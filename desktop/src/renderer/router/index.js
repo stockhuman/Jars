@@ -8,7 +8,27 @@ export default new Router({
 		{
 			path: '/',
 			name: 'landing-page',
-			component: require('@/components/LandingPage')
+			component: require('@/components/pages/LandingPage')
+		},
+		{
+			path: '/today',
+			name: 'today-page',
+			component: require('@/components/pages/TodayPage')
+		},
+		{
+			path: '/week',
+			name: 'week-page',
+			component: require('@/components/pages/WeekPage')
+		},
+		{
+			path: '/year',
+			name: 'year-page',
+			component: require('@/components/pages/YearPage')
+		},
+		{
+			path: '/account',
+			name: 'account-page',
+			component: require('@/components/pages/AccountPage')
 		},
 		{
 			path: '*',

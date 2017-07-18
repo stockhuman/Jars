@@ -1,39 +1,41 @@
 <template>
-	<div id="nav">
+	<div id="nav" :class="{ hidden: navIsHidden }">
 		<ul>
+			<li>	
+				<div id="nav-toggle" class="nav-link" @click="toggleNav">
+					<span></span>
+					<span></span>
+					<span></span>
+				</div>
+			</li>
 			<li v-for="item in items">
 				<router-link :to="item.route" class="nav-link">
-					<img :src="item.icon" v-bind:title="item.title">
+					<!-- <img :src="item.icon" v-bind:title="item.title"> -->
+					<span class="nav-link-title">{{item.title}}</span>
 				</router-link>
 			</li>
 		</ul>
+		<div id="nav-panel">
+			<nav-panel></nav-panel>
+		</div>
 	</div>
 </template>
 
 <script>
+	import NavPanel from './Navigation/NavPanel'
+
 	export default {
 		name: 'navigation',
-
-		mounted: () => {
-			// this is cheating, but I need it to be global
-			document.onkeydown = function (evt) {
-				evt = evt || window.event
-				if (evt.keyCode === 36) { // home key
-					if (this.navIsHidden) {
-						document.getElementById('nav').classList = ''
-					} else {
-						document.getElementById('nav').classList = 'hidden'
-					}
-					this.navIsHidden = !this.navIsHidden
-				}
+		components: { NavPanel },
+		computed: {
+			navIsHidden () {
+				return this.$store.state.App.navIsHidden
 			}
 		},
-
 		data: () => ({
-			navIsHidden: false,
 			items: [{
 				title: 'Today',
-				route: '/',
+				route: '/today',
 				icon: 'static/ui/day.svg'
 			},
 			{
@@ -45,14 +47,14 @@
 				title: 'Year',
 				route: '/year',
 				icon: 'static/ui/year.svg'
-			},
-			{
-				title: 'Account',
-				route: '/account',
-				icon: require('../assets/img/user.jpg')
 			}
 			]
-		})
+		}),
+		methods: {
+			toggleNav () { // admittedly this could be done in the @click directive
+				this.$store.commit('TOGGLE_NAV')
+			}
+		}
 	}
 </script>
 
@@ -61,58 +63,106 @@
 
 	#nav {
 		position: fixed;
-		left: 0;
-		height: 100vh;
-		background: rgba(0, 0, 0, 0.5);
-		width: $nav-width;
-		box-shadow: 4px 0px 72px -20px rgba(0,0,0,0.75);
-		transition: left .3s ease;
-		&.hidden {
-			left: -5em;
-		}
+		bottom: 0;
+		height: $nav-height;
+		background: #efefef;
+		width: 100vw;
+		z-index: 5;
+		transition: bottom .3s ease;
 	}
 
 	ul {
 		list-style: none;
+		display: flex;
+		li {
+			width: 100%;
+		}
 	}
 
 	.nav-link {
 		display: block;
-		float: left;
-		height: $nav-width;
-		width: $nav-width;
-		border-bottom: 1px solid #222;
-		color: #eee;
+		// float: left;
+		height: $nav-height;
+		width: 100%;
+		// width: $nav-height;
+		color: #EAE0D5;
 		text-decoration: none;
 		text-align: center;
 		transition: 0.15s background ease-in-out;
 
 		&:hover {
-			background: rgba(198, 172, 143, 0.7);
-			img {
+			background: $color__blue;
+		}
 
+		&.router-link-active {
+			border-bottom: 4px solid darken(#5E503F, 20%);
+			&:hover {
+				border: none;
 			}
 		}
-
-		img {
-			width: 100%;
-			padding: 1.7em; // magic numbers! 
+		.nav-link-title {
+			line-height: $nav-height;
+			text-decoration: none;
+			color: #222;
 		}
+	}
 
-		// account pic
-		&[href='#/account'] {
-			position: fixed;
-			bottom: 0;
-			border-top: 1px solid #222;
-			border-bottom: none;
+	$navPad: 10px; // determined by eye based on nav size. No ideal computed val found..
 
-			img {
-				padding: 0;
-				border-radius: 50%;
-				border: 1px #555 solid;
-				margin: 1em;
-				width: 3em; // magic numbers everywhere!
+	#nav-toggle {
+		cursor: pointer;
+		height: $nav-height;
+		width: $nav-height;
+		margin-left: $nav-height / 3;
+		margin-right: $nav-height / 3;
+		position: relative;
+		transform: rotateZ(90deg); // reversed logic for nav hiding, now hidden by default
+		transition: transform .1s ease;
+
+		&:hover { background: transparent; }
+
+		span {
+			position: absolute;
+			height: 2px;
+			width: calc(#{$nav-height} - #{$navPad *2}); // full width - padding at both sides
+			background: #222;
+			
+
+			&:nth-child(1) {
+				top: $navPad*1.4;
+				left: $navPad;
+			}
+
+			&:nth-child(2) {
+				top: $navPad*2.4;
+				left: $navPad;
+			}
+
+			&:nth-child(3) {
+				top: $navPad*3.4;
+				left: $navPad;
 			}
 		}
 	}
+
+	#nav.hidden #nav-toggle {
+		transform: rotateZ(0deg);
+	}
+
+	#nav-panel {
+		position: fixed;
+		left: 0;
+		top: 0;
+		background: white;
+		width: 16em;
+		height: 100vh;
+		z-index: -2;
+		transition: left .4s ease-in-out;
+	}
+
+	.hidden #nav-panel {
+		left: -100%;
+	}
+
+
 </style>

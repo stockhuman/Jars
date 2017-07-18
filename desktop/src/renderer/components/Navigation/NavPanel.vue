@@ -1,5 +1,5 @@
 <template>
-	<div class="wrapper">
+	<div class="panel-wrapper">
 		<img id="account-image" src="~@/assets/img/user.jpg" alt="User Account image">
 		<section class="account-info">
 			<h1 class="item">{{account.user_nicename}}</h1>
@@ -33,7 +33,7 @@
 			</div>
 
 			<div class="one-half">
-				<button class="alt" @click="open('https://electron.atom.io/docs/')">Jars Documentation</button>
+				<button class="alt" @click="open('https://github.com/stockHuman/Jars/wiki')">Jars Documentation</button>
 			</div>
 			
 		</section>
@@ -44,7 +44,7 @@
 	import axios from 'axios'
 
 	export default {
-		name: 'test-page',
+		name: 'nav-panel',
 		methods: {
 			open (link) {
 				this.$electron.shell.openExternal(link)
@@ -80,6 +80,10 @@
 </script>
 
 <style scoped>
+	.panel-wrapper {
+		padding: 2em;
+	}
+
 	.account-info, .device-info {
 		padding-top: 5em;
 		color: #eee;
@@ -87,20 +91,12 @@
 
 	#account-image {
 		border-radius: 50%;
-		width: 20vw;
-		height: 20vw;
+		width: 7em;
+		height: 7em;
 		display: block;
 		margin: 0 auto;
 	}
-
-	.title {
-		color: #888;
-		font-size: 18px;
-		font-weight: initial;
-		letter-spacing: .25px;
-		margin-top: 10px;
-	}
-
+	
 	.items { margin-top: 8px; }
 
 	.item {

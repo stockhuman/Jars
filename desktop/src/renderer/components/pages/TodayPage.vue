@@ -1,32 +1,78 @@
 <template>
 	<div class="wrapper">
+		<header class="header">
+			<h1 class="title">{{date}}</h1>
+			<hr />
+		</header>
 		<main>
-			<h1 class="title">Today</h1>
-			<p>{{state.Profile.testState}}</p>
+			<section id="header">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 136.13 136.1">
+
+					<title>Asset 1</title>
+
+					<!-- Days spent -->
+					<path d="M0,68a69,69,0,0,0,34.53,59.81V8.24A69,69,0,0,0,0,68Z" style="fill:#00aeef"/>
+
+					<!-- Days left -->
+					<path d="M33.54,9.79l.52-.32V127a68.05,68.05,0,1,0,34-127A67.54,67.54,0,0,0,33.53,9.47C33.53,9.57,33.54,9.68,33.54,9.79Z" style="fill:#fff"/>
+
+				</svg>
+
+				<div class="box">
+					
+				</div>
+			</section>
 		</main>
 	</div>
 </template>
 
 <script>
-	export default {
-		name: 'test-page',
-		computed: {
-			state () {
-				return this.$store.state
-			}
+import axios from 'axios'
+import moment from 'moment'
+
+export default {
+	name: 'today-page',
+	computed: {
+		state () {
+			return this.$store.state
+		},
+		date () {
+			return moment().format('LLL')
 		}
+	},
+	data: () => ({
+		errors: [],
+		days: []
+	}),
+	created: function () {
+		axios.get('http://localhost/api.jars.com/days')
+		.then(response => {
+			this.days = response.data[0]
+		})
+		.catch(e => {
+			this.errors.push(e)
+		})
 	}
+}
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 	@import '../../assets/scss/variables';
 
-	.title {
-		color: #888;
-		font-size: 18px;
-		font-weight: initial;
-		letter-spacing: .25px;
-		margin-top: 10px;
+	#header {
+		width: 100%;
+		text-align: center;
+		padding: 2em;
+		svg {
+			width: 7em;
+		}
+	}
+
+	.box {
+		height: 4em;
+		width: 4em;
+		background: blue;
+		clip-path: circle(60px at center);
 	}
 
 </style>

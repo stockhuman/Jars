@@ -1,6 +1,28 @@
-@import url('https://fonts.googleapis.com/css?family=Rubik:700');
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400');
+
+body {
+	font-family: Hack, monospace;
+}
 
 h1, h2 {
-	font-family: 'Rubik', sans-serif;
+	font-family: 'Roboto', sans-serif;
 	letter-spacing: 1px;
+	font-weight: 400
+}
+
+hr {
+	height: 1px;
+	border-width:0;
+	color: #22333B;
+	background-color: #22333B;
+	margin-bottom: 1em;
+}
+
+.title {
+	color: #EAE0D5;
+	font-size: 20px;
+	font-weight: normal;
+	letter-spacing: .35px;
+	margin-top: .5em;
+	margin-bottom: .5em;
 }

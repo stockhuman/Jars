@@ -1,4 +1,5 @@
 @import './scss/variables';
+@import './scss/mixins';
 
 ::-webkit-scrollbar-thumb:vertical {
 	height: 10px;
@@ -8,7 +9,7 @@
 ::-webkit-scrollbar {
 	width: 5px;
 	height: 1px;
-	background: white;
+	background: grey;
 }
 
 * {
@@ -19,15 +20,15 @@
 
 body {
 	font-family: sans-serif;
-	background-image: linear-gradient(to right top, #0A0908 0%, #22333B 100%);
+	background-image: linear-gradient(to right top, #002B55 0%, #262233 100%);
 	-webkit-font-smoothing: antialiased;
 }
 
 .wrapper {
-	height: 100vh;
-	padding: 60px 80px;
-	margin-left: 5em;
-	width: calc(100vw - $nav-width);
+	height: calc(100vh - #{$nav-height});
+	padding: 30px 40px;
+	margin-bottom: $nav-height;
+	width: 100vw;
 }
 
 #nav.hidden + .wrapper {
@@ -37,7 +38,35 @@ body {
 
 main {
 	display: flex;
+	flex-wrap: wrap;
 	justify-content: space-between;
+}
+
+.header {
+	width: 100%;
+	flex-grow: 1;
+}
+
+.module {
+	width: calc(50% - 2px);
+	padding: 1em;
+	background: #EAE0D5;
+	border-radius: 1px;
+	margin-bottom: 4px;
+	&:only-of-type {
+		width: 100%;
+	}
+	&.left-side {
+		margin-right: 2px;
+	}
+}
+
+.full-width {
+	width: 100%;
+}
+
+textarea {
+	resize: vertical;
 }
 
 main > div { flex-basis: 50%; }

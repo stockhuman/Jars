@@ -26,9 +26,9 @@ export default new Router({
 			component: require('@/components/pages/YearPage')
 		},
 		{
-			path: '/account',
-			name: 'account-page',
-			component: require('@/components/pages/AccountPage')
+			path: '/CMS',
+			name: 'CMS-page',
+			component: require('@/components/pages/CMS')
 		},
 		{
 			path: '*',

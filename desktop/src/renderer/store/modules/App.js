@@ -1,14 +1,20 @@
 const state = {
-	navIsHidden: false
+	navIsHidden: true,
+	notesAreHidden: true
+}
+
+const getters = {
+	nav: state => () => state.navIsHidden,
+	notes: state => () => state.notesAreHidden
 }
 
 const mutations = {
 	TOGGLE_NAV (state) {
 		state.navIsHidden = !state.navIsHidden
+	},
+	TOGGLE_NOTES (state) {
+		state.notesAreHidden = !state.notesAreHidden
 	}
-	// INCREMENT_MAIN_COUNTER (state) {
-	// 	state.main++
-	// }
 }
 
 const actions = {
@@ -20,6 +26,7 @@ const actions = {
 
 export default {
 	state,
+	getters,
 	mutations,
 	actions
 }

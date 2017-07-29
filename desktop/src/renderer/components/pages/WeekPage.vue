@@ -27,44 +27,43 @@
 </template>
 
 <script>
-	import axios from 'axios'
-	import moment from 'moment'
+import axios from 'axios'
+import moment from 'moment'
 
-	export default {
-		name: 'test-page',
-		computed: {
-			state () {
-				return this.$store.state
-			},
-			week () {
-				return 'Week of the ' +
-					moment().startOf('isoWeek').format('Do') +
-					' to ' +
-					moment().endOf('isoWeek').format('Do')
-			}
+export default {
+	name: 'test-page',
+	computed: {
+		state () {
+			return this.$store.state
 		},
-		data: () => ({
-			errors: [],
-			weekData: []
-		}),
-		created: function () {
-			axios.get('http://localhost/api.jars.com/weeks')
-			.then(response => {
-				this.weekData = response.data[0]
-			})
-			.catch(e => {
-				this.errors.push(e)
-			})
+		week () {
+			return 'Week of the ' +
+				moment().startOf('isoWeek').format('Do') +
+				' to ' +
+				moment().endOf('isoWeek').format('Do')
 		}
+	},
+	data: () => ({
+		errors: [],
+		weekData: []
+	}),
+	created: function () {
+		axios.get('weeks/')
+		.then(response => {
+			this.weekData = response.data
+		})
+		.catch(e => {
+			this.errors.push(e)
+		})
 	}
+}
 </script>
 
 <style lang="scss">
-	@import '../../assets/scss/variables';
-	@import '../../assets/scss/mixins';
+@import '../../assets/scss/variables';
+@import '../../assets/scss/mixins';
 
-	.day {
-		font-weight: 700;
-	}
-
+.day {
+	font-weight: 700;
+}
 </style>

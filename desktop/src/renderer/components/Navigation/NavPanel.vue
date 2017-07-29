@@ -4,7 +4,7 @@
 		<section class="account-info">
 			<h1 class="item">{{account.user_nicename}}</h1>
 			<p class="item name">User: {{account.user_name}}</p>
-			<p class="item name">Days on Record: {{daysTotal}}</p>
+			<p class="item name">Days on Record: {{tasks.length}}</p>
 		</section>
 
 		<section class="device-info">
@@ -53,7 +53,7 @@
 
 		data: () => ({
 			account: [],
-			daysTotal: 0,
+			tasks: 0,
 			errors: [],
 			electron: process.versions['atom-shell'],
 			node: process.versions.node,
@@ -62,17 +62,17 @@
 		}),
 
 		created () {
-			axios.get('http://localhost/api.jars.com/users/')
+			axios.get('users/')
 			.then(response => {
-				this.account = response.data[0]
+				this.account = response.data
 			})
 			.catch(e => {
 				this.errors.push(e)
 			})
 
-			axios.get('http://localhost/api.jars.com/days')
+			axios.get('tasks/')
 			.then(response => {
-				this.daysTotal = response.data.length
+				this.tasks = response.data
 			})
 			.catch(e => {})
 		}
@@ -112,12 +112,6 @@
 	.item .value {
 		color: #35495e;
 		font-weight: bold;
-	}
-
-	.one-half {
-		display: block;
-		float: left;
-		width: 50%;
 	}
 
 	.one-half > button {

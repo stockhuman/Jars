@@ -14,7 +14,6 @@
 	export default {
 		name: 'notes',
 		data: () => ({
-
 			note: '',
 			errors: []
 		}),
@@ -28,7 +27,7 @@
 		},
 
 		created: function () {
-			axios.get('http://localhost/api.jars.com/life')
+			axios.get('life/')
 			.then(response => {
 				this.note = response.data[response.data.length - 1].life_notes_large
 			})
@@ -38,7 +37,7 @@
 		},
 		methods: {
 			updateNotes: function () {
-				axios.post('http://localhost/api.jars.com/life', {
+				axios.post('life/', {
 					life_notes_large: this.note
 					// headers: {
 					// 	'Accept': 'application/json'

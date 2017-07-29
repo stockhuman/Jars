@@ -27,9 +27,9 @@
 			yearData: []
 		}),
 		created: function () {
-			axios.get('http://localhost/api.jars.com/years')
+			axios.get('years/')
 			.then(response => {
-				this.yearData = response.data[0]
+				this.yearData = response.data
 			})
 			.catch(e => {
 				this.errors.push(e)

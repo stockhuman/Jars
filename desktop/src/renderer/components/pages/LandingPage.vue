@@ -12,6 +12,7 @@
 
 <script>
 // turn this page into a loader thing. timeout, route to today / login.
+// update tasks
 
 export default {
 	name: 'landing-page'

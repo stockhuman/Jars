@@ -1,15 +1,19 @@
 <template>
-	<article class="task" :class="{editable: editable}">
+	<article class="task" :class="{editable: editable, dismissed: dismissed}">
 		<img src="~@/assets/img/jars-home-plus-icon.svg" alt="plus icon" @click="expand">
 		<h2 contenteditable="{true: editable}" @input="update">{{task.title}}</h2>
 		<p class="details">{{details}}</p>
 		<div class="editbox">
 			<div class="row">
 				<label for="time">Time</label>
-				<input type="text" v-model="task.time" name="time" placeholder="task.time"></div>
+				<input type="time" @input="update" v-model="task.time" name="time" placeholder="task.time" size="8"></div>
 			<div class="row">
 				<label for="repeat">Repeat</label>
-				<input type="text" name="repeat" v-model="editbox.text" placeholder="task.repeatPattern.text"></div>
+				<input type="text" name="repeat" v-model="editbox.text" placeholder="Again?"></div>
+			<div class="row actions">
+				<button @click="dismiss">Done</button>
+				<button @click="dismiss">Add Subtask</button>
+			</div>
 		</div>
 		<!-- <p style="color: lightgreen">{{task}}</p> -->
 	</article>
@@ -21,7 +25,8 @@ import axios from 'axios'
 export default {
 	name: 'task',
 	data: () => ({
-		editable: false
+		editable: false,
+		dismissed: false
 	}),
 	computed: {
 		details () {
@@ -51,10 +56,12 @@ export default {
 			// show in this order: time, reccurance, last completed (if no time set)
 			} else if (repeat.length !== 0) {
 				if (repeat.time !== '') {
-					detailsString = '@ ' + repeat.time + ', reccuring'
+					detailsString = '@ ' + this.task.time + ', reccuring' // changed from repeat.time
 				} else {
 					detailsString = repeat.text
 				}
+			} else {
+				detailsString = '@ ' + this.task.time
 			}
 
 			return detailsString
@@ -72,105 +79,46 @@ export default {
 			}
 		},
 		update: function (event) {
-			axios.put('tasks/' + this.task.task, {
-				title: event.target.innerText
-			})
-			.catch((error) => {
-				console.warn(error)
-			})
+			let e = event.target.localName
+			var params = {}
+
+			if (e === 'h2') {
+				params.title = event.target.innerText
+			}
+			if (e === 'input') {
+				// do the thing
+				let repeat = JSON.parse(this.task.repeatPattern)
+				if (event.target.name === 'time') {
+					if (repeat.length !== 0) {
+						repeat.time = event.target.value
+						params.repeatPattern = JSON.stringify(repeat)
+					} else {
+						params.time = event.target.value
+					}
+				}
+			}
+			// Here's an idea: remove axios dependecy again and pass this to todaypage
+
+			// send appropriate data
+			axios.put('tasks/' + this.task.task, JSON.stringify(params))
+			.then(response => console.log(response))
+		},
+		repeatingTaskCheck: function () {
+			if (this.edibox.text !== '') {
+				// do nothing
+			}
+		},
+		dismiss: function () {
+			this.dismissed = true
+			this.repeatingTaskCheck()
+			setTimeout(axios.put('tasks/' + this.task.task, {
+				isDismissed: true
+			}), 2000)
 		}
 	}
 }
 </script>
 
 <style lang="scss">
-@import '../assets/scss/variables';
 
-.task { // article element
-	// margin-bottom: 1em;
-	position: relative;
-	transition: background .3s ease;
-	border-radius: 4px;
-	padding-right: 1.2em;
-	padding-left: 1.5em;
-	padding-bottom: 1em;
-	padding-top: .5em;
-	h2 {
-		font-size: 20px;
-	}
-	img {
-		position: absolute;
-		width: 20px;
-		left: 0px;
-		top: 10px;
-		padding: 3px;
-    transition: transform .25s ease;
-		&:hover {
-			transform: rotateZ(90deg);
-			cursor: pointer;
-		}
-	}
-	.details {
-		font-size: 14px;
-		color: #678;
-		font-style: italic;
-		padding-top: 2px;
-		font-family: Helvetica, sans-serif;
-		font-variant: oblique;
-		transition: all .5s ease;
-		max-height: 1em;
-	}
-	.editbox {
-		max-height: 0;
-		overflow: hidden;
-		// display: flex;
-		// flex-wrap: row;
-		transition: all .6s ease;
-
-		.row {
-			// display: block;
-			// width: 100%;
-			// flex-grow: 1;
-		}
-
-		label, input {
-			color: #9ab;
-			font-size: 15px;
-			width: 100%;
-		}
-
-		label {
-			font-size: 12px;
-		}
-
-		input {
-			background: transparent;
-			border: none;
-			padding: 1em;
-			line-height: 1;
-			outline: none;
-			border-bottom: 1px solid transparent;
-			transition: border .1s ease;
-			&:focus {
-				color: white;
-				border-bottom: 1px solid white;
-			}
-		}
-	}
-
-	&.editable {
-		background: rgba(120,120,120,0.3);
-		img {
-			transform: rotateZ(90deg);
-		}
-		.details {
-			opacity: 0;
-			transform: translateX(10px);
-			max-height: 0;
-		}
-		.editbox {
-			max-height: 10em;
-		}
-	}
-}
 </style>

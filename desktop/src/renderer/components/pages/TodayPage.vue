@@ -18,16 +18,19 @@
 			<h1>{{welcome}}</h1>
 			<hr />
 		</header>
+
 		<main>
 			<section id="day-tasks" v-if="tasks.length > 0">
 				<h3 class="section-title">tasks</h3>
 				<task v-for="(task, index) in tasks" :task="task" :index="index" :key="task.task"></task>
 			</section>
-			<section id="day-events" v-if="tasks.length > 0">
+			<section id="day-events" v-if="events.length > 0">
 				<h3 class="section-title">events</h3>
 				<event v-for="(event, index) in events" :event="event" :index="index" :key="event.event_ID"></event>
 			</section>
 		</main>
+
+		<div id="fab-button" class="fab" :class="{active: fabActive}" @click="fabActive = !fabActive"></div>
 	</div>
 </template>
 
@@ -113,7 +116,8 @@ export default {
 	data: () => ({
 		account: [],
 		tasks: [],
-		events: {}
+		events: [],
+		fabActive: false
 	}),
 	created () {
 		axios.get('users/0')
@@ -126,15 +130,16 @@ export default {
 			}
 		})
 
+		// axios.get('tasks?transform=1&filter=isDismissed,eq,0')
 		axios.get('tasks?transform=1')
 		.then(response => {
 			this.tasks = response.data.tasks
 		})
 		.catch(e => {})
 
-		axios.get('calendar?transform=1')
+		axios.get('events?transform=1')
 		.then(response => {
-			this.events = response.data.calendar
+			this.events = response.data.events
 		})
 		.catch(e => {})
 	}
@@ -165,9 +170,31 @@ export default {
 	#day-tasks, #day-events {
 		color: #eee;
 		width: 100%;
+		padding-bottom: .7em;
 	}
 
 	.section-title {
 		font-size: 22px;
+	}
+
+	.fab {
+		position: absolute;
+		bottom: 5em;
+		right: 2em;
+		width: 3em;
+		height: 3em;
+		background: #00aeef;
+		cursor: pointer;
+		border-radius: 50%;
+		transition: width .3s ease .2s, border-radius .1s ease;
+		&:hover {
+			background: lighten(#00aeef, 10%);
+		}
+	}
+
+	.fab.active {
+		width: calc(100% - 4em);
+		border-radius: 3px;
+		transition: width .3s ease 0s, border-radius .1s ease .4s;
 	}
 </style>

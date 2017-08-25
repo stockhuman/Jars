@@ -31,7 +31,7 @@
 				if (e.keyCode === 112) { // F1
 					this.$router.push('/CMS')
 				}
-				if (e.shiftKey) { // sans-nav navigation
+				if (e.altKey) { // sans-nav navigation
 					switch (e.keyCode) {
 					case 48: this.$router.push('/')
 						break

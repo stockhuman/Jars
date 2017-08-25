@@ -30,7 +30,7 @@
 			</section>
 		</main>
 
-		<div id="fab-button" class="fab" :class="{active: fabActive}" @click="fabActive = !fabActive"></div>
+		<fab></fab>
 	</div>
 </template>
 
@@ -39,10 +39,11 @@ import axios from 'axios'
 import moment from 'moment'
 import Task from '../Task'
 import Event from '../Event'
+import Fab from '../Navigation/Fab'
 
 export default {
 	name: 'today-page',
-	components: { Task, Event },
+	components: { Task, Event, Fab },
 	computed: {
 		date () {
 			return moment().format('LLL')
@@ -116,8 +117,7 @@ export default {
 	data: () => ({
 		account: [],
 		tasks: [],
-		events: [],
-		fabActive: false
+		events: []
 	}),
 	created () {
 		axios.get('users/0')
@@ -130,8 +130,32 @@ export default {
 			}
 		})
 
-		// axios.get('tasks?transform=1&filter=isDismissed,eq,0')
-		axios.get('tasks?transform=1')
+		this.$on('fab-action', action => {
+			console.log(action)
+			if (action === 'task') {
+				axios.post('tasks', {
+					'title': 'title',
+					'subtasks': '[]',
+					'repeatPattern': '{}' }).then(
+					response => {
+						console.log(response)
+						this.tasks.push(JSON.parse(response.config.data))
+					}
+				)
+			} else {
+				axios.post('events', {
+					'title': 'title',
+					'time': '10:00:00' }).then(
+					response => {
+						console.log(response)
+						this.events.push(JSON.parse(response.config.data))
+					}
+				)
+			}
+		})
+
+		axios.get('tasks?transform=1&filter=isDismissed,eq,0')
+		// axios.get('tasks?transform=1')
 		.then(response => {
 			this.tasks = response.data.tasks
 		})
@@ -175,26 +199,5 @@ export default {
 
 	.section-title {
 		font-size: 22px;
-	}
-
-	.fab {
-		position: absolute;
-		bottom: 5em;
-		right: 2em;
-		width: 3em;
-		height: 3em;
-		background: #00aeef;
-		cursor: pointer;
-		border-radius: 50%;
-		transition: width .3s ease .2s, border-radius .1s ease;
-		&:hover {
-			background: lighten(#00aeef, 10%);
-		}
-	}
-
-	.fab.active {
-		width: calc(100% - 4em);
-		border-radius: 3px;
-		transition: width .3s ease 0s, border-radius .1s ease .4s;
 	}
 </style>

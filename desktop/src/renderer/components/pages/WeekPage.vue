@@ -5,23 +5,25 @@
 			<hr />
 		</header>
 		<main>
-			<section class="module left-side week-calendar">
+			<section class="week-calendar">
 				<p class="day">Monday</p>
+				<input type="text">
 				<p class="day">Tuesday</p>
+				<input type="text">
 				<p class="day">Wednesday</p>
+				<input type="text">
 				<p class="day">Thursday</p>
+				<input type="text">
 				<p class="day">Friday</p>
+				<input type="text">
 				<p class="day">Saturday</p>
+				<input type="text">
 				<p class="day">Sunday</p>
+				<input type="text">
 			</section>
-			<section class="module right-side">
-				<h4>This week's goals</h4>
-				<ul>
-					<li>{{weekData.week_goal_1}}</li>
-					<li>{{weekData.week_goal_2}}</li>
-					<li>{{weekData.week_goal_3}}</li>
-				</ul>
-			</section>
+			<div>
+				{{thisWeek}}
+			</div>
 		</main>
 	</div>
 </template>
@@ -45,15 +47,18 @@ export default {
 	},
 	data: () => ({
 		errors: [],
-		weekData: []
+		weekData: [],
+		thisWeek: []
 	}),
 	created: function () {
 		axios.get('weeks/')
 		.then(response => {
-			this.weekData = response.data
+			let weeksOnRecord = response.data.weeks.records.length
+			this.weekData = response.data.weeks.records
+			this.thisWeek = response.data.weeks.records[weeksOnRecord - 1]
 		})
 		.catch(e => {
-			this.errors.push(e)
+			console.warn(e)
 		})
 	}
 }
@@ -63,7 +68,10 @@ export default {
 @import '../../assets/scss/variables';
 @import '../../assets/scss/mixins';
 
-.day {
-	font-weight: 700;
+.week-calendar {
+	background: #eee;
+	width: 100%;
 }
+
+
 </style>

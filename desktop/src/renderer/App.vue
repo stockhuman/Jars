@@ -56,6 +56,9 @@
 	}
 	.fade-enter-active {
 		transition-delay: .25s;
+		position: fixed;
+		width: 100vw;
+		height: 100vh;
 	}
 	.fade-enter, .fade-leave-active {
 		opacity: 0

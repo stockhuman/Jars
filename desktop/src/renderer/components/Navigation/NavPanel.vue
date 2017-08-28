@@ -2,9 +2,9 @@
 	<div class="panel-wrapper">
 		<img id="account-image" src="~@/assets/img/user.jpg" alt="User Account image">
 		<section class="account-info">
-			<h1 class="item">{{account.user_nicename}}</h1>
+			<h1 class="item name">{{account.user_nicename}}</h1>
 			<p class="item name">User: {{account.user_name}}</p>
-			<p class="item name">Days on Record: {{tasks.length}}</p>
+			<p class="item name">Tasks Completed: {{tasks.length}}</p>
 		</section>
 
 		<section class="device-info">
@@ -62,7 +62,7 @@
 		}),
 
 		created () {
-			axios.get('users/')
+			axios.get('users/0')
 			.then(response => {
 				this.account = response.data
 			})
@@ -70,9 +70,9 @@
 				this.errors.push(e)
 			})
 
-			axios.get('tasks/')
+			axios.get('tasks?transform=1&filter=isDismissed,eq,1')
 			.then(response => {
-				this.tasks = response.data
+				this.tasks = response.data.tasks
 			})
 			.catch(e => {})
 		}

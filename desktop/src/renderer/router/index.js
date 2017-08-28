@@ -6,14 +6,9 @@ Vue.use(Router)
 export default new Router({
 	routes: [
 		{
-			path: '/',
-			name: 'landing-page',
-			component: require('@/components/pages/LandingPage')
-		},
-		{
-			path: '/today',
-			name: 'today-page',
-			component: require('@/components/pages/TodayPage')
+			path: '/home',
+			name: 'home-page',
+			component: require('@/components/pages/HomePage')
 		},
 		{
 			path: '/week',
@@ -32,7 +27,7 @@ export default new Router({
 		},
 		{
 			path: '*',
-			redirect: '/'
+			redirect: '/home'
 		}
 	]
 })

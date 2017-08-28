@@ -6,24 +6,40 @@
 	transition: all .35s ease;
 	border-radius: 4px;
 	padding-right: 1.5em;
-	padding-left: 1.5em;
-	padding-bottom: 1em;
-	padding-top: .4em;
-	margin-top: 7px;
-	h2 {
-		font-size: 20px;
-	}
-	img {
+	// padding-left: 1.5em;
+	color: $color__light;
+	margin-top: 6px;
+
+	.task-edit {
 		position: absolute;
-		width: 20px;
+		// padding: 1em;
+		opacity: 0;
+		background: $color__blue;
+		transform: translate3D(-100%, 0, 0);
+		width: 2px;
+		height: 100%;
+		top: 0px;
 		left: 0px;
-		top: 10px;
-		padding: 3px;
-    transition: transform .25s ease;
-		&:hover {
-			transform: rotateZ(90deg);
-			cursor: pointer;
+		cursor: pointer;
+    transition: transform .25s ease, opacity .2s ease;
+	}
+
+	&.editable {
+		// padding-left: 1.5em;
+		padding-bottom: .6em;
+		padding-top: .6em;
+	}
+	&.editable, &:hover {
+		padding-left: 1.5em;
+		.task-edit {
+			transform: translate3D(0%,0,0);
+			opacity: 1;
 		}
+	}
+
+	.task-title {
+		display: inline-block;
+		font-size: 18px;
 	}
 	.details {
 		font-size: 14px;
@@ -34,40 +50,34 @@
 		font-variant: oblique;
 		transition: all .5s ease;
 		max-height: 1em;
+		display: inline;
 	}
 	.editbox {
 		max-height: 0;
 		overflow: hidden;
-		display: flex;
-		flex-wrap: wrap;
+		// display: flex;
+		// flex-wrap: wrap;
 		transition: all .6s ease;
 
 		.row {
-			flex: 1 1 auto;
+			// flex: 1 1 auto;
 			&.actions {
 				width: 100%;
 				margin-top: .25em;
 			}
 		}
 
-		label, input {
-			color: #9ab;
-			font-size: 15px;
-			width: 100%;
-		}
-
-		label {
-			font-size: 12px;
-		}
-
 		input {
+			color: #9ab;
+			font-size: 14px;
 			background: transparent;
 			border: none;
-			padding: 1em;
+			padding: 1em 1em 1em 0;
 			line-height: 1;
 			outline: none;
 			border-bottom: 1px solid transparent;
 			transition: border .1s ease;
+			display: inline-block;
 			&:focus {
 				color: white;
 				border-bottom: 1px solid white;

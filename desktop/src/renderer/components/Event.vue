@@ -1,6 +1,6 @@
 <template>
 	<article class="task" :class="{editable: editable, dismissed: dismissed}">
-		<img src="~@/assets/img/jars-home-plus-icon.svg" alt="plus icon" @click="expand">
+		<!-- <img src="~@/assets/img/jars-home-plus-icon.svg" alt="plus icon" @click="expand"> -->
 		<h2 contenteditable="{true: editable}" @input="update">{{event.event_title}}</h2>
 		<p class="details">{{details}}</p>
 		<div class="editbox">

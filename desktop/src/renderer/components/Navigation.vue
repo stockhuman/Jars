@@ -5,7 +5,6 @@
 				<div id="nav-toggle" class="nav-link" @click="toggleNav">
 					<span></span>
 					<span></span>
-					<span></span>
 				</div>
 			</li>
 			<li v-for="item in items">
@@ -34,9 +33,8 @@
 		},
 		data: () => ({
 			items: [{
-				title: 'Today',
-				route: '/today',
-				icon: 'static/ui/day.svg'
+				title: 'Home',
+				route: '/home'
 			},
 			{
 				title: 'Week',
@@ -82,12 +80,13 @@
 	.nav-link {
 		display: block;
 		// float: left;
-		height: $nav-height;
+		height: $nav-height + 0.2em;
 		width: 100%;
 		// width: $nav-height;
 		color: #EAE0D5;
 		text-decoration: none;
 		text-align: center;
+		font-size: 15px;
 		transition: 0.15s background ease-in-out;
 
 		&:hover {
@@ -95,7 +94,7 @@
 		}
 
 		&.router-link-active {
-			border-bottom: 4px solid darken(#5E503F, 20%);
+			border-bottom: 3px solid darken(#5E503F, 20%);
 			&:hover {
 				border: none;
 			}

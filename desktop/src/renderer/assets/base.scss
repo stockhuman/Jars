@@ -20,8 +20,8 @@
 
 body {
 	font-family: sans-serif;
-	background-image: linear-gradient(to right top, #002B55 0%, #262233 100%);
-	-webkit-font-smoothing: antialiased;
+	background-color: #090d17;
+	background-image: url("https://www.transparenttextures.com/patterns/otis-redding.png");
 }
 
 .wrapper {
@@ -45,20 +45,6 @@ main {
 .header {
 	width: 100%;
 	flex-grow: 1;
-}
-
-.module {
-	width: calc(50% - 2px);
-	padding: 1em;
-	background: #EAE0D5;
-	border-radius: 1px;
-	margin-bottom: 4px;
-	&:only-of-type {
-		width: 100%;
-	}
-	&.left-side {
-		margin-right: 2px;
-	}
 }
 
 .full-width {

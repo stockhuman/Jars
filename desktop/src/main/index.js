@@ -20,11 +20,14 @@ function createWindow () {
 	 * Initial window options
 	 */
 	mainWindow = new BrowserWindow({
-		height: 1000,
-		useContentSize: true,
-		width: 500,
-		skipTaskbar: true,
-		toolbar: false
+		// height: 1000,
+		// useContentSize: true,
+		// width: 500,
+		icon: __dirname + 'icon_large.png'
+		skipTaskbar: false,
+		width: lastWindowState.width, 
+		height: lastWindowState.height, 
+		// toolbar: false
 	})
 	// mainWindow.setMenu(null)
 
@@ -34,7 +37,7 @@ function createWindow () {
 		mainWindow = null
 	})
 }
-
+// app.setAppUserModelId('Jars')
 app.on('ready', createWindow)
 
 app.on('window-all-closed', () => {

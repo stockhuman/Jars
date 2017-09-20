@@ -1,9 +1,9 @@
 {
   "name": "JarsDesktopClient",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Michael Hemingway",
   "description": "The desktop version of Jars",
-  "license": null,
+  "license": "MIT",
   "main": "./dist/electron/main.js",
   "scripts": {
     "build": "node .electron-vue/build.js && electron-builder",
@@ -20,7 +20,7 @@
   },
   "build": {
     "productName": "Jars",
-    "appId": "org.simulatedgreg.electron-vue",
+    "appId": "com.michaelhemingway.jars",
     "directories": {
       "output": "build"
     },
@@ -46,7 +46,10 @@
       "icon": "build/icons/icon.icns"
     },
     "win": {
-      "icon": "build/icons/icon.ico"
+      "icon": "build/icons/icon.ico",
+      "target": "appx",
+      "backgroundColor": "#eee",
+      "publisherDisplayName": "Arthem Co."
     },
     "linux": {
       "icon": "build/icons"

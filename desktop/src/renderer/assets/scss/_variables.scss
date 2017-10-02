@@ -1,7 +1,12 @@
 $nav-height: 2.5em;
+$pu: 2rem; // one padding-unit 
 
 // colors
 
 $color__blue: #00AEEF;
 $color__grey: #aaa;
-$color__light: #eee;
+$color__light: #f1f2f2;
+$color__dark: #231f20;
+
+$color__body-background: $color__light;
+$color__body-color: $color__dark;

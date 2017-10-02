@@ -8,22 +8,17 @@ export default new Router({
 		{
 			path: '/home',
 			name: 'home-page',
-			component: require('@/components/pages/HomePage')
+			component: require('@/components/Home')
 		},
 		{
-			path: '/week',
-			name: 'week-page',
-			component: require('@/components/pages/WeekPage')
+			path: '/overview',
+			name: 'overview-page',
+			component: require('@/components/Overview')
 		},
 		{
-			path: '/year',
-			name: 'year-page',
-			component: require('@/components/pages/YearPage')
-		},
-		{
-			path: '/CMS',
-			name: 'CMS-page',
-			component: require('@/components/pages/CMS')
+			path: '/settings',
+			name: 'settings-page',
+			component: require('@/components/Settings')
 		},
 		{
 			path: '*',

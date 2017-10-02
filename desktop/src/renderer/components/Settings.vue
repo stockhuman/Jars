@@ -1,9 +1,6 @@
 <template>
 	<div class="wrapper">
-		<header class="header">
-			<h1 class="title">{{week}}</h1>
-			<hr />
-		</header>
+
 		<main>
 			<section class="week-calendar">
 				<p class="day">Monday</p>
@@ -30,21 +27,25 @@
 
 <script>
 import axios from 'axios'
-import moment from 'moment'
+
+// moment.locale('en', {
+// 	ordinal: function (number, token) {
+// 		var b = number % 10
+// 		var output = (~~(number % 100 / 10) === 1) ? 'th'
+// 			: (b === 1) ? 'st'
+// 			: (b === 2) ? 'nd'
+// 			: (b === 3) ? 'rd'
+// 			: 'th'
+// 		return number + '<sup>' + output + '</sup>'
+// 	}
+// })
 
 export default {
 	name: 'test-page',
-	computed: {
-		state () {
-			return this.$store.state
-		},
-		week () {
-			return 'Week of the ' +
-				moment().startOf('isoWeek').format('Do') +
-				' to ' +
-				moment().endOf('isoWeek').format('Do')
-		}
-	},
+	// computed: {
+	// 	state () {
+	// 		return this.$store.state
+	// 	}
 	data: () => ({
 		errors: [],
 		weekData: [],
@@ -65,8 +66,8 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../../assets/scss/variables';
-@import '../../assets/scss/mixins';
+@import '../assets/scss/variables';
+@import '../assets/scss/mixins';
 
 .week-calendar {
 	background: #eee;

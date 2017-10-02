@@ -1,6 +1,6 @@
 <template>
 	<div id="app">
-		<navigation></navigation>
+		<top></top>
 		<transition name="fade">
 			<router-view></router-view>
 		</transition>
@@ -8,38 +8,27 @@
 </template>
 
 <script>
-	import navigation from './components/Navigation'
-	// import notes from './components/Notes'
+	import top from './components/parts/Header'
 
 	export default {
 		name: 'desktop',
-		// components: { navigation, notes },
-		components: { navigation },
+		components: { top },
 		computed: {
 			store () { return this.$store }
 		},
-
 		// Add global keyboard event listener
 		mounted: function () {
 			document.addEventListener('keyup', (e) => {
-				if (e.keyCode === 45) { // "n" or Insert Key
-					this.store.commit('TOGGLE_NOTES')
-				}
-				if (e.keyCode === 192 || e.keyCode === 36) { // "~" or Home key
-					this.store.commit('TOGGLE_NAV')
-				}
-				if (e.keyCode === 112) { // F1
-					this.$router.push('/CMS')
-				}
+				// if (e.keyCode === 45) { // "n" or Insert Key
+				// 	this.store.commit('TOGGLE_NOTES')
+				// }
 				if (e.altKey) { // sans-nav navigation
 					switch (e.keyCode) {
 					case 48: this.$router.push('/')
 						break
-					case 49: this.$router.push('/today')
+					case 49: this.$router.push('/overview')
 						break
-					case 50: this.$router.push('/week')
-						break
-					case 51: this.$router.push('/year')
+					case 50: this.$router.push('/settings')
 						break
 					}
 				}
@@ -50,6 +39,7 @@
 
 <style src='./assets/base.scss' lang="scss"></style>
 <style lang="scss">
+	@import './assets/scss/variables';
 	.fade-enter-active, .fade-leave-active {
 		transition-property: opacity;
 		transition-duration: .15s;

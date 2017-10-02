@@ -3,7 +3,7 @@
 
 ::-webkit-scrollbar-thumb:vertical {
 	height: 10px;
-	background-color: black;
+	background-color: $color__blue;
 }
 
 ::-webkit-scrollbar {
@@ -20,26 +20,20 @@
 
 body {
 	font-family: sans-serif;
-	background-color: #090d17;
-	background-image: url("https://www.transparenttextures.com/patterns/otis-redding.png");
+	// font-family: Hack, monospace;
+	color: $color__body-color;
+	background-color: $color__body-background;
 }
 
 .wrapper {
-	height: calc(100vh - #{$nav-height});
-	padding: 30px 40px;
-	margin-bottom: $nav-height;
+	height: 100%;
+	padding: $pu;
 	width: 100vw;
 }
 
 #nav.hidden + .wrapper {
 	width: 100vw;
 	margin-left: 0;
-}
-
-main {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-between;
 }
 
 .header {

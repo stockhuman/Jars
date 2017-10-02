@@ -2,6 +2,8 @@
 
 import { app, BrowserWindow } from 'electron'
 
+const path = require('path')
+
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -20,16 +22,16 @@ function createWindow () {
 	 * Initial window options
 	 */
 	mainWindow = new BrowserWindow({
-		// height: 1000,
+		height: 850,
 		// useContentSize: true,
-		// width: 500,
-		icon: __dirname + 'icon_large.png'
+		width: 1280,
+		icon: path.join(__dirname, 'icon_large.png'),
 		skipTaskbar: false,
-		width: lastWindowState.width, 
-		height: lastWindowState.height, 
-		// toolbar: false
+		// width: lastWindowState.width,
+		// height: lastWindowState.height,
+		toolbar: false
 	})
-	// mainWindow.setMenu(null)
+	mainWindow.setMenu(null)
 
 	mainWindow.loadURL(winURL)
 

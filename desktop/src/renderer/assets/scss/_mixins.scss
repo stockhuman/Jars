@@ -10,6 +10,10 @@
 	}
 }
 
+.no-select {
+	user-select: none;
+}
+
 // via http://joshbroton.com/quick-fix-sass-mixins-for-css-keyframe-animations/
 
 // usage:

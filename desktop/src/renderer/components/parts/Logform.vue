@@ -19,7 +19,6 @@ import moment from 'moment'
 
 export default {
 	name: 'logform',
-	computed: {},
 	created () {
 		this.computeCommits()
 	},
@@ -30,6 +29,7 @@ export default {
 		stage: 0
 	}),
 	methods: {
+		// TODO: bug: not updated on commit
 		computeCommits: function () {
 			var hours = 0
 			let thisWeek = ''

@@ -1,19 +1,30 @@
 button {
-	font-size: .8em;
+	font-size: .9em;
+	font-family: 'Hack';
+	font-weight: 700;
 	cursor: pointer;
 	outline: none;
-	padding: 0.75em 2em;
+	padding: 0.6em 2.3em;
 	margin: 3px;
-	border-radius: 2em;
+	border-radius: 6px;
 	display: inline-block;
 	color: #fff;
-	background-color: #4fc08d;
+	background-color: $color__blue;
 	transition: all 0.15s ease;
 	box-sizing: border-box;
-	border: 1px solid #4fc08d;
+	border: 2px solid $color__blue;
+	&:hover {
+		background: lighten($color__blue, 10%);
+		border-color: lighten($color__blue, 10%);
+	}
 }
 
 button.alt {
-	color: #42b983;
+	color: black;
 	background-color: transparent;
+	border-color: black;
+	&:hover {
+		background: black;
+		color: white;
+	}
 }

@@ -1,65 +1,72 @@
 <template>
 	<div class="wrapper">
+		<section class="account-info">
+			<img id="account-image" src="~@/assets/img/user.jpg" alt="User Account image">
+			<h1 class="item name">{{account.user_nicename}}</h1>
+			<p class="item name">User: {{account.user_name}}</p>
+		</section>
 
-		<main>
-			<section class="week-calendar">
-				<p class="day">Monday</p>
-				<input type="text">
-				<p class="day">Tuesday</p>
-				<input type="text">
-				<p class="day">Wednesday</p>
-				<input type="text">
-				<p class="day">Thursday</p>
-				<input type="text">
-				<p class="day">Friday</p>
-				<input type="text">
-				<p class="day">Saturday</p>
-				<input type="text">
-				<p class="day">Sunday</p>
-				<input type="text">
-			</section>
-			<div>
-				{{thisWeek}}
+		<section class="device-info">
+			<hr />
+
+			<div class="one-half">
+				<h2 class="title">Information</h2>
+				<div class="items">
+					<div class="item">
+						<div class="name">Vue.js:</div>
+						<div class="value">{{ vue }}</div>
+					</div>
+					<div class="item">
+						<div class="name">Electron:</div>
+						<div class="value">{{ electron }}</div>
+					</div>
+					<div class="item">
+						<div class="name">Node:</div>
+						<div class="value">{{ node }}</div>
+					</div>
+					<div class="item">
+						<div class="name">Platform:</div>
+						<div class="value">{{ platform }}</div>
+					</div>
+				</div>
 			</div>
-		</main>
+
+			<div class="one-half">
+				<button class="alt" @click="open('https://github.com/stockHuman/Jars/wiki')">Jars Documentation</button>
+			</div>
+			
+		</section>
 	</div>
 </template>
 
 <script>
 import axios from 'axios'
 
-// moment.locale('en', {
-// 	ordinal: function (number, token) {
-// 		var b = number % 10
-// 		var output = (~~(number % 100 / 10) === 1) ? 'th'
-// 			: (b === 1) ? 'st'
-// 			: (b === 2) ? 'nd'
-// 			: (b === 3) ? 'rd'
-// 			: 'th'
-// 		return number + '<sup>' + output + '</sup>'
-// 	}
-// })
-
 export default {
-	name: 'test-page',
-	// computed: {
-	// 	state () {
-	// 		return this.$store.state
-	// 	}
+	name: 'settings',
+	methods: {
+		open (link) {
+			this.$electron.shell.openExternal(link)
+		}
+	},
+
 	data: () => ({
+		account: [],
+		tasks: 0,
 		errors: [],
-		weekData: [],
-		thisWeek: []
+		electron: process.versions['atom-shell'],
+		node: process.versions.node,
+		platform: require('os').platform(),
+		vue: require('vue/package.json').version
 	}),
-	created: function () {
-		axios.get('weeks/')
+
+	created () {
+		axios.get('users/0')
 		.then(response => {
-			let weeksOnRecord = response.data.weeks.records.length
-			this.weekData = response.data.weeks.records
-			this.thisWeek = response.data.weeks.records[weeksOnRecord - 1]
+			this.account = response.data
 		})
 		.catch(e => {
-			console.warn(e)
+			this.errors.push(e)
 		})
 	}
 }
@@ -69,10 +76,33 @@ export default {
 @import '../assets/scss/variables';
 @import '../assets/scss/mixins';
 
-.week-calendar {
-	background: #eee;
-	width: 100%;
+.account-info, .device-info {
+	padding-top: 5em;
+	color: #eee;
 }
 
+#account-image {
+	border-radius: 50%;
+	width: 7em;
+	height: 7em;
+}
 
+.item {
+	display: flex;
+	margin-bottom: 6px;
+}
+
+.name {
+	color: #6a6a6a;
+	margin-right: 6px;
+}
+
+.item .value {
+	color: $color__blue;
+	font-weight: bold;
+}
+
+.one-half > button {
+	margin: .9em 0;
+}
 </style>

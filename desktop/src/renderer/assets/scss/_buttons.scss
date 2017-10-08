@@ -28,3 +28,9 @@ button.alt {
 		color: white;
 	}
 }
+
+input, button, textarea {
+	&:focus {
+		outline: none;
+	}
+}

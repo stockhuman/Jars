@@ -9,7 +9,7 @@
 			@focus="begin()" 
 			@blur="abort()" 
 			@keyup.enter="nextField()">
-		<span class="commits-this-week">commited this week: {{hoursCommited}}</span>
+		<span class="commits-this-week">commited this week: {{hrs}}</span>
 	</section>
 </template>
 
@@ -20,18 +20,17 @@ import moment from 'moment'
 export default {
 	name: 'logform',
 	created () {
-		this.computeCommits()
+		console.log('hours commited @ created: ' + this.computeHours())
 	},
 	data: () => ({
-		hoursCommited: '',
 		commit: {},
 		msg: '',
-		stage: 0
+		stage: 0,
+		hrs: ''
 	}),
 	methods: {
-		// TODO: bug: not updated on commit
-		computeCommits: function () {
-			var hours = 0
+		computeHours: function () {
+			let hours = 0
 			let thisWeek = ''
 
 			// see https://github.com/mevdschee/php-crud-api
@@ -42,8 +41,7 @@ export default {
 			}
 			thisWeek += 'satisfy=any'
 
-			axios.get('beans?' + thisWeek)
-			.then(response => {
+			axios.get('beans?' + thisWeek).then(response => {
 				let r = response.data.beans.records
 
 				for (let l = 0; l < r.length; l++) {
@@ -56,16 +54,13 @@ export default {
 				} else {
 					hours += ' hours'
 				}
-
-				this.hoursCommited = hours
+				this.hrs = hours
 			})
 		},
 		begin: function () {
-			console.log('log focus')
 			document.getElementById('log').placeholder = 'log time (press enter to commit)'
 		},
 		abort: function () {
-			console.log('log focus lost')
 			this.stage = 0
 			document.getElementById('log').value = ''
 			document.getElementById('log').placeholder = 'log time'
@@ -86,7 +81,11 @@ export default {
 					}
 				}
 				if (!isNaN(filterFloat(txt))) {
-					this.msg += txt + ' hours '
+					if (txt === '1') {
+						this.msg += 'An hour '
+					} else {
+						this.msg += txt + ' hours '
+					}
 					this.commit.time = txt
 				}
 			}
@@ -153,7 +152,11 @@ export default {
 				this.msg = ''
 				axios.post('beans/', this.commit)
 
-				this.computeCommits()
+				this.computeHours()
+				this.hrs = ''
+				window.setTimeout(function () {
+					form.blur()
+				}, 2000)
 			}
 		}
 	}

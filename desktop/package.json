@@ -1,6 +1,6 @@
 {
-  "name": "JarsDesktopClient",
-  "version": "0.0.2",
+  "name": "Jars",
+  "version": "0.0.3",
   "author": "Michael Hemingway",
   "description": "The desktop version of Jars",
   "license": "MIT",
@@ -47,9 +47,7 @@
     },
     "win": {
       "icon": "build/icons/icon.ico",
-      "target": "appx",
-      "backgroundColor": "#eee",
-      "publisherDisplayName": "Arthem Co."
+      "publisherName": "Arthem Co."
     },
     "linux": {
       "icon": "build/icons"

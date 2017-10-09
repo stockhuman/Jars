@@ -76,15 +76,11 @@ export default {
 @import '../assets/scss/variables';
 @import '../assets/scss/mixins';
 
-.account-info, .device-info {
-	padding-top: 5em;
-	color: #eee;
-}
-
 #account-image {
 	border-radius: 50%;
 	width: 7em;
 	height: 7em;
+	margin-bottom: $u;
 }
 
 .item {

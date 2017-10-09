@@ -66,12 +66,14 @@ export default {
 			} else {
 				datetime = moment(
 					event.nicedate + ' ' + moment().year() + ' ' + event.time,
-					'MMM Do YYYY H:mmA').format('YYYY-MM-DD HH:mm:ss')
+					'MMM Do YYYY h:mmA').format('YYYY-MM-DD HH:mm:ss')
 			}
 
 			let evt = {
 				week: weekcode,
 				datetime: datetime,
+				time: moment(datetime).format('h:mmA'), // this param is ignored by the server
+				nicedate: moment(datetime).format('MMM Do'), // this one too
 				title: event.title,
 				location: event.location
 			}
@@ -102,7 +104,7 @@ export default {
 			} else {
 				datetime = moment(
 					event.nicedate + ' ' + moment().year() + ' ' + event.time,
-					'MMM Do YYYY H:mmA').format('YYYY-MM-DD HH:mm:ss')
+					'MMM Do YYYY h:mmA').format('YYYY-MM-DD HH:mm:ss')
 			}
 			axios.put('events/' + event.ID, {
 				title: event.title,
@@ -126,7 +128,7 @@ export default {
 
 		this.$on('commit-event', event => {
 			let tod = ''
-			switch (moment(event.time, 'H:mmA').hour()) {
+			switch (moment(event.time, 'h:mmA').hour()) {
 			case 3:
 			case 4: tod = 'em'
 				break
@@ -195,7 +197,7 @@ export default {
 							let obj = {
 								ID: evt[0],
 								title: evt[3],
-								time: t.format('H:mmA'),
+								time: t.format('h:mmA'),
 								nicedate: moment(evt[2]).format('MMM Do'),
 								location: evt[4]
 							}

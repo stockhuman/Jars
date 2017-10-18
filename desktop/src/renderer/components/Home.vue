@@ -18,6 +18,7 @@ export default {
 	components: { logform, events },
 	computed: {
 		weekInfo () {
+			// TODO: does not update, moment.js is not reactive?
 			return 'Week of the ' +
 				moment().startOf('isoWeek').format('Do') +
 				' to ' +

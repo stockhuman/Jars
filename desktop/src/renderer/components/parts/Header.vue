@@ -96,6 +96,7 @@ export default {
 			return msg
 		},
 		welcome () {
+			// FIX: does not update on hour
 			return this.greeting + ', ' + this.name
 		}
 	},

@@ -16,6 +16,9 @@
 		computed: {
 			store () { return this.$store }
 		},
+		data: () => ({
+			timer: []
+		}),
 		// Add global keyboard event listener
 		mounted: function () {
 			document.addEventListener('keyup', (e) => {
@@ -33,6 +36,15 @@
 					}
 				}
 			})
+
+			// Set reccuring event to refresh content
+			this.timer = setTimeout(this.refresh(), 300000) // five minutes
+		},
+		methods: {
+			refresh: function () {
+				this.$root.$emit('tick')
+				this.timer = setTimeout(this.refresh, 300000)
+			}
 		}
 	}
 </script>

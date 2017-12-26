@@ -27,6 +27,7 @@ function createWindow () {
 		width: 1280,
 		icon: path.join(__dirname, 'icon_large.png'),
 		skipTaskbar: false,
+		frame: false,
 		// width: lastWindowState.width,
 		// height: lastWindowState.height,
 		toolbar: false

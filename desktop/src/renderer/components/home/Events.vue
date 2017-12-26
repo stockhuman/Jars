@@ -46,6 +46,17 @@ export default {
 		},
 		panelHidden: true
 	}),
+	props: ['wkc'], // week code for week switching
+	watch: {
+		// watch for weekcode changes
+		wkc: function () {
+			for (let e = 0; e < this.weekdays.length; e++) {
+				this.weekdays[e].events = []
+				this.events = []
+			}
+			this.fetchData()
+		}
+	},
 	created () {
 		this.fetchData()
 
@@ -56,7 +67,6 @@ export default {
 
 		// create a new event
 		this.$on('create-event', event => {
-			let weekcode = '' + moment().year() + moment().isoWeek() // '201740'
 			let datetime = ''
 
 			if (event.time === '') {
@@ -70,7 +80,7 @@ export default {
 			}
 
 			let evt = {
-				week: weekcode,
+				week: this.wkc,
 				datetime: datetime,
 				time: moment(datetime).format('h:mmA'), // this param is ignored by the server
 				nicedate: moment(datetime).format('MMM Do'), // this one too
@@ -113,17 +123,8 @@ export default {
 			})
 		})
 
-		// TODO: refactor common code out of these
 		this.$on('delete-event', event => {
-			axios.delete('events/' + event.ID)
-			for (let d = 0; d < this.weekdays.length; d++) {
-				for (let e = 0; e < this.weekdays[d].events.length; e++) {
-					if (this.weekdays[d].events[e].ID === event.ID) { // this is colossally stupid
-						this.weekdays[d].events.splice(e, 1)
-					}
-				}
-			}
-			this.resetPanel()
+			this.removeEvent(event)
 		})
 
 		this.$on('commit-event', event => {
@@ -163,6 +164,7 @@ export default {
 			}
 
 			let commit = {
+				date: moment(event.nicedate + ' ' + moment().year(), 'MMM Do YYYY').format('YYYY-MM-DD'),
 				time: event.commit,
 				tod: tod,
 				project: 'life',
@@ -171,22 +173,18 @@ export default {
 				comment: event.location ? 'At ' + event.location : ''
 			}
 
-			axios.post('beans/', commit)
+			// fixes reactivity in the commited this week in Logform
+			axios.post('beans/', commit).then(() => {
+				console.log('Committed: ' + commit.time + 'h in ' + commit.project)
+				// this.$root.$emit('event-commit', commit.time)
+			})
 
-			axios.delete('events/' + event.ID)
-			for (let d = 0; d < this.weekdays.length; d++) {
-				for (let e = 0; e < this.weekdays[d].events.length; e++) {
-					if (this.weekdays[d].events[e].ID === event.ID) { // this is colossally stupid
-						this.weekdays[d].events.splice(e, 1)
-					}
-				}
-			}
-			this.resetPanel()
+			this.removeEvent(event)
 		})
 	},
 	methods: {
 		fetchData: function () {
-			let wk = '?filter=week,eq,' + moment().year() + moment().isoWeek() // eg: 201739
+			let wk = '?filter=week,eq,' + this.wkc
 			axios.get('events/' + wk).then(r => {
 				for (let i = r.data.events.records.length - 1; i >= 0; i--) {
 					let evt = r.data.events.records[i]
@@ -207,7 +205,6 @@ export default {
 				}
 			})
 		},
-
 		// get the events of the requested day
 		selectDay: function (day) {
 			let elems = document.querySelectorAll('.weekday-row.selected');
@@ -221,7 +218,8 @@ export default {
 
 		newEvent: function (day) {
 			this.panelData.isNew = true
-			this.panelData.nicedate = moment().startOf('isoWeek').add(day, 'days').format('MMM Do')
+			this.panelData.nicedate =
+				moment(this.wkc + 0, 'YYYYWWe').startOf('isoWeek').add(day, 'days').format('MMM Do')
 			// this.panelData.week = '' + moment().year() + moment().isoWeek()
 			this.panelData.title = ''
 			this.panelData.time = ''
@@ -235,6 +233,18 @@ export default {
 			this.panelData.nicedate = ''
 			this.panelData.location = ''
 			this.panelHidden = true
+		},
+
+		removeEvent: function (event) {
+			axios.delete('events/' + event.ID)
+			for (let d = 0; d < this.weekdays.length; d++) {
+				for (let e = 0; e < this.weekdays[d].events.length; e++) {
+					if (this.weekdays[d].events[e].ID === event.ID) { // this is colossally stupid
+						this.weekdays[d].events.splice(e, 1)
+					}
+				}
+			}
+			this.resetPanel()
 		}
 	}
 }

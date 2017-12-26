@@ -5,7 +5,6 @@
 				<!-- base -->
 				<circle fill="#FFFFFF" cx="64" cy="64" r="64"/>
 				<g>
-
 					<defs><rect id="mask" :width="lifeClip" height="128"/></defs>
 					<clipPath id="clip"><use xlink:href="#mask"/></clipPath>
 					<circle class="st1" cx="64" cy="64" r="64" fill="#00AEEF" clip-path="url(#clip)"/>
@@ -13,7 +12,7 @@
 			</svg>
 			<div class="welcome-block">
 				<h1>{{welcome}}</h1>
-				<h2 class="fraction">{{fraction}}</h2>
+				<h2 class="fraction">{{this.computedFraction}}</h2>
 				<p>This time will pass today</p>
 			</div>
 		</div>
@@ -27,29 +26,11 @@ import moment from 'moment'
 import navigation from './Navigation'
 
 export default {
-	name: 'top', // got I'm an idiot, I set it to 'header'
+	name: 'top',
 	components: { navigation },
 	computed: {
-		fraction () {
-			function formatTime (time) {
-				return Math.ceil(time / (1000 * 3600 * 24))
-			}
-
-			// compute how long I have to live
-			let birth = new Date('4/24/1997')
-			let death = new Date('4/24/2077')
-
-			// var lifeTime = Math.abs(death.getTime() - birth.getTime())
-			// var lifeDays = formatTime(lifeTime)
-
-			let DDC = formatTime(death) - formatTime(birth) // formatted to 29000
-
-			let life = formatTime(new Date(Date.now()).getTime()) - formatTime(birth)
-
-			return life + ' / ' + DDC
-		},
 		lifeClip () {
-			return eval(this.fraction) * 100 // eslint-disable-line
+			return eval(this.computedFraction) * 100 // eslint-disable-line
 		},
 		name () { // compute the first name only
 			let nn = this.account.user_nicename || ''
@@ -57,6 +38,30 @@ export default {
 			if (spacePosition === -1) return nn
 			else return nn.substr(0, spacePosition)
 		},
+		welcome () {
+			return this.computedGreeting + ', ' + this.name
+		}
+	},
+	created () {
+		// get my name (as inneficiently as possible: this should be in localstorage)
+		axios.get('users/0').then(response => {
+			this.account = response.data
+		}).catch(e => { this.account = { user_nicename: ' ' } })
+
+		this.computedGreeting = this.greeting()
+		this.computedFraction = this.fraction()
+
+		this.$on('tick', () => {
+			this.computedGreeting = this.greeting()
+			this.computedFraction = this.fraction()
+		})
+	},
+	data: () => ({
+		account: [],
+		computedGreeting: '',
+		computedFraction: ''
+	}),
+	methods: {
 		greeting () {
 			let hr = moment().hour()
 			let msg = ''
@@ -95,20 +100,22 @@ export default {
 			}
 			return msg
 		},
-		welcome () {
-			// FIX: does not update on hour
-			return this.greeting + ', ' + this.name
+		fraction () {
+			function formatTime (time) {
+				return Math.ceil(time / (1000 * 3600 * 24))
+			}
+
+			// TODO: add this to profile as data
+			// compute how long I have to live
+			let birth = new Date('4/24/1997')
+			let death = new Date('4/24/2077')
+
+			let DDC = formatTime(death) - formatTime(birth) // formatted to 29000
+			let life = formatTime(new Date(Date.now()).getTime()) - formatTime(birth)
+
+			return life + ' / ' + DDC
 		}
-	},
-	created () {
-		// get my name (as inneficiently as possible: this should be in localstorage)
-		axios.get('users/0').then(response => {
-			this.account = response.data
-		}).catch(e => { this.account = { user_nicename: ' ' } })
-	},
-	data: () => ({
-		account: []
-	})
+	}
 }
 </script>
 
@@ -118,6 +125,7 @@ export default {
 		position: absolute;
 		right: $pu;
 		bottom: 8px;
+		-webkit-app-region: no-drag;
 	}
 	
 	.nav-links li {
@@ -138,12 +146,13 @@ export default {
 	#header {
 		width: 100%;
 		position: relative;
-		border: 1px solid white;
+		border-bottom: 1px solid rgba($color__grey, 0.5);
 		font-family:  "Helvetica Neue Light", Helvetica, Arial, sans-serif;
+		-webkit-app-region: drag;
 	}
 	#header-inner {
 		width: 100%;
-		margin: $pu;
+		padding: $pu;
 		border-bottom: 1ps solid white;
 		display: flex;
 		flex-wrap: wrap;

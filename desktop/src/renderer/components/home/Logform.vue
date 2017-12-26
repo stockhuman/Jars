@@ -20,7 +20,7 @@ import moment from 'moment'
 export default {
 	name: 'logform',
 	created () {
-		console.log('hours commited @ created: ' + this.computeHours())
+		this.computeHours()
 	},
 	data: () => ({
 		commit: {},
@@ -28,6 +28,12 @@ export default {
 		stage: 0,
 		hrs: ''
 	}),
+	mounted () {
+		// // separarate hours commited from life events
+		// this.$root.$on('event-commit', time => {
+		// 	this.computeHours()
+		// })
+	},
 	methods: {
 		computeHours: function () {
 			let hours = 0
@@ -47,15 +53,20 @@ export default {
 				for (let l = 0; l < r.length; l++) {
 					hours += parseFloat(r[l][2])
 				}
-				if (hours < 1) {
-					hours += ' minutes'
-				} else if (hours === 1) {
-					hours += ' hour'
-				} else {
-					hours += ' hours'
-				}
-				this.hrs = hours
+
+				this.hrs = this.appendTime(hours)
 			})
+		},
+		appendTime: function (hours) {
+			if (hours < 1) {
+				hours = 60 * hours
+				hours += ' minutes'
+			} else if (hours === 1) {
+				hours += ' hour'
+			} else {
+				hours += ' hours'
+			}
+			return hours
 		},
 		begin: function () {
 			document.getElementById('log').placeholder = 'log time (press enter to commit)'
@@ -147,13 +158,14 @@ export default {
 				console.log('now on stage ' + this.stage)
 			} else {
 				form.placeholder = 'bean commited!'
+
 				// commit!
 				this.commit.date = moment().format('YYYY-MM-DD')
 				this.msg = ''
-				axios.post('beans/', this.commit)
+				axios.post('beans/', this.commit).then(() => {
+					this.computeHours()
+				})
 
-				this.computeHours()
-				this.hrs = ''
 				window.setTimeout(function () {
 					form.blur()
 				}, 2000)

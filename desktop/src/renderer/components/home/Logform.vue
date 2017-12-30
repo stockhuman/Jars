@@ -45,13 +45,14 @@ export default {
 					moment().startOf('isoWeek').add(i, 'days').format('YYYY-MM-DD') +
 					'&'
 			}
-			thisWeek += 'satisfy=any'
+			thisWeek += 'satisfy=any&columns=time,cat'
 
 			axios.get('beans?' + thisWeek).then(response => {
 				let r = response.data.beans.records
 
 				for (let l = 0; l < r.length; l++) {
-					hours += parseFloat(r[l][2])
+					// TODO: separarate hours commited from life events
+					hours += parseFloat(r[l][0])
 				}
 
 				this.hrs = this.appendTime(hours)
@@ -184,9 +185,9 @@ export default {
 	}
 	.log-input {
 		width: 100%;
-		padding: $pu / 2.5;
+		padding: $u / 2.5;
 		border: none;
-		font-size: $pu / 2;
+		font-size: $u / 2;
 		&::placeholder {
 			color: $color__grey;
 			font-family: "Helvetica Light";

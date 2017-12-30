@@ -1,18 +1,19 @@
 button {
 	font-size: .9em;
 	font-family: 'Hack';
-	font-weight: 700;
+	font-weight: 300;
 	cursor: pointer;
 	outline: none;
 	padding: 0.6em 2.3em;
 	margin: 3px;
-	border-radius: 6px;
+	border-radius: 4px;
 	display: inline-block;
 	color: #fff;
 	background-color: $color__blue;
 	transition: all 0.15s ease;
 	box-sizing: border-box;
-	border: 2px solid $color__blue;
+	border: 1px solid $color__blue;
+	user-select: none;
 	&:hover {
 		background: lighten($color__blue, 10%);
 		border-color: lighten($color__blue, 10%);
@@ -26,6 +27,22 @@ button.alt {
 	&:hover {
 		background: black;
 		color: white;
+	}
+}
+
+button.soft {
+	border-color: $color__grey;
+	background-color: transparent;
+	color: $color__grey;
+	&:hover {
+		background: $color__blue;
+		border-color: $color__blue;
+		color: $color__light;
+	}
+	&.selected {
+		background: black;
+		color: white;
+		border-color: black;
 	}
 }
 

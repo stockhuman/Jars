@@ -90,7 +90,7 @@ export default {
 			case 19:
 			case 20:
 			case 21:
-			case 22: msg = 'Good Evening'
+			case 22: msg = 'Good evening'
 				break
 			case 23:
 			case 0:

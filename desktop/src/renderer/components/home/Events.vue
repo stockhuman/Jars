@@ -254,15 +254,15 @@ export default {
 	@import '../../assets/scss/variables';
 
 	.events {
-		padding-top: $pu;
-		padding-bottom: 4 * $pu;
+		padding-top: $u;
+		padding-bottom: 4 * $u;
 		display: flex;
 		flex-wrap: row;
 	}
 
 	.weekday-select {
 		tr {
-			height: $pu / 1.1;
+			height: $u / 1.1;
 			font-family: "Hack", monospace;
 			font-weight: bold;
 			color: $color__grey;

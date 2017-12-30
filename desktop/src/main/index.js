@@ -22,14 +22,14 @@ function createWindow () {
 	 * Initial window options
 	 */
 	mainWindow = new BrowserWindow({
-		height: 850,
+		// height: 850,
 		// useContentSize: true,
-		width: 1280,
+		// width: 1280,
 		icon: path.join(__dirname, 'icon_large.png'),
 		skipTaskbar: false,
 		frame: false,
-		// width: lastWindowState.width,
-		// height: lastWindowState.height,
+		width: lastWindowState.width,
+		height: lastWindowState.height,
 		toolbar: false
 	})
 	mainWindow.setMenu(null)

@@ -1,5 +1,5 @@
 <template>
-	<aside id="event-panel" :class="{hidden: hidden, neue: event.isNew}">
+	<aside id="event-panel" :class="{hidden: hidden, neue: event.isNew}" @keyup.esc="cancel()">
 		<div class="editbox">
 			<input type="text" @input="update('title')" class="title" v-model="event.title" placeholder="title">
 			<div class="row details">
@@ -72,9 +72,9 @@ export default {
 		position: fixed;
 		background: $color__grey-dark;
 		height: 11 * $pu;
-		width: calc(100% - (8 * #{$pu}));
+		width: calc(100% - (2 * #{$pu}));
 		padding: 1.5*$pu;
-		margin: 0 4*$pu 0 4*$pu;
+		margin: 0 $pu 0 $pu;
 		bottom: 0;
 		left: 0;
 		transform: translate3D(0, 0, 0);

@@ -1,28 +1,13 @@
 <template>
 	<div class="wrapper">
-		<aside id="overview-meta">
-			<h2>{{timescale}}</h2>
-			<p class="hack">{{committed}}</p>
-		</aside>
-		<section id="overview-data">
-			<grapher :ds="tsData" :ts="showme" :width="400" :height="400"></grapher>
-		</section>
-		<nav class="overview-timescales">
-			<button class="soft" @click="switchView('today')" :class="{selected: tab('today')}">Today</button>
-			<button class="soft" @click="switchView('month')" :class="{selected: tab('month')}">This Month</button>
-			<button class="soft" @click="switchView('year')" :class="{selected: tab('year')}">This Year</button>
-			<button class="soft" @click="switchView('all')" :class="{selected: tab('all')}">This Jar</button>
-		</nav>
 	</div>
 </template>
 
 <script>
-import moment from 'moment'
-import axios from 'axios'
-import grapher from './overview/Grapher'
-
+// TODO: build me
 export default {
 	name: 'overview',
+<<<<<<< HEAD
 	components: { grapher },
 	computed: {
 		timescale: function () {
@@ -149,11 +134,16 @@ export default {
 			this.weekcode = '' + moment().year() + moment().isoWeek() // '201740'
 		})
 	}
+=======
+	computed: {},
+	methods: {}
+>>>>>>> parent of 411d4d0... Built Overview MVP
 }
 </script>
 
 <style lang="scss">
 	@import '../assets/scss/variables';
+<<<<<<< HEAD
 
 	.overview-timescales {
 		text-align: center;
@@ -168,4 +158,6 @@ export default {
 			color: $color__grey;
 		}
 	}
+=======
+>>>>>>> parent of 411d4d0... Built Overview MVP
 </style>

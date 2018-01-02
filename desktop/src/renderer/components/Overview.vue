@@ -8,6 +8,7 @@
 export default {
 	name: 'overview',
 <<<<<<< HEAD
+<<<<<<< HEAD
 	components: { grapher },
 	computed: {
 		timescale: function () {
@@ -138,11 +139,16 @@ export default {
 	computed: {},
 	methods: {}
 >>>>>>> parent of 411d4d0... Built Overview MVP
+=======
+	computed: {},
+	methods: {}
+>>>>>>> parent of 411d4d0... Built Overview MVP
 }
 </script>
 
 <style lang="scss">
 	@import '../assets/scss/variables';
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 	.overview-timescales {
@@ -158,6 +164,8 @@ export default {
 			color: $color__grey;
 		}
 	}
+=======
+>>>>>>> parent of 411d4d0... Built Overview MVP
 =======
 >>>>>>> parent of 411d4d0... Built Overview MVP
 </style>

@@ -8,8 +8,6 @@
 </template>
 
 <script>
-	import localforage from 'localforage'
-	import axios from 'axios'
 	import top from './components/parts/Header'
 
 	export default {
@@ -21,16 +19,6 @@
 		data: () => ({
 			timer: []
 		}),
-		created: function () {
-			localforage.getItem('prefs').then(prefs => {
-				if (prefs === null) {
-					this.$router.push('/login')
-				} else {
-					axios.defaults.baseURL = prefs.url
-					console.log(axios.defaults)
-				}
-			})
-		},
 		// Add global keyboard event listener
 		mounted: function () {
 			document.addEventListener('keyup', (e) => {
@@ -62,3 +50,19 @@
 </script>
 
 <style src='./assets/base.scss' lang="scss"></style>
+<style lang="scss">
+	@import './assets/scss/variables';
+	.fade-enter-active, .fade-leave-active {
+		transition-property: opacity;
+		transition-duration: .15s;
+	}
+	.fade-enter-active {
+		transition-delay: .25s;
+		position: fixed;
+		width: 100vw;
+		height: 100vh;
+	}
+	.fade-enter, .fade-leave-active {
+		opacity: 0
+	}
+</style>

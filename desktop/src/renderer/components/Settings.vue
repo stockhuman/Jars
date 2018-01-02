@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import localforage from 'localforage'
 
 export default {
 	name: 'settings',
@@ -48,6 +48,12 @@ export default {
 		open (link) {
 			this.$electron.shell.openExternal(link)
 		}
+	},
+
+	created: function () {
+		localforage.getItem('user').then(r => {
+			this.account = r
+		})
 	},
 
 	data: () => ({
@@ -58,23 +64,12 @@ export default {
 		node: process.versions.node,
 		platform: require('os').platform(),
 		vue: require('vue/package.json').version
-	}),
-
-	created () {
-		axios.get('users/0')
-		.then(response => {
-			this.account = response.data
-		})
-		.catch(e => {
-			this.errors.push(e)
-		})
-	}
+	})
 }
 </script>
 
 <style lang="scss">
 @import '../assets/scss/variables';
-@import '../assets/scss/mixins';
 
 #account-image {
 	border-radius: 50%;

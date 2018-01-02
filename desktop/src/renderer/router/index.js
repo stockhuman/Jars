@@ -21,6 +21,11 @@ export default new Router({
 			component: require('@/components/Settings')
 		},
 		{
+			path: '/login',
+			name: 'login-page',
+			component: require('@/components/Login')
+		},
+		{
 			path: '*',
 			redirect: '/home'
 		}

@@ -70,14 +70,14 @@ export default {
 		}
 	},
 	methods: {
-		switchView: function (view) {
+		switchView (view) {
 			this.showme = view
 			this.getData()
 		},
-		tab: function (tab) {
+		tab (tab) {
 			return this.showme === tab
 		},
-		getData: function () {
+		getData () {
 			let qs = 'beans?filter=date,'
 
 			// note that data efficiency pragmatism necessitates a different
@@ -158,7 +158,7 @@ export default {
 	.overview-timescales {
 		text-align: center;
 		position: fixed;
-		bottom: $pu;
+		bottom: $u;
 		width: 100%;
 	}
 

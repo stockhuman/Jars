@@ -75,10 +75,3 @@ export default {
 	}
 }
 </script>
-
-<style>
-	.week-info {
-		opacity: 0.7;
-		font-style: italic;
-	}
-</style>

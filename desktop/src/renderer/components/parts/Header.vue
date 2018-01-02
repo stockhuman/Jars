@@ -12,8 +12,7 @@
 			</svg>
 			<div class="welcome-block">
 				<h1>{{welcome}}</h1>
-				<h2 class="fraction">{{this.computedFraction}}</h2>
-				<p>This time will pass today</p>
+				<h2 class="fraction">{{this.computedFraction}} - This time will pass today</h2>
 			</div>
 		</div>
 		<navigation></navigation>
@@ -21,8 +20,8 @@
 </template>
 
 <script>
-import axios from 'axios'
 import moment from 'moment'
+import localforage from 'localforage'
 import navigation from './Navigation'
 
 export default {
@@ -30,7 +29,7 @@ export default {
 	components: { navigation },
 	computed: {
 		lifeClip () {
-			return eval(this.computedFraction) * 100 // eslint-disable-line
+			return eval(this.computedFraction || 0) * 100 // eslint-disable-line
 		},
 		name () { // compute the first name only
 			let nn = this.account.user_nicename || ''
@@ -42,9 +41,9 @@ export default {
 			return this.computedGreeting + ', ' + this.name
 		}
 	},
-	created () {
+	mounted () {
 		// get my name (as inneficiently as possible: this should be in localstorage)
-		axios.get('users/0').then(response => {
+		localforage.getItem('user').then(response => {
 			this.account = response.data
 		}).catch(e => { this.account = { user_nicename: ' ' } })
 
@@ -123,14 +122,14 @@ export default {
 	@import '../../assets/scss/variables';
 	.nav-links {
 		position: absolute;
-		right: $pu;
+		right: $u;
 		bottom: 8px;
 		-webkit-app-region: no-drag;
 	}
 	
 	.nav-links li {
 		display: inline-block;
-		padding-left: ($pu / 4);
+		padding-left: ($u / 4);
 	}
 
 	.nav-link {
@@ -152,22 +151,21 @@ export default {
 	}
 	#header-inner {
 		width: 100%;
-		padding: $pu;
+		padding: $u;
 		border-bottom: 1ps solid white;
 		display: flex;
 		flex-wrap: wrap;
 
 		svg {
-			width: 4em;
-			height: 4em;
-			margin-top: .5em;
-			margin-right: 2em;
+			width: 40px;
+			height: 40px;
+			margin-right: $u;
 		}
 
 		h1 {
-			margin-top: .2em;
+			margin-top: -.3rem;
 			margin-bottom: .2em;
-			font-size: 25px;
+			font-size: 21px;
 		}
 
 		.fraction {

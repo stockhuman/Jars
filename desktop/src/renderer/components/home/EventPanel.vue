@@ -71,10 +71,10 @@ export default {
 	#event-panel {
 		position: fixed;
 		background: $color__grey-dark;
-		height: 11 * $pu;
-		width: calc(100% - (2 * #{$pu}));
-		padding: 1.5*$pu;
-		margin: 0 $pu 0 $pu;
+		height: 11 * $u;
+		width: calc(100% - (2 * #{$u}));
+		padding: 1.5*$u;
+		margin: 0 $u 0 $u;
 		bottom: 0;
 		left: 0;
 		transform: translate3D(0, 0, 0);
@@ -84,7 +84,7 @@ export default {
 			color: black;
 			font-family: "Helvetica Light";
 			width: 100%;
-			padding-bottom: $pu / 4;
+			padding-bottom: $u / 4;
 		}
 		input {
 			border: none;
@@ -93,15 +93,15 @@ export default {
 		.actions {
 			position: absolute;
 			text-align: right;
-			bottom: $pu;
-			width: calc(100% - (3 * #{$pu}));
+			bottom: $u;
+			width: calc(100% - (3 * #{$u}));
 		}
 		.details {
 			font-variant: oblique;
 		}
 
 		.commit-time {
-			padding-top: $pu;
+			padding-top: $u;
 			input {
 				font-size: 80px;
 				font-family: "Helvetica Light";
@@ -122,10 +122,10 @@ export default {
 
 		// states
 		&.neue{
-			height: 7 * $pu;
+			height: 7 * $u;
 		}
 		&.hidden {
-			transform: translate3D(0, 11 * $pu, 0);
+			transform: translate3D(0, 11 * $u, 0);
 		}
 	}
 </style>

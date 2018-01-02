@@ -123,14 +123,14 @@ export default {
 	@import '../../assets/scss/variables';
 	.nav-links {
 		position: absolute;
-		right: $pu;
+		right: $u;
 		bottom: 8px;
 		-webkit-app-region: no-drag;
 	}
 	
 	.nav-links li {
 		display: inline-block;
-		padding-left: ($pu / 4);
+		padding-left: ($u / 4);
 	}
 
 	.nav-link {
@@ -152,7 +152,7 @@ export default {
 	}
 	#header-inner {
 		width: 100%;
-		padding: $pu;
+		padding: $u;
 		border-bottom: 1ps solid white;
 		display: flex;
 		flex-wrap: wrap;

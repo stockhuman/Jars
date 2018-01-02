@@ -180,7 +180,7 @@ export default {
 	@import '../../assets/scss/variables';
 
 	.log {
-		margin: $pu auto;
+		margin: $u auto;
 		max-width: 700px;
 	}
 	.log-input {

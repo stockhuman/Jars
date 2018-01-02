@@ -4,11 +4,12 @@
 </template>
 
 <script>
-// TODO: build me
+import moment from 'moment'
+import grapher from './overview/Grapher'
+import axios from 'axios'
+
 export default {
 	name: 'overview',
-<<<<<<< HEAD
-<<<<<<< HEAD
 	components: { grapher },
 	computed: {
 		timescale: function () {
@@ -135,26 +136,16 @@ export default {
 			this.weekcode = '' + moment().year() + moment().isoWeek() // '201740'
 		})
 	}
-=======
-	computed: {},
-	methods: {}
->>>>>>> parent of 411d4d0... Built Overview MVP
-=======
-	computed: {},
-	methods: {}
->>>>>>> parent of 411d4d0... Built Overview MVP
 }
 </script>
 
 <style lang="scss">
 	@import '../assets/scss/variables';
-<<<<<<< HEAD
-<<<<<<< HEAD
 
 	.overview-timescales {
 		text-align: center;
 		position: fixed;
-		bottom: $pu;
+		bottom: $u;
 		width: 100%;
 	}
 
@@ -164,8 +155,4 @@ export default {
 			color: $color__grey;
 		}
 	}
-=======
->>>>>>> parent of 411d4d0... Built Overview MVP
-=======
->>>>>>> parent of 411d4d0... Built Overview MVP
 </style>

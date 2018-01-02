@@ -31,9 +31,9 @@ export default {
 @import '../../assets/scss/variables';
 
 .event-results {
-	padding-left: 2.5 * $pu;
+	padding-left: 2.5 * $u;
 	.event {
-		margin-bottom: $pu / 2;
+		margin-bottom: $u / 2;
 		h2 {
 			font-size: 20px;
 			color: black;

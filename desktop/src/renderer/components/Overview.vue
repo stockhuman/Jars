@@ -1,12 +1,25 @@
 <template>
 	<div class="wrapper">
+		<aside id="overview-meta">
+			<h2>{{timescale}}</h2>
+			<p class="hack">{{committed}}</p>
+		</aside>
+		<section id="overview-data">
+			<grapher :ds="tsData" :ts="showme" :width="400" :height="400"></grapher>
+		</section>
+		<nav class="overview-timescales">
+			<button class="soft" @click="switchView('today')" :class="{selected: tab('today')}">Today</button>
+			<button class="soft" @click="switchView('month')" :class="{selected: tab('month')}">This Month</button>
+			<button class="soft" @click="switchView('year')" :class="{selected: tab('year')}">This Year</button>
+			<button class="soft" @click="switchView('all')" :class="{selected: tab('all')}">This Jar</button>
+		</nav>
 	</div>
 </template>
 
 <script>
 import moment from 'moment'
-import grapher from './overview/Grapher'
 import axios from 'axios'
+import grapher from './overview/Grapher'
 
 export default {
 	name: 'overview',
@@ -57,14 +70,14 @@ export default {
 		}
 	},
 	methods: {
-		switchView: function (view) {
+		switchView (view) {
 			this.showme = view
 			this.getData()
 		},
-		tab: function (tab) {
+		tab (tab) {
 			return this.showme === tab
 		},
-		getData: function () {
+		getData () {
 			let qs = 'beans?filter=date,'
 
 			// note that data efficiency pragmatism necessitates a different

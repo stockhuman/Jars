@@ -39,6 +39,10 @@ body {
 	width: 100%;
 }
 
+.no-drag {
+	-webkit-app-region: no-drag;
+}
+
 textarea {
 	resize: vertical;
 }
@@ -48,3 +52,4 @@ main > div { flex-basis: 50%; }
 @import './scss/typography';
 @import './scss/buttons';
 @import './scss/task';
+@import './scss/animation';

@@ -10,8 +10,7 @@ Vue.http = Vue.prototype.$http = axios
 Vue.config.productionTip = false
 axios.defaults.baseURL = 'http://localhost/api.jars.com/'
 
-/* eslint-disable no-new */
-new Vue({
+new Vue({ // eslint-disable-line
 	components: { App },
 	router,
 	store,

@@ -1,30 +1,45 @@
 <template>
 	<div id="app">
-		<top></top>
-		<transition name="fade">
-			<router-view></router-view>
-		</transition>
+		<div v-if="this.initialized">
+			<masthead></masthead>
+			<transition name="fade">
+				<router-view></router-view>
+			</transition>
+			<logform></logform>
+		</div>
+		<div v-else>
+			<setup></setup>
+		</div>
 	</div>
 </template>
 
 <script>
-	import top from './components/parts/Header'
+	import masthead from './components/parts/Header'
+	import logform from './components/parts/Logform'
+	import setup from './components/Setup'
+	import localforage from 'localforage'
 
 	export default {
 		name: 'desktop',
-		components: { top },
-		computed: {
-			store () { return this.$store }
-		},
+		components: { masthead, logform, setup },
 		data: () => ({
-			timer: []
+			timer: [],
+			initialized: false
 		}),
-		// Add global keyboard event listener
+
+		created: function () {
+			localforage.getItem('jar').then(data => {
+				if (data !== null) {
+					if (data.ready) { this.initialized = true }
+				}
+			})
+
+			this.$on('ready', () => { this.initialized = true })
+		},
+
 		mounted: function () {
+			// Add global keyboard event listener
 			document.addEventListener('keyup', (e) => {
-				// if (e.keyCode === 45) { // "n" or Insert Key
-				// 	this.store.commit('TOGGLE_NOTES')
-				// }
 				if (e.altKey) { // sans-nav navigation
 					switch (e.keyCode) {
 					case 48: this.$router.push('/')
@@ -50,19 +65,3 @@
 </script>
 
 <style src='./assets/base.scss' lang="scss"></style>
-<style lang="scss">
-	@import './assets/scss/variables';
-	.fade-enter-active, .fade-leave-active {
-		transition-property: opacity;
-		transition-duration: .15s;
-	}
-	.fade-enter-active {
-		transition-delay: .25s;
-		position: fixed;
-		width: 100vw;
-		height: 100vh;
-	}
-	.fade-enter, .fade-leave-active {
-		opacity: 0
-	}
-</style>

@@ -12,8 +12,7 @@
 			</svg>
 			<div class="welcome-block">
 				<h1>{{welcome}}</h1>
-				<h2 class="fraction">{{this.computedFraction}}</h2>
-				<p>This time will pass today</p>
+				<h2 class="fraction">{{this.computedFraction}} - This time will pass today</h2>
 			</div>
 		</div>
 		<navigation></navigation>
@@ -21,8 +20,8 @@
 </template>
 
 <script>
-import axios from 'axios'
 import moment from 'moment'
+import localforage from 'localforage'
 import navigation from './Navigation'
 
 export default {
@@ -30,23 +29,26 @@ export default {
 	components: { navigation },
 	computed: {
 		lifeClip () {
-			return eval(this.computedFraction) * 100 // eslint-disable-line
+			return eval(this.computedFraction || 0) * 100 // eslint-disable-line
 		},
 		name () { // compute the first name only
-			let nn = this.account.user_nicename || ''
+			let nn = this.username || ''
 			let spacePosition = nn.indexOf(' ')
 			if (spacePosition === -1) return nn
 			else return nn.substr(0, spacePosition)
 		},
 		welcome () {
-			return this.computedGreeting + ', ' + this.name
+			if (this.username !== '') {
+				return this.computedGreeting + ', ' + this.name
+			} else {
+				return this.computedGreeting
+			}
 		}
 	},
-	created () {
-		// get my name (as inneficiently as possible: this should be in localstorage)
-		axios.get('users/0').then(response => {
-			this.account = response.data
-		}).catch(e => { this.account = { user_nicename: ' ' } })
+	mounted () {
+		localforage.getItem('jar').then(response => {
+			this.username = response.name
+		}).catch(e => { this.username = '' })
 
 		this.computedGreeting = this.greeting()
 		this.computedFraction = this.fraction()
@@ -57,7 +59,7 @@ export default {
 		})
 	},
 	data: () => ({
-		account: [],
+		username: '',
 		computedGreeting: '',
 		computedFraction: ''
 	}),
@@ -101,9 +103,7 @@ export default {
 			return msg
 		},
 		fraction () {
-			function formatTime (time) {
-				return Math.ceil(time / (1000 * 3600 * 24))
-			}
+			const formatTime = time => Math.ceil(time / (1000 * 3600 * 24))
 
 			// TODO: add this to profile as data
 			// compute how long I have to live
@@ -146,28 +146,26 @@ export default {
 	#header {
 		width: 100%;
 		position: relative;
-		border-bottom: 1px solid rgba($color__grey, 0.5);
 		font-family:  "Helvetica Neue Light", Helvetica, Arial, sans-serif;
 		-webkit-app-region: drag;
 	}
 	#header-inner {
 		width: 100%;
 		padding: $u;
-		border-bottom: 1ps solid white;
 		display: flex;
 		flex-wrap: wrap;
+		border-bottom: 1px solid rgba($color__grey, 0.5);
 
 		svg {
-			width: 4em;
-			height: 4em;
-			margin-top: .5em;
-			margin-right: 2em;
+			width: 40px;
+			height: 40px;
+			margin-right: $u;
 		}
 
 		h1 {
-			margin-top: .2em;
+			margin-top: -.3rem;
 			margin-bottom: .2em;
-			font-size: 25px;
+			font-size: 21px;
 		}
 
 		.fraction {

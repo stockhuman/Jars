@@ -3,19 +3,17 @@
 		<h3 class="week-of-the-year" v-html="weekInfo"></h3>
 		<main id="home-view">
 			<events :wkc="this.weekcode"></events>
-			<logform></logform>
 		</main>
 	</div>
 </template>
 
 <script>
 import moment from 'moment'
-import logform from './home/Logform'
 import events from './home/Events'
 
 export default {
 	name: 'today-page',
-	components: { logform, events },
+	components: { events },
 	computed: {
 		weekInfo () {
 			let notice = ''
@@ -75,10 +73,3 @@ export default {
 	}
 }
 </script>
-
-<style>
-	.week-info {
-		opacity: 0.7;
-		font-style: italic;
-	}
-</style>

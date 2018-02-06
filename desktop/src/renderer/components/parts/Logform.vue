@@ -1,5 +1,6 @@
 <template>
 	<section class="log">
+		<span class="commits-this-week">commited this week: {{hrs}}</span>
 		<div class="live-update">{{this.msg}}</div>
 		<input 
 			type="text" 
@@ -9,7 +10,6 @@
 			@focus="begin()" 
 			@blur="abort()" 
 			@keyup.enter="nextField()">
-		<span class="commits-this-week">commited this week: {{hrs}}</span>
 	</section>
 </template>
 
@@ -85,7 +85,7 @@ export default {
 			if (this.stage === 0) {
 				form.placeholder = 'time of day? (em|m|md|an|ev|n|ln)'
 
-				const filterFloat = function (value) {
+				const filterFloat = value => {
 					if ((/^(\|\+)?([0-9]+(\.[0-9]+)?|Infinity)$/).test(value)) {
 						return Number(value)
 					} else {
@@ -167,9 +167,7 @@ export default {
 					this.computeHours()
 				})
 
-				window.setTimeout(function () {
-					form.blur()
-				}, 2000)
+				window.setTimeout(() => { form.blur() }, 2000)
 			}
 		}
 	}
@@ -180,8 +178,10 @@ export default {
 	@import '../../assets/scss/variables';
 
 	.log {
-		margin: $u auto;
-		max-width: 700px;
+		position: fixed;
+		bottom: 0;
+		right: 0;
+		left: 0;
 	}
 	.log-input {
 		width: 100%;

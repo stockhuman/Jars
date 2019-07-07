@@ -85,11 +85,12 @@ const events = () => {
 
 	document.addEventListener('calendar-blur', e => {
 		selectedDay = new Date()
-		calInfo()
+		log.alterDate(selectedDay)
 		updateLogs()
+		calInfo()
 	})
 
-	document.addEventListener('commit', e => {
+	document.addEventListener('commit', () => {
 		updateLogs()
 	})
 

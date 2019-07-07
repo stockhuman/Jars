@@ -1,0 +1,13 @@
+{
+	"header": {
+		"greetings": [
+			"Te levantaste temprano",
+			"Buenos días",
+			"Buen dia",
+			"Buenas tardes",
+			"Buenas tardes",
+			"Buena noches"
+		],
+		"fraction": "Este tiempo pasará hoy"
+	}
+}

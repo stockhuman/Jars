@@ -1,0 +1,39 @@
+@import './variables';
+
+#header {
+	width: 100%;
+	position: relative;
+	-webkit-app-region: drag;
+	background: $color__light;
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+
+#header-inner {
+	padding: $u;
+	display: flex;
+	flex-wrap: wrap;
+	border-bottom: 1px solid rgba($color__grey, 0.5);
+
+	svg {
+		width: 50px;
+		height: 50px;
+		margin-right: $u;
+		transform: rotate(-20deg);
+	}
+
+	h1 {
+		margin-top: -.3rem;
+		margin-bottom: .2em;
+		font-size: 21px;
+	}
+
+	.fraction {
+		font-size: 13px;
+		color: $color__grey;
+	}
+
+	.welcome-block p {
+		font-size: 11px;
+		color: $color__grey;
+	}
+}

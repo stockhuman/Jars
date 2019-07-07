@@ -1,0 +1,195 @@
+/**!
+	MIT License
+
+	Copyright (c) 2018 Alexey Botkov
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
+
+	The above copyright notice and this permission notice shall be included in all
+	copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+	SOFTWARE.
+*/
+
+:root {
+	--bright: #d9d9d0;
+	--gray: #959585;
+	--dark: #181818;
+	--select: #ff1e00;
+	--gone: #393939;
+}
+
+html,
+body {
+	display: block;
+	height: 100%;
+	min-height: 400px;
+	width: 100%;
+	padding: 0px;
+	margin: 0px;
+	font-family: 'Input Sans Narrow';
+	text-transform: uppercase;
+	background-color: var(--dark);
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+
+section {
+	position: relative;
+	top: 50%;
+	margin: 0px auto;
+	user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	-webkit-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+	text-align: center;
+}
+
+.month {
+	margin: 10px;
+	display: inline-block;
+	width: 100px;
+	height: 130px;
+}
+
+.header {
+	margin: 0px 10px 40px 10px;
+	text-align: left;
+	align-content: flex-start;
+}
+
+.footer {
+	margin: 20px 10px 0px 10px;
+	text-align: left;
+	height: 20px;
+	color: var(--bright);
+}
+
+p {
+	margin: 0px;
+}
+
+.y {
+	color: var(--bright);
+	font-size: 40px;
+	font-weight: bold;
+}
+
+.y a {
+	text-align: center;
+	width: 30px;
+	display: inline-block;
+	margin-left: 10px;
+}
+
+.y a:hover {
+	color: #ffffff;
+	background: #000;
+	cursor: pointer;
+}
+
+.p {
+	font-size: 20px;
+	color: var(--gray);
+}
+
+.m {
+	color: var(--bright);
+	font-size: 18px;
+	margin-bottom: 5px;
+	text-align: left;
+}
+
+svg.graph {
+	width: 100%;
+	height: 100px;
+}
+
+svg.graph text {
+	font-family: 'Input Sans Narrow';
+	stroke: none;
+	fill: var(--gray);
+	font-size: 14px;
+	text-anchor: middle;
+}
+
+svg.graph text.dayLabel {
+	font-size: 10px;
+	opacity: 0.4;
+	transition: opacity .3s ease-in-out;
+}
+
+.month:hover svg.graph text.dayLabel {
+	opacity: 1;
+}
+
+svg.graph rect {
+	stroke: none;
+	outline: none;
+}
+
+svg.graph rect:hover,
+rect:focus {
+	fill: #ff1e00 !important;
+	cursor: pointer;
+}
+
+svg.graph rect.null {
+	fill: none;
+	stroke: none;
+}
+
+svg.graph rect.today {
+	fill: var(--select);
+}
+
+svg.graph rect.day {
+	fill: var(--bright);
+}
+
+svg.graph rect.weekend {
+	fill: var(--gray);
+}
+
+svg.graph rect.gone {
+	fill: var(--gone);
+}
+
+svg.graph path {
+	stroke-linecap: butt;
+	stroke-dasharray: 1, 1;
+	fill: none;
+	stroke: #333;
+	stroke-width: 13px
+}
+
+@media only screen and (min-width: 1440px) {
+	section {
+		width: 1440px;
+	}
+}
+
+@media only screen and (max-width: 1440px) {
+	section {
+		width: 720px;
+	}
+}
+
+@media only screen and (max-width: 720px) {
+	section {
+		width: 360px;
+	}
+}

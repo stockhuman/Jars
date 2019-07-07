@@ -1,0 +1,76 @@
+{
+	"header": {
+		"greetings": [
+			"Vous vous êtes levés tôt",
+			"Bon matin",
+			"Bonjour",
+			"Bonne après-midi",
+			"Bonsoir",
+			"Bonne nuit"
+		],
+		"fraction": "Ce temps passera aujourd'hui"
+	},
+	"logform": {
+		"misc": {
+			"begin": "Ecrivez le nombre d'heures (appuyez sur Enter pour enregistrer)",
+			"placeholder": "Journalez",
+			"recap": "Heures cette semaine :"
+		},
+		"s0": {
+			"placeholder": "moment de la journée? (tm|m|vm|am|s|n|tn)",
+			"singularHour": "Une heure",
+			"singularHourNoPronoun": "heure",
+			"pluralHour": "heures",
+			"minutes": "minutes"
+		},
+		"s1": {
+			"placeholder": "projet",
+			"values": [
+				{
+					"abbr": "tm",
+					"expa": "tôt le matin"
+				},
+				{
+					"abbr": "m",
+					"expa": "le matin"
+				},
+				{
+					"abbr": "vm",
+					"expa": "vers midi"
+				},
+				{
+					"abbr": "am",
+					"expa": "dans l'après midi"
+				},
+				{
+					"abbr": "s",
+					"expa": "dans la soirée"
+				},
+				{
+					"abbr": "n",
+					"expa": "autour de la nuit"
+				},
+				{
+					"abbr": "tn",
+					"expa": "tard dans la nuit"
+				}
+			],
+			"transition": "en travaillant sur"
+		},
+		"s2": {
+			"placeholder": "tâche"
+		},
+		"s3": {
+			"placeholder": "catégorie de travail",
+			"category": "cat"
+		},
+		"s4": {
+			"placeholder": "commentaires ?"
+		},
+		"s5": {
+			"placeholder": "Appuyez sur Enter pour valider ce haricot",
+			"comment": "CMNT"
+		},
+		"success": "haricot commis !"
+	}
+}

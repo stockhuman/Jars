@@ -1,0 +1,29 @@
+.fraction-container {
+	display: grid;
+	gap: var(--u);
+	grid-template-columns: calc(var(--u) * 2) 1fr;
+	margin-bottom: var(--u);
+	flex-grow: 1;
+}
+
+.fraction-container svg {
+	height: 40px;
+	transform: rotate(-45deg)
+}
+
+.fraction-container .greeting {
+	font-size: 12px;
+}
+
+section.header {
+	display: flex;
+	margin-top: 40px;
+}
+
+.year-controls {
+	text-align: right
+}
+
+.year-span {
+	padding-left: 20px;
+}

@@ -85,8 +85,8 @@ const events = () => {
 
 	document.addEventListener('calendar-blur', e => {
 		selectedDay = new Date()
-		// cinfo.innerHTML = ''
-		// document.getElementById('meta-root').innerHTML = ''
+		calInfo()
+		updateLogs()
 	})
 
 	document.addEventListener('commit', e => {

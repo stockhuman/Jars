@@ -40,6 +40,7 @@ class Header {
 		// create individual container for buttons
 		const buttons = document.createElement('span')
 		this.elem.year = document.createElement('span')
+		this.elem.year.className = 'year-span'
 
 		// create buttons
 		this.btns.ff = document.createElement('a')
@@ -52,19 +53,26 @@ class Header {
 		buttons.appendChild(this.btns.ff)
 
 		// add container and year
-		yearContainer.appendChild(this.elem.year)
 		yearContainer.appendChild(buttons)
+		yearContainer.appendChild(this.elem.year)
 
 		// create subtitle
 		this.elem.subtitle = document.createElement('p')
+
+		// create container to subtitle and year changer
+		const yearControls = document.createElement('div')
+		yearControls.className = 'year-controls'
+
 
 		// tie everything together
 		logogreet.appendChild(this.elem.logo)
 		logogreet.appendChild(this.elem.greeting)
 
+		yearControls.appendChild(yearContainer)
+		yearControls.appendChild(this.elem.subtitle)
+
 		container.appendChild(logogreet)
-		container.appendChild(yearContainer)
-		container.appendChild(this.elem.subtitle)
+		container.appendChild(yearControls)
 
 		// mount
 		this.root.appendChild(container)
@@ -159,20 +167,15 @@ class Header {
 		this.elem.year.innerHTML = this.year
 		this.elem.subtitle.innerHTML = this.subtitle()
 		this.elem.logo.innerHTML =
-			` <circle fill="#FFFFFF" cx="64" cy="64" r="64" />
-				<g>
-					<defs>
-						<rect id="mask"
-							width="${eval(this.fraction() || 0) * 100}"
-							height="128"/>
-					</defs>
-					<clipPath id="clip"><use xlinkHref="#mask"/></clipPath>
-					<circle cx="64" cy="64" r="64" fill="var(--f-high)" clipPath="url(#clip)" />
-				</g>`
+			`<circle id="base" cx="64" cy="64" r="64" fill="#FFFFFF"/>
+			<clipPath id="clippath">
+				<rect  width="${eval(this.fraction() || 0) * 100}" height="128"/>
+			</clipPath>
+			<circle id="clip" fill="var(--f-high)" cx="64" cy="64" r="64" style="clip-path:url(#clippath);"/>`
 		this.elem.greeting.innerHTML =
 			`<div>${this.greeting()}</div>
-				<h2 className="fraction">
+				<span className="fraction">
 				${ this.fraction()} - ${this.strings.fraction}
-			 </h2>`
+			 </span>`
 	}
 }

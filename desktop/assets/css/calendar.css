@@ -66,18 +66,18 @@ p {
 	margin: 0px;
 }
 
-.y {
+.year {
 	font-size: 40px;
 }
 
-.y a {
+.year a {
 	text-align: center;
 	width: 30px;
 	display: inline-block;
 	margin-left: 10px;
 }
 
-.y a:hover {
+.year a:hover {
 	color: var(--f-high);
 	background: var(--b-low);
 	cursor: pointer;

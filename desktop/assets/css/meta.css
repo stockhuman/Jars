@@ -6,10 +6,8 @@
 	font-family: 'Courier New', Courier, monospace; /* add Input Mono */
 }
 
-thead {
-	text-align: left;
-	color: var(--b-mid);
-	font-weight: normal;
+.meta-table header {
+	margin-bottom: var(--u)
 }
 
 .log-detail:hover {

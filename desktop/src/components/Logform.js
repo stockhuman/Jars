@@ -7,7 +7,12 @@ function filterFloat(value) {
 }
 
 function SQLDate(date = new Date()) {
+	// convert date string to the 'YYYY-MM-DD HH:MM:SS' SQL format
 	return new Date(date).toISOString().slice(0, 19).replace('T', ' ')
+}
+
+function YYYYMMDD (date = new Date()) {
+	return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())
 }
 
 
@@ -16,12 +21,12 @@ class LogForm {
 		this.state = {
 			root,
 			strings: locales('logform'),
-			hours: 0,
-			inputValue: '',
-			stage: 0,
-			summary: '',
 			placeholder: 'log time',
-			commit: {}
+			inputValue: '',
+			summary: '',
+			stage: 0,
+			commit: {},
+			customDate: null
 		}
 
 		// build out element programmatically
@@ -60,6 +65,24 @@ class LogForm {
 	setState (props) {
 		this.state = { ...this.state, ...props }
 		this.render()
+	}
+
+	alterDate (newDate) {
+		const d = YYYYMMDD(newDate)
+		const isToday = d.getTime() == YYYYMMDD().getTime()
+
+		if (!isToday) {
+			// date passed is not the current date
+			this.setState({ ...this.state, customDate: d})
+			this.setAttributes(this.input, {
+				class: 'log-input altered-date'
+			})
+		} else {
+			this.setState({ ...this.state, customDate: null })
+			this.setAttributes(this.input, {
+				class: 'log-input'
+			})
+		}
 	}
 
 	appendTime (hours) {
@@ -201,6 +224,7 @@ class LogForm {
 						break;
 				}
 
+				// advance stages!
 				if (this.state.stage <= 5) {
 					this.setState({
 						inputValue: '',
@@ -209,9 +233,15 @@ class LogForm {
 					console.log('now on stage ' + this.state.stage)
 				} else {
 
+					// set appropriate date
+					if (this.state.customDate) {
+						this.state.commit.date = SQLDate(this.state.customDate)
+					} else {
+						this.state.commit.date = SQLDate()
+					}
+
 					// commit!
-					this.state.commit.date = SQLDate()
-					axios.post('https://api.arthem.co/jars/v1/beans/', JSON.stringify(this.state.commit))
+					axios.post('https://api.arthem.co/jars/v1/records/beans/', JSON.stringify(this.state.commit))
 					.then(() => {
 						let e = new CustomEvent('commit', { detail: this.state.commit })
 						document.dispatchEvent(e)

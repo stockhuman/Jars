@@ -9,8 +9,11 @@ class Header {
 		this.elem = {
 			subtitle: null,
 			year: null,
-			logo: null
+			logo: null,
+			greeting: null
 		}
+
+		this.strings = locales('header')
 
 		this.mount()
 		this.render()
@@ -20,6 +23,15 @@ class Header {
 		// create overall container
 		const container = document.createElement('section')
 		container.className = 'header'
+
+		// create logo and greeting container
+		const logogreet = document.createElement('header')
+		logogreet.className = 'fraction-container'
+
+		this.elem.greeting = document.createElement('div')
+		this.elem.greeting.className = 'greeting'
+		this.elem.logo = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+		this.elem.logo.setAttributeNS(null, 'viewBox', "0 0 128 128")
 
 		// create container for year + buttons
 		const yearContainer = document.createElement('p')
@@ -47,6 +59,10 @@ class Header {
 		this.elem.subtitle = document.createElement('p')
 
 		// tie everything together
+		logogreet.appendChild(this.elem.logo)
+		logogreet.appendChild(this.elem.greeting)
+
+		container.appendChild(logogreet)
 		container.appendChild(yearContainer)
 		container.appendChild(this.elem.subtitle)
 
@@ -70,6 +86,58 @@ class Header {
 		}
 	}
 
+	fraction () {
+		const formatTime = time => Math.ceil(time / (1000 * 3600 * 24))
+
+		// compute how long I have to live
+		let birth = new Date('4/24/1997')
+		let death = new Date('4/24/2077')
+
+		let DDC = formatTime(death) - formatTime(birth) // formatted to 29000
+		let life = formatTime(new Date(Date.now()).getTime()) - formatTime(birth)
+
+		return life + ' / ' + DDC
+	}
+
+	greeting () {
+		let hr = new Date().getHours()
+		let msg = ''
+
+		switch (hr) {
+			case 3:
+			case 4: msg = this.strings.greetings[0]
+				break
+			case 5:
+			case 6:
+			case 7:
+			case 8:
+			case 9:
+			case 10: msg = this.strings.greetings[1]
+				break
+			case 11:
+			case 12: msg = this.strings.greetings[2]
+				break
+			case 13:
+			case 14:
+			case 15:
+			case 16: msg = this.strings.greetings[3]
+				break
+			case 17:
+			case 18:
+			case 19:
+			case 20:
+			case 21:
+			case 22: msg = this.strings.greetings[4]
+				break
+			case 23:
+			case 0:
+			case 1:
+			case 2: msg = this.strings.greetings[5]
+				break
+		}
+		return msg
+	}
+
 	changeYear (year) {
 		this.year = year
 		this._emit()
@@ -90,5 +158,21 @@ class Header {
 		// only updates values.
 		this.elem.year.innerHTML = this.year
 		this.elem.subtitle.innerHTML = this.subtitle()
+		this.elem.logo.innerHTML =
+			` <circle fill="#FFFFFF" cx="64" cy="64" r="64" />
+				<g>
+					<defs>
+						<rect id="mask"
+							width="${eval(this.fraction() || 0) * 100}"
+							height="128"/>
+					</defs>
+					<clipPath id="clip"><use xlinkHref="#mask"/></clipPath>
+					<circle cx="64" cy="64" r="64" fill="var(--f-high)" clipPath="url(#clip)" />
+				</g>`
+		this.elem.greeting.innerHTML =
+			`<div>${this.greeting()}</div>
+				<h2 className="fraction">
+				${ this.fraction()} - ${this.strings.fraction}
+			 </h2>`
 	}
 }

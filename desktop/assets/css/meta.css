@@ -1,0 +1,41 @@
+#meta-root {
+	margin-top: var(--u);
+	text-transform: initial;
+	color: var(--b-high);
+	font-size: 14px;
+	font-family: 'Courier New', Courier, monospace; /* add Input Mono */
+}
+
+thead {
+	text-align: left;
+	color: var(--b-mid);
+	font-weight: normal;
+}
+
+.log-detail:hover {
+	color: var(--f-high)
+}
+.log-detail .time {
+	opacity: 0.5;
+}
+.log-detail .name {
+	width: 60%;
+}
+.log-detail .cat {
+	opacity: 0.5;
+}
+.log-detail:hover .cat {
+	opacity: 1;
+}
+.log-detail:hover .cat.code {
+	color: #D4BFFF;
+}
+.log-detail:hover .cat.null {
+	color: #3C526A;
+}
+
+@media only screen and (max-width: 720px) {
+	.log-detail .name {
+		width: unset;
+	}
+}

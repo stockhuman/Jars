@@ -22,60 +22,44 @@
 	SOFTWARE.
 */
 
-:root {
-	--bright: #d9d9d0;
-	--gray: #959585;
-	--dark: #181818;
-	--select: #ff1e00;
-	--gone: #393939;
-}
-
 html,
 body {
 	display: block;
-	height: 100%;
 	min-height: 400px;
 	width: 100%;
 	padding: 0px;
 	margin: 0px;
 	font-family: 'Input Sans Narrow';
 	text-transform: uppercase;
-	background-color: var(--dark);
-	background-position: center center;
-	background-repeat: no-repeat;
+	background-color: var(--f-low);
+	color: var(--f-mid);
+	font-kerning: none;
 }
 
 section {
-	position: relative;
-	top: 50%;
 	margin: 0px auto;
 	user-select: none;
-	-webkit-user-select: none;
-	-ms-user-select: none;
-	-webkit-transform: translateY(-50%);
-	-ms-transform: translateY(-50%);
-	transform: translateY(-50%);
-	text-align: center;
+}
+
+#calendar {
+	-moz-user-select: none;
+	user-select: none;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, 100px);
+	gap: var(--u)
+}
+
+#cal-info {
+	margin-top: calc(var(--u) * 2);
 }
 
 .month {
-	margin: 10px;
-	display: inline-block;
 	width: 100px;
 	height: 130px;
 }
 
 .header {
-	margin: 0px 10px 40px 10px;
-	text-align: left;
-	align-content: flex-start;
-}
-
-.footer {
-	margin: 20px 10px 0px 10px;
-	text-align: left;
-	height: 20px;
-	color: var(--bright);
+	margin: var(--u) auto calc(var(--u) * 2) auto;
 }
 
 p {
@@ -83,9 +67,7 @@ p {
 }
 
 .y {
-	color: var(--bright);
 	font-size: 40px;
-	font-weight: bold;
 }
 
 .y a {
@@ -96,18 +78,17 @@ p {
 }
 
 .y a:hover {
-	color: #ffffff;
-	background: #000;
+	color: var(--f-high);
+	background: var(--b-low);
 	cursor: pointer;
 }
 
 .p {
 	font-size: 20px;
-	color: var(--gray);
 }
 
 .m {
-	color: var(--bright);
+	color: var(--f-high);
 	font-size: 18px;
 	margin-bottom: 5px;
 	text-align: left;
@@ -121,7 +102,7 @@ svg.graph {
 svg.graph text {
 	font-family: 'Input Sans Narrow';
 	stroke: none;
-	fill: var(--gray);
+	fill: var(--f-mid);
 	font-size: 14px;
 	text-anchor: middle;
 }
@@ -143,7 +124,7 @@ svg.graph rect {
 
 svg.graph rect:hover,
 rect:focus {
-	fill: #ff1e00 !important;
+	fill: var(--b-med)!important;
 	cursor: pointer;
 }
 
@@ -153,19 +134,19 @@ svg.graph rect.null {
 }
 
 svg.graph rect.today {
-	fill: var(--select);
+	fill: var(--f-inv);
 }
 
 svg.graph rect.day {
-	fill: var(--bright);
+	fill: var(--b-high);
 }
 
 svg.graph rect.weekend {
-	fill: var(--gray);
+	fill: var(--b-inv);
 }
 
 svg.graph rect.gone {
-	fill: var(--gone);
+	fill: var(--b-low);
 }
 
 svg.graph path {

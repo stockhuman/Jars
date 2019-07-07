@@ -1,0 +1,48 @@
+:root {
+	--u: 1rem;
+	--f-high:#FFCC66;
+	--f-mid: #cbccc6;
+	--f-low: #1F2430;
+	--f-inv: #BAE67E;
+ 	--b-high:#5C6773;
+ 	--b-med: #95E6Bc;
+ 	--b-low: #101521;
+ 	--b-inv: #34455A;
+}
+
+
+.log {
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	padding-bottom: calc(var(--u) * 2);
+}
+
+.log-input {
+	width: calc(100% - (var(--u) * 2));
+	padding: var(--u);
+	border: none;
+	border-radius: 1px;
+	background: var(--f-mid);
+	color: var(--f-low);
+	font-size: var(--u);
+}
+
+.log-input::placeholder {
+	color: var(--b-high);
+	font-weight: 200;
+}
+
+.live-update {
+	color: var(--b-med);
+	font-size: 14px;
+	font-style: italic;
+	margin-top: 8px;
+	display: block;
+	text-align: right;
+	font-weight: 200;
+	text-align: left;
+	margin-bottom: 8px;
+	margin-left: 12px;
+}

@@ -1,28 +1,68 @@
-import React, { Component } from 'react'
+function filterFloat(value) {
+	if ((/^(\|\+)?([0-9]+(\.[0-9]+)?|Infinity)$/).test(value)) {
+		return Number(value)
+	} else {
+		return NaN
+	}
+}
 
-import { filterFloat } from '../utilities/filters'
-import locales from '../locales/locales'
+function SQLDate(date = new Date()) {
+	return new Date(date).toISOString().slice(0, 19).replace('T', ' ')
+}
 
-import '../styles/Logform.scss'
 
-// Temp: localStorage only
-export default class Logform extends Component {
-
-	constructor(props) {
-		super(props)
+class LogForm {
+	constructor ({ root = null }) {
 		this.state = {
+			root,
 			strings: locales('logform'),
 			hours: 0,
 			inputValue: '',
 			stage: 0,
 			summary: '',
-			placeholder: '',
+			placeholder: 'log time',
 			commit: {}
 		}
-		this.state.placeholder = this.state.strings.misc.placeholder
+
+		// build out element programmatically
+		let container = document.createElement('section')
+		container.className = 'log'
+
+		// live update
+		this.preview = document.createElement('div')
+		this.preview.className = 'live-update'
+		container.appendChild(this.preview)
+
+		// logger
+		this.input = document.createElement('input')
+		this.setAttributes(this.input, {
+			type: 'text',
+			class:'log-input',
+			id: 'log',
+			autoComplete: 'off',
+			value: this.state.inputValue,
+			placeholder: this.state.placeholder
+		})
+		container.appendChild(this.input)
+		this.state.root.appendChild(container)
+
+		this.render()
+		this.events()
 	}
 
-	appendTime = hours => {
+	setAttributes(element, attributes) {
+		Object.keys(attributes).forEach(name => {
+			element.setAttribute(name, attributes[name])
+		})
+	}
+
+	// shim for native non-react code
+	setState (props) {
+		this.state = { ...this.state, ...props }
+		this.render()
+	}
+
+	appendTime (hours) {
 		if (hours < 1) {
 			hours = 60 * hours
 			hours += ' ' + this.state.strings.s0.minutes
@@ -34,20 +74,17 @@ export default class Logform extends Component {
 		return hours
 	}
 
-	updateInputValue = event => {
+	updateInputValue (event) {
 		if (event.target) {
 			this.setState({ inputValue: event.target.value })
 		}
 	}
 
-	render() {
+	events () {
 		let strings = this.state.strings
+		let l = this.input
 
-		const begin = () => {
-			this.setState({ placeholder: strings.misc.begin })
-		}
-
-		const abort = () => {
+		l.addEventListener('blur', () => {
 			this.setState({ stage: 0 })
 			this.updateInputValue('')
 			this.setState({
@@ -55,15 +92,24 @@ export default class Logform extends Component {
 				summary: '',
 				stage: 0
 			})
-		}
+		})
 
-		const nextField = event => {
-			const strings = this.state.strings
+		l.addEventListener('change', event => {
+			this.updateInputValue(event)
+		})
 
+		l.addEventListener('focus', () => {
+			this.setState({ placeholder: strings.misc.begin })
+		})
+
+		l.addEventListener('keyup', event => {
 			if (event.key === 'Enter') {
 				switch (this.state.stage) {
-					case 0:
-						this.setState({ placeholder: strings.s0.placeholder })
+					case 0: // amount worked
+						this.setState({
+							placeholder: strings.s0.placeholder,
+							commit: { ...this.state.commit, hours: this.state.inputValue}
+						})
 						if (!isNaN(filterFloat(this.state.inputValue))) {
 							if (this.state.inputValue === '1') {
 								this.setState({
@@ -74,9 +120,9 @@ export default class Logform extends Component {
 									summary: `${this.state.inputValue} ${strings.s0.pluralHour} `
 								})
 							}
-						}
+						} else this.input.blur()
 						break;
-					case 1:
+					case 1: // time of day
 						const s1s = strings.s1 // alias stage 1 strings
 						let humanTOD = '' // TOD == time of day
 
@@ -102,42 +148,47 @@ export default class Logform extends Component {
 							case s1s.values[6].abbr: // 'well past sundown'
 								humanTOD = s1s.values[6].expa
 								break
-							default: // if something else is input,
+							default: // if something else (or nothing) is input,
 								if (this.state.inputValue === '') {
-									// returns 'HH:MM:SS'
+									// return 'HH:MM:SS'
 									humanTOD = `@ ${new Date().toTimeString().split(' ')[0]}`
 								} else {
-									// or to what was input
+									// or what was input
 									humanTOD = `<b>${this.state.inputValue}</b>`
 								}
 						}
 
 						this.setState({
 							placeholder: s1s.placeholder, // 'project'
-							summary: this.state.summary + `${humanTOD} ${s1s.transition} `
+							summary: this.state.summary + `${humanTOD} ${s1s.transition} `,
+							commit: { ...this.state.commit, tod: this.state.inputValue }
 						})
 						break;
-					case 2:
+					case 2: // project value
 						this.setState({
-							placeholder: strings.s2.placeholder,
-							summary: `${this.state.summary + this.state.inputValue} => `
+							placeholder: strings.s2.placeholder, // 'task
+							summary: `${this.state.summary + this.state.inputValue} => `,
+							commit: { ...this.state.commit, project: this.state.inputValue }
 						})
 						break;
-					case 3:
+					case 3: // task value
 						this.setState({
 							placeholder: strings.s3.placeholder,
-							summary: `${this.state.summary + this.state.inputValue}. (${strings.s3.category}: `
+							summary: `${this.state.summary + this.state.inputValue}. (${strings.s3.category}: `,
+							commit: { ...this.state.commit, task: this.state.inputValue }
 						})
 						break;
-					case 4:
+					case 4: // category
 						this.setState({
 							placeholder: strings.s4.placeholder,
-							summary: this.state.summary + this.state.inputValue + ') '
-					 })
+							summary: this.state.summary + this.state.inputValue + ') ',
+							commit: { ...this.state.commit, category: this.state.inputValue }
+						})
 						break;
-					case 5:
+					case 5: // comment
 						this.setState({
 							placeholder: strings.s5.placeholder,
+							commit: { ...this.state.commit, comment: this.state.inputValue }
 						})
 						if (this.state.inputValue !== '') {
 							this.setState({
@@ -157,43 +208,36 @@ export default class Logform extends Component {
 					})
 					console.log('now on stage ' + this.state.stage)
 				} else {
-					this.setState({
-						placeholder: strings.success,
-						summary: ''
-					})
 
 					// commit!
-					// this.commit.date = dayjs().format('YYYY-MM-DD')
-					// axios.post('beans/', this.commit).then(() => {
-					// 	this.computeHours()
-					// })
+					this.state.commit.date = SQLDate()
+					axios.post('https://api.arthem.co/jars/v1/beans/', JSON.stringify(this.state.commit))
+					.then(() => {
+						let e = new CustomEvent('commit', { detail: this.state.commit })
+						document.dispatchEvent(e)
+					})
+
+					// reset
+					this.setState({
+						placeholder: strings.success,
+						summary: '',
+						commit: {}
+					})
 
 					// blurs() the input, returning focus to the main window
-					setTimeout(function (e) {
-						e.blur()
-						abort()
-					}, 2000, event.nativeEvent.target)
+					setTimeout(() => {
+						this.input.blur()
+					}, 2000)
 				}
+			} else if (event.key === 'Escape') {
+				l.blur()
 			}
-		}
-
-		return (
-			<section className="log">
-				<div className="live-update" dangerouslySetInnerHTML={{ __html: this.state.summary }}></div>
-				<input
-					type="text"
-					className="log-input"
-					id="log"
-					autoComplete="off"
-					value={ this.state.inputValue }
-					onChange={ evt => this.updateInputValue(evt) }
-					placeholder={ this.state.placeholder }
-					onFocus={ begin }
-					onBlur={ abort }
-					onKeyUp={ nextField } />
-				<span className="commits-this-week">{strings.misc.recap} {this.state.hours}</span>
-			</section>
-		)
+		})
 	}
 
+	render() {
+		this.preview.innerHTML = this.state.summary
+		this.input.value = this.state.inputValue
+		this.input.placeholder = this.state.placeholder
+	}
 }

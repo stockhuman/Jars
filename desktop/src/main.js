@@ -7,6 +7,7 @@
 // Files are to be written so that they may one day be migrated to modern approaches
 const log = new LogForm({ root: document.getElementById('log-root') })
 const cal = new Calendar({ root: document.getElementById('cal-root') })
+const hed = new Header({ root: document.getElementById('header-root') })
 
 const cinfo = document.getElementById('cal-info')
 
@@ -14,82 +15,39 @@ const cinfo = document.getElementById('cal-info')
 let year = new Date().getFullYear()
 let selectedDay = new Date()
 
-// listen for custom events
-document.addEventListener('calendar-select', e => {
-	selectedDay = new Date(e.detail)
-	updateLogs()
-	calInfo()
-})
-
-document.addEventListener('calendar-blur', e => {
-	selectedDay = new Date()
-	// cinfo.innerHTML = ''
-	// document.getElementById('meta-root').innerHTML = ''
-})
-
-const yearProgress = year => {
-	const diff = new Date() - new Date(year, 0, 1, 0)
-	const progress = ((diff / 31536000000) * 100).toFixed(2)
-	const yd = Math.abs((progress / 100).toFixed(2))
-
-	return progress < 0
-		? yd + ` YEARS AWAY` : progress > 100
-		? yd + ` YEARS AGO` : progress + "%"
-}
-
-const changeYear = dir => {
-	year += dir
-	cal.setYear(year)
-	setHeader()
-}
-
-const setHeader = () => {
-	document.getElementById('header-root').innerHTML =
-		`<section class="header">
-			<p class="y">
-				${year}<a onclick="changeYear(-1)">-</a><a onclick="changeYear(1)">+</a>
-			</p>
-			<p class="p">${yearProgress(year)}</p>
-		</section>`
-}
 
 // lists detailed logs for a given day
-const updateLogs = () => {
-
+const updateLogs = async () => {
+	// see https://github.com/mevdschee/php-crud-api
+	let query = `filter=date,sw,${selectedDay.toISOString().slice(0, 10)}`
+	let db = await axios.get('https://api.arthem.co/jars/v1/records/beans?' + query)
 	let html = ''
-	let keys = Object.keys(localStorage)
 	let hours = 0
 
-	keys = keys.filter(
-		// compares the calendar date (before T23:00:00...) of each Date() object
-		// via https://stackoverflow.com/questions/4607745/
-		key => new Date(key).toISOString().split(/T(.+)/)[0] === selectedDay.toISOString().split(/T(.+)/)[0]
-	)
-
-	keys.forEach(key => {
-		const res = JSON.parse(localStorage.getItem(String(key)))
-		hours += parseInt(res.hours)
-		html += `<tr class="log-detail">
-			<td class="cat ${res.category || 'null'}">[${res.category || 'null'}]</td>
-			<td class="hours">${res.hours} -</td>
-			<td class="name">${res.project} - ${res.task}</td>
-			<td class="time">${res.tod || new Date(res.date).toTimeString().split(' ')[0]}</td>
-		</tr>`
-	})
+	if (db && db.data.records.length > 0) {
+		db.data.records.forEach(res => {
+			hours += parseInt(res.hours)
+			html += `<div class="log-detail">
+				<span class="cat ${res.category || 'null'}">[${res.category || 'null'}]</span>
+				<span class="hours">(${res.hours}) </span>
+				<span class="name">${res.project} - ${res.task}</span>
+				<span class="time">${res.tod || new Date(res.date).toTimeString().split(' ')[0]}</span>
+			</div>`
+		})
+	}
 
 	document.getElementById('meta-root').innerHTML =
-		`<table>
-			<thead>
-  			<tr>
-   				<th colspan="3">${keys.length > 0 ? hours + ' hours recorded' : 'No records'}</th>
-				</tr>
-			</thead>
-			<tbody>
+		`<div class="meta-table">
+			<header>
+				${db.data.records.length > 0 ? hours + ' hour' + (hours == 1 ? '': 's') + ' recorded' : 'No records'}
+			</header>
+			<div class="meta-table-body">
 				${html}
-			</tbody>
-		</table>`
+			</div>
+		</div>`
 }
 
+// update text describing chosen date in calendar
 const calInfo = () => {
 	let month = selectedDay.getUTCMonth()
 	let date = selectedDay.getUTCDate()
@@ -116,4 +74,29 @@ const calInfo = () => {
 	cinfo.innerHTML = `<p>${monthNames[month]} ${date}, ${dayNames[day]}. ${calc}</p>`
 }
 
-setHeader()
+// listen for custom events
+const events = () => {
+	document.addEventListener('calendar-select', e => {
+		selectedDay = new Date(e.detail)
+		log.alterDate(selectedDay)
+		updateLogs()
+		calInfo()
+	})
+
+	document.addEventListener('calendar-blur', e => {
+		selectedDay = new Date()
+		// cinfo.innerHTML = ''
+		// document.getElementById('meta-root').innerHTML = ''
+	})
+
+	document.addEventListener('commit', e => {
+		updateLogs()
+	})
+
+	document.addEventListener('year-change', e => {
+		year = e.detail
+		cal.setYear(year)
+	})
+}
+
+events()

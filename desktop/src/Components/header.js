@@ -98,8 +98,8 @@ class Header {
 		const formatTime = time => Math.ceil(time / (1000 * 3600 * 24))
 
 		// compute how long I have to live
-		let birth = new Date('4/24/1997')
-		let death = new Date('4/24/2077')
+		let birth = new Date(localStorage.getItem('dob'))
+		let death = new Date(birth.getFullYear() + 80, birth.getMonth(), birth.getDate())
 
 		let DDC = formatTime(death) - formatTime(birth) // formatted to 29000
 		let life = formatTime(new Date(Date.now()).getTime()) - formatTime(birth)

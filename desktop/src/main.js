@@ -4,7 +4,34 @@
 // far too much to my dev time. Whilst I know how to do it, and I
 // really do enjoy it, I have come to realise that I can't go on.
 
-// Files are to be written so that they may one day be migrated to modern approaches
+// check for setup credentials
+if (window.localStorage) {
+	let d = localStorage.getItem('dob')
+	if (d === null) {
+		let d = prompt('Enter your date of birth\nin the format MM/DD/YYYY')
+		if (d === null) {
+			console.log('[Jars] Date of birth defaulting to 01/01/2000')
+			localStorage.setItem('dob', '01/01/2000')
+		} else {
+			localStorage.setItem('dob', d)
+		}
+	}
+
+	let api = localStorage.getItem('api')
+	if (api === null) {
+		api = prompt('Enter the api url to your database\nex: https://api.jars.com/v1/')
+		if (api === null) {
+			alert('Jars set to localStorage mode.')
+		} else {
+			localStorage.setItem('api', api)
+			window.api = api
+		}
+	} else {
+		window.api = api
+	}
+}
+
+// Files are to be written so that they may one day be migrated to 'modern' approaches
 const log = new LogForm({ root: document.getElementById('log-root') })
 const cal = new Calendar({ root: document.getElementById('cal-root') })
 const hed = new Header({ root: document.getElementById('header-root') })
@@ -18,28 +45,45 @@ let selectedDay = new Date()
 
 // lists detailed logs for a given day
 const updateLogs = async () => {
-	// see https://github.com/mevdschee/php-crud-api
-	let query = `filter=date,sw,${selectedDay.toISOString().slice(0, 10)}`
-	let db = await axios.get('https://api.arthem.co/jars/v1/records/beans?' + query)
 	let html = ''
 	let hours = 0
+	let records = []
 
-	if (db && db.data.records.length > 0) {
-		db.data.records.forEach(res => {
-			hours += parseInt(res.hours)
-			html += `<div class="log-detail">
+	if (window.api) {
+		// imediately set a 'loading' text
+		document.getElementById('meta-root').innerHTML = 'fetching...'
+
+		// see https://github.com/mevdschee/php-crud-api
+		let query = `filter=date,sw,${selectedDay.toISOString().slice(0, 10)}`
+		let db = await fetch(window.api + '?' + query).then(r => r.json())
+
+		if (db && db.records.length > 0) {
+			records = db.records
+		}
+
+	} else {
+		let keys = Object.keys(localStorage)
+		keys = keys.filter(key => key.startsWith(selectedDay.toISOString().slice(0, 10)))
+		keys.forEach(key => {
+			records.push(JSON.parse(localStorage.getItem(key)))
+		})
+	}
+
+	records.forEach(res => {
+		hours += parseInt(res.hours)
+		html += `<div class="log-detail">
 				<span class="cat ${res.category || 'null'}">[${res.category || 'null'}]</span>
 				<span class="hours">(${res.hours}) </span>
 				<span class="name">${res.project} - ${res.task}</span>
 				<span class="time">${res.tod || new Date(res.date).toTimeString().split(' ')[0]}</span>
 			</div>`
-		})
-	}
+	})
+
 
 	document.getElementById('meta-root').innerHTML =
 		`<div class="meta-table">
 			<header>
-				${db.data.records.length > 0 ? hours + ' hour' + (hours == 1 ? '': 's') + ' recorded' : 'No records'}
+				${records.length > 0 ? hours + ' hour' + (hours == 1 ? '': 's') + ' recorded' : 'No records'}
 			</header>
 			<div class="meta-table-body">
 				${html}

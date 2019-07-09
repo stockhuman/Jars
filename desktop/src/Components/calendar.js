@@ -123,18 +123,17 @@ class Calendar {
 			day.date = day.attributes.details.value
 			this.listeners.push(day)
 			day.addEventListener('focus', (e) => this._emit(e))
-			day.addEventListener('blur', (e) => this._emit(e, 'blur'))
 		})
 	}
 
-	setYear(year) {
+	setYear (year) {
 		this.state.year = year
 		this.state.root.innerHTML = `<section id="calendar">${this.render()}</section>`
 		this.listeners = []
 		this.events()
 	}
 
-	render() {
+	render () {
 		let month = 0
 		let html = ''
 

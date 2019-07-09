@@ -13,28 +13,28 @@ const en = {
 	"logform": {
 		"misc": {
 			"begin": "log time (press enter to commit)",
-				"placeholder": "log time",
-					"recap": "committed this week:"
+			"placeholder": "log time",
+			"recap": "committed this week:"
 		},
 		"s0": {
 			"placeholder": "time of day? (em|m|md|an|ev|n|ln)",
-				"singularHour": "An hour",
-					"singularHourNoPronoun": "hour",
-						"pluralHour": "hours",
-							"minutes": "minutes"
+			"singularHour": "An hour",
+			"singularHourNoPronoun": "hour",
+			"pluralHour": "hours",
+			"minutes": "minutes"
 		},
 		"s1": {
 			"placeholder": "project",
-				"values": [
-					{ "abbr": "em", "expa": "in the early morning" },
-					{ "abbr": "m", "expa": "in the morning" },
-					{ "abbr": "md", "expa": "around midday" },
-					{ "abbr": "an", "expa": "in the afternoon" },
-					{ "abbr": "ev", "expa": "in the evening" },
-					{ "abbr": "n", "expa": "around nighttime" },
-					{ "abbr": "ln", "expa": "well past sundown" }
-				],
-					"transition": "working on"
+			"values": [
+				{ "abbr": "em", "expa": "in the early morning" },
+				{ "abbr": "m", "expa": "in the morning" },
+				{ "abbr": "md", "expa": "around midday" },
+				{ "abbr": "an", "expa": "in the afternoon" },
+				{ "abbr": "ev", "expa": "in the evening" },
+				{ "abbr": "n", "expa": "around nighttime" },
+				{ "abbr": "ln", "expa": "well past sundown" }
+			],
+			"transition": "working on"
 		},
 		"s2": {
 			"placeholder": "task"

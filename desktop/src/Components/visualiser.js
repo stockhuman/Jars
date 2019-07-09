@@ -4,8 +4,27 @@ class Visualiser {
 			year: new Date().getFullYear(),
 			scale: 4, // 12 months / [scale] => 3 months
 			root,
-			strings: locales('logform')
+			strings: locales('logform'),
+			svg: null,
+			meta: null,
+			container: null
 		}
+
+		// 'mount'
+		this.state.container = document.createElement('section')
+		this.state.container.id = 'visualiser'
+
+		this.state.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+		this.state.svg.setAttributeNS(null, 'viewBox', '0 0 600 105')
+
+		this.state.meta = document.createElement('p')
+		this.state.meta.className = 'vis-meta'
+
+		// tie it together
+		this.state.container.appendChild(this.state.svg)
+		this.state.container.appendChild(this.state.meta)
+		this.state.root.appendChild(this.state.container)
+
 
 		this.render()
 	}
@@ -47,13 +66,12 @@ class Visualiser {
 			}
 		}
 
-		console.log(scale())
-
-
+		// Query database for logs in date range
 		const query = `?${scale()}&exclude=id,comment,task`
 		const data = await fetch(window.api + query).then(r => r.json())
 		let svg = ''
 
+		// construct a single log <rect />
 		const day = day => {
 			let y = 0
 			let x = 0
@@ -83,27 +101,29 @@ class Visualiser {
 
 			}
 
-			let dt1 = new Date(day.date);
-			let dt2 = new Date();
-			console.log(diff_hours(dt1, dt2));
 
+			/**
+			 * 1. find furthest date
+			 * 2. convert that date into hours from present (diff_hours())
+			 * 3. last / present = day.hours / 600 => width
+			 */
+
+			const furthest = new Date(this.state.year, new Date().getMonth() - (12 / this.state.scale))
+			console.log(diff_hours(new Date(), furthest))
 
 
 			return `<rect x="${x}" y="${y}" width="${day.hours}" height="4" rx="10" fill="#eee"/>`
 		}
 
-		data.records.forEach(element => {
-			svg += day(element)
-		})
+		// append logs to svg
+		data.records.forEach( el=> svg += day(el) )
 
+		// discover modal time of day
 		// via https://stackoverflow.com/questions/52898456/
 		const mode = a =>
 			Object.values(
 				a.reduce((count, e) => {
-					if (!(e in count)) {
-						count[e] = [0, e]
-					}
-
+					if (!(e in count)) count[e] = [0, e]
 					count[e][0]++
 					return count
 				}, {})
@@ -112,13 +132,8 @@ class Visualiser {
 		// most commonly entered time of day for work
 		const modalTod = `Mode: ${mode(data.records.map(item => item.tod))}`
 
-		this.state.root.innerHTML = `
-			<section id="visualiser">
-				<svg viewBox="0 0 600 105">
-					${svg}
-				</svg>
-				<p class="vis-meta">${modalTod}</p>
-			</section>
-		`
+		this.state.container.className = 'ready'
+		this.state.svg.innerHTML = svg
+		this.state.meta.innerHTML = modalTod
 	}
 }

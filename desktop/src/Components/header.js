@@ -174,8 +174,8 @@ class Header {
 			<circle id="clip" fill="var(--f-high)" cx="64" cy="64" r="64" style="clip-path:url(#clippath);"/>`
 		this.elem.greeting.innerHTML =
 			`<div>${this.greeting()}</div>
-				<span className="fraction">
+				<p class="fraction">
 				${ this.fraction()} - ${this.strings.fraction}
-			 </span>`
+			 </p>`
 	}
 }

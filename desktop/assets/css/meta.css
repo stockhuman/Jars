@@ -3,7 +3,7 @@
 	text-transform: initial;
 	color: var(--b-high);
 	font-size: 14px;
-	font-family: 'Courier New', Courier, monospace; /* add Input Mono */
+	font-family: 'Courier New', Courier, monospace; /* TODO: add Input Mono */
 }
 
 .meta-table header {

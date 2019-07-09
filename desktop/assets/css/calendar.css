@@ -22,26 +22,6 @@
 	SOFTWARE.
 */
 
-html,
-body {
-	display: block;
-	min-height: 400px;
-	width: 100%;
-	padding: 0px;
-	margin: 0px;
-	font-family: 'Input Sans Narrow';
-	text-transform: uppercase;
-	background-color: var(--f-low);
-	color: var(--f-mid);
-	-moz-user-select: none;
-	user-select: none;
-}
-
-section {
-	margin: 0px auto;
-	user-select: none;
-}
-
 #calendar {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, 100px);
@@ -55,35 +35,6 @@ section {
 .month {
 	width: 100px;
 	height: 130px;
-}
-
-.header {
-	margin: var(--u) auto calc(var(--u) * 2) auto;
-}
-
-p {
-	margin: 0px;
-}
-
-.year {
-	font-size: 40px;
-}
-
-.year a {
-	text-align: center;
-	width: 30px;
-	display: inline-block;
-	margin-left: 10px;
-}
-
-.year a:hover {
-	color: var(--f-high);
-	background: var(--b-low);
-	cursor: pointer;
-}
-
-.p {
-	font-size: 20px;
 }
 
 .m {

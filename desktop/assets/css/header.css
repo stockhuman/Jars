@@ -1,7 +1,7 @@
 .fraction-container {
 	display: grid;
 	gap: var(--u);
-	grid-template-columns: calc(var(--u) * 2) 1fr;
+	grid-template-columns: calc(var(--u) * 3) 1fr;
 	margin-bottom: var(--u);
 	flex-grow: 1;
 }
@@ -17,7 +17,9 @@
 
 section.header {
 	display: flex;
+	margin: var(--u) auto calc(var(--u) * 2) auto;
 	margin-top: 40px;
+	align-items: center;
 }
 
 .year-controls {
@@ -26,4 +28,26 @@ section.header {
 
 .year-span {
 	padding-left: 20px;
+}
+
+.fraction-container .greeting .fraction {
+	color: var(--b-high);
+	margin-top: 4px;
+}
+
+.year {
+	font-size: 35px;
+}
+
+.year a {
+	text-align: center;
+	width: 30px;
+	display: inline-block;
+	margin-left: 10px;
+}
+
+.year a:hover {
+	color: var(--f-high);
+	background: var(--b-low);
+	cursor: pointer;
 }

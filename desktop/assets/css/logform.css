@@ -1,16 +1,3 @@
-:root {
-	--u: 1rem;
-	--f-high:#FFCC66;
-	--f-mid: #cbccc6;
-	--f-low: #1F2430;
-	--f-inv: #BAE67E;
- 	--b-high:#5C6773;
- 	--b-med: #95E6Bc;
- 	--b-low: #101521;
- 	--b-inv: #34455A;
-}
-
-
 .log {
 	position: fixed;
 	bottom: 0;

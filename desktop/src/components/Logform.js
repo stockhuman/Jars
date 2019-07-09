@@ -12,6 +12,7 @@ function SQLDate(date = new Date()) {
 	return new Date(date).toISOString().slice(0, 19).replace('T', ' ')
 }
 
+// truncates time from date info
 function YYYYMMDD (date = new Date()) {
 	return new Date(date.getFullYear(), date.getMonth(), date.getDate())
 }
@@ -68,6 +69,17 @@ class LogForm {
 		this.render()
 	}
 
+	// assures that the bean is properly formatted to some degree
+	assure () {
+		const { hours, tod, project, task, category } = this.state.commit
+		if (typeof filterFloat(hours) != 'number') return false
+		if (tod == '') return false
+		if (project == '') return false
+		if (task == '') console.warn(`It's nice to log a task with a project`)
+		if (category == '') console.warn(`Marking category as null is discouraged`)
+		return true
+	}
+
 	alterDate (newDate) {
 		const d = YYYYMMDD(newDate)
 		const isToday = d.getTime() == YYYYMMDD().getTime()
@@ -104,14 +116,22 @@ class LogForm {
 		}
 	}
 
+	error (message) {
+		this.input.classList.add('error')
+		console.warn(message, this.state.commit)
+		setTimeout(() => {
+			this.input.blur()
+			this.input.classList.remove('error')
+		}, 1000)
+	}
+
 	events () {
 		let strings = this.state.strings
 		let l = this.input
 
 		l.addEventListener('blur', () => {
-			this.setState({ stage: 0 })
-			this.updateInputValue('')
 			this.setState({
+				inputValue: '',
 				placeholder: strings.misc.placeholder,
 				summary: '',
 				stage: 0
@@ -144,7 +164,7 @@ class LogForm {
 									summary: `${this.state.inputValue} ${strings.s0.pluralHour} `
 								})
 							}
-						} else this.input.blur()
+						} else this.error('Commit time not a valid number')
 						break;
 					case 1: // time of day
 						const s1s = strings.s1 // alias stage 1 strings
@@ -178,7 +198,7 @@ class LogForm {
 									humanTOD = `@ ${new Date().toTimeString().split(' ')[0]}`
 								} else {
 									// or what was input
-									humanTOD = `<b>${this.state.inputValue}</b>`
+									humanTOD = `@ ${this.state.inputValue}`
 								}
 						}
 
@@ -189,6 +209,7 @@ class LogForm {
 						})
 						break;
 					case 2: // project value
+						if (this.state.inputValue == '') { this.error('No Project?'); return }
 						this.setState({
 							placeholder: strings.s2.placeholder, // 'task
 							summary: `${this.state.summary + this.state.inputValue} => `,
@@ -239,6 +260,12 @@ class LogForm {
 						this.state.commit.date = SQLDate(this.state.customDate)
 					} else {
 						this.state.commit.date = SQLDate()
+					}
+
+					if (!this.assure()) {
+						// commit is malformed
+						this.error('Bean malformed!')
+						return
 					}
 
 					// commit!

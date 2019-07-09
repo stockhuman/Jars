@@ -20,6 +20,10 @@
 	border-right: var(--u) #FFA759 solid;
 }
 
+.log-input.error {
+	border: 1px solid #aa0000;
+}
+
 .log-input::placeholder {
 	color: var(--b-high);
 	font-weight: 200;

@@ -5,36 +5,41 @@
 // really do enjoy it, I have come to realise that I can't go on.
 
 // check for setup credentials
-if (window.localStorage) {
+const setup = () => {
 	let d = localStorage.getItem('dob')
 	if (d === null) {
-		let d = prompt('Enter your date of birth\nin the format MM/DD/YYYY')
-		if (d === null) {
-			console.log('[Jars] Date of birth defaulting to 01/01/2000')
-			localStorage.setItem('dob', '01/01/2000')
-		} else {
-			localStorage.setItem('dob', d)
-		}
+		// NOTE: prompt does not work in electron :(
+		alert('Manually set date of birth in localStorage formatted as MM/DD/YYYY, key "dob"')
+		// let d = prompt('Enter your date of birth\nin the format MM/DD/YYYY')
+		// if (d === null) {
+		// 	console.log('[Jars] Date of birth defaulting to 01/01/2000')
+		// 	localStorage.setItem('dob', '01/01/2000')
+		// } else {
+		// 	localStorage.setItem('dob', d)
+		// }
 	}
 
 	let api = localStorage.getItem('api')
 	if (api === null) {
-		api = prompt('Enter the api url to your database\nex: https://api.jars.com/v1/')
-		if (api === null) {
+		// api = prompt('Enter the api url to your database\nex: https://api.jars.com/v1/')
+		// if (api === null) {
 			alert('Jars set to localStorage mode.')
-		} else {
-			localStorage.setItem('api', api)
-			window.api = api
-		}
+			alert('Manually set API URL in localStorage with key "api"')
+		// } else {
+		// 	localStorage.setItem('api', api)
+		// 	window.api = api
+		// }
 	} else {
 		window.api = api
 	}
 }
+setup()
 
 // Files are to be written so that they may one day be migrated to 'modern' approaches
 const log = new LogForm({ root: document.getElementById('log-root') })
 const cal = new Calendar({ root: document.getElementById('cal-root') })
 const hed = new Header({ root: document.getElementById('header-root') })
+const vis = new Visualiser({ root: document.getElementById('vis-root')})
 
 const cinfo = document.getElementById('cal-info')
 
@@ -54,8 +59,8 @@ const updateLogs = async () => {
 		document.getElementById('meta-root').innerHTML = 'fetching...'
 
 		// see https://github.com/mevdschee/php-crud-api
-		let query = `filter=date,sw,${selectedDay.toISOString().slice(0, 10)}`
-		let db = await fetch(window.api + '?' + query).then(r => r.json())
+		let query = `?filter=date,sw,${selectedDay.toISOString().slice(0, 10)}`
+		let db = await fetch(window.api + query).then(r => r.json())
 
 		if (db && db.records.length > 0) {
 			records = db.records
@@ -70,7 +75,7 @@ const updateLogs = async () => {
 	}
 
 	records.forEach(res => {
-		hours += parseInt(res.hours)
+		hours += filterFloat(res.hours)
 		html += `<div class="log-detail">
 				<span class="cat ${res.category || 'null'}">[${res.category || 'null'}]</span>
 				<span class="hours">(${res.hours}) </span>
@@ -122,13 +127,6 @@ const calInfo = () => {
 const events = () => {
 	document.addEventListener('calendar-select', e => {
 		selectedDay = new Date(e.detail)
-		log.alterDate(selectedDay)
-		updateLogs()
-		calInfo()
-	})
-
-	document.addEventListener('calendar-blur', e => {
-		selectedDay = new Date()
 		log.alterDate(selectedDay)
 		updateLogs()
 		calInfo()

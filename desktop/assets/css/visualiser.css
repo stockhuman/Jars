@@ -12,3 +12,7 @@
 #visualiser.ready {
 	opacity: 1;
 }
+
+#visualiser rect.code {
+	fill: #D4BFFF;
+}

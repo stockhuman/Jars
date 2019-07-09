@@ -13,6 +13,9 @@
 .log-detail:hover {
 	color: var(--f-high)
 }
+.log-detail:hover .hours {
+	color: var(--f-mid)
+}
 .log-detail .time {
 	opacity: 0.5;
 }
@@ -30,6 +33,9 @@
 }
 .log-detail:hover .cat.null {
 	color: #3C526A;
+}
+.log-detail:hover .cat.read {
+	color: #A6CC70;
 }
 
 @media only screen and (max-width: 720px) {

@@ -106,21 +106,3 @@ svg.graph path {
 	stroke: #333;
 	stroke-width: 13px
 }
-
-@media only screen and (min-width: 1440px) {
-	section {
-		width: 1440px;
-	}
-}
-
-@media only screen and (max-width: 1440px) {
-	section {
-		width: 720px;
-	}
-}
-
-@media only screen and (max-width: 720px) {
-	section {
-		width: 360px;
-	}
-}

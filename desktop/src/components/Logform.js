@@ -13,7 +13,7 @@ function SQLDate(date = new Date()) {
 }
 
 function YYYYMMDD (date = new Date()) {
-	return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())
+	return new Date(date.getFullYear(), date.getMonth(), date.getDate())
 }
 
 

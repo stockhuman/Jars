@@ -134,11 +134,13 @@ const events = () => {
 
 	document.addEventListener('commit', () => {
 		updateLogs()
+		vis.render()
 	})
 
 	document.addEventListener('year-change', e => {
 		year = e.detail
 		cal.setYear(year)
+		vis.setYear(year)
 	})
 }
 

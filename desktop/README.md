@@ -1,3 +1,5 @@
+![Desktop preview](../design/jars-v2.0.0.jpg)
+
 # Jars Desktop
 
 > The desktop version of Jars

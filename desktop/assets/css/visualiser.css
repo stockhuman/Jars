@@ -16,3 +16,12 @@
 #visualiser rect.code {
 	fill: #D4BFFF;
 }
+
+#visualiser rect.read {
+	fill:#A6CC70;
+}
+
+#visualiser text {
+	fill:var(--b-high);
+	font-size:8px
+}

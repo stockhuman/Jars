@@ -1,0 +1,27 @@
+.vis-meta {
+	font-size: 12px;
+	height: 14px;
+	margin-bottom: calc(var(--u) * 3)
+}
+
+#visualiser {
+	opacity: 0;
+	transition: opacity .2s ease-in;
+}
+
+#visualiser.ready {
+	opacity: 1;
+}
+
+#visualiser rect.code {
+	fill: #D4BFFF;
+}
+
+#visualiser rect.read {
+	fill:#A6CC70;
+}
+
+#visualiser text {
+	fill:var(--b-high);
+	font-size:8px
+}

@@ -1,0 +1,43 @@
+.log {
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	padding-bottom: calc(var(--u) * 2);
+}
+
+.log-input {
+	width: calc(100% - (var(--u) * 2));
+	padding: var(--u);
+	border: none;
+	border-radius: 1px;
+	background: var(--f-mid);
+	color: var(--f-low);
+	font-size: var(--u);
+}
+
+.log-input.altered-date {
+	border-right: var(--u) #FFA759 solid;
+}
+
+.log-input.error {
+	border: 1px solid #aa0000;
+}
+
+.log-input::placeholder {
+	color: var(--b-high);
+	font-weight: 200;
+}
+
+.live-update {
+	color: var(--b-med);
+	font-size: 14px;
+	font-style: italic;
+	margin-top: 8px;
+	display: block;
+	text-align: right;
+	font-weight: 200;
+	text-align: left;
+	margin-bottom: 8px;
+	margin-left: 12px;
+}

@@ -1,0 +1,45 @@
+#meta-root {
+	margin-top: var(--u);
+	text-transform: initial;
+	color: var(--b-high);
+	font-size: 14px;
+	font-family: 'Courier New', Courier, monospace; /* TODO: add Input Mono */
+}
+
+.meta-table header {
+	margin-bottom: var(--u)
+}
+
+.log-detail:hover {
+	color: var(--f-high)
+}
+.log-detail:hover .hours {
+	color: var(--f-mid)
+}
+.log-detail .time {
+	opacity: 0.5;
+}
+.log-detail .name {
+	width: 60%;
+}
+.log-detail .cat {
+	opacity: 0.5;
+}
+.log-detail:hover .cat {
+	opacity: 1;
+}
+.log-detail:hover .cat.code {
+	color: #D4BFFF;
+}
+.log-detail:hover .cat.null {
+	color: #3C526A;
+}
+.log-detail:hover .cat.read {
+	color: #A6CC70;
+}
+
+@media only screen and (max-width: 720px) {
+	.log-detail .name {
+		width: unset;
+	}
+}

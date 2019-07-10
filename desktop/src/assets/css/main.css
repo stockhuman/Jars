@@ -1,0 +1,60 @@
+@font-face {
+	font-family: 'Input Sans Narrow';
+	src: url('../fonts/InputSansNarrow-Light.ttf') format('truetype');
+	font-weight: lighter;
+	font-style: normal;
+}
+
+:root {
+	--u: 1rem;
+	--f-high:#FFCC66;
+	--f-mid: #cbccc6;
+	--f-low: #1F2430;
+	--f-inv: #BAE67E;
+ 	--b-high:#5C6773;
+ 	--b-med: #95E6Bc;
+ 	--b-low: #101521;
+ 	--b-inv: #34455A;
+}
+
+html,
+body {
+	min-height: 400px;
+	width: 100%;
+	padding: 0px;
+	margin: 0px;
+	font-family: 'Input Sans Narrow';
+	text-transform: uppercase;
+	background-color: var(--f-low);
+	color: var(--f-mid);
+	-moz-user-select: none;
+	user-select: none;
+}
+
+section {
+	margin: 0px auto;
+	user-select: none;
+}
+
+@media only screen and (min-width: 1440px) {
+	section {
+		width: 1440px;
+	}
+}
+
+@media only screen and (max-width: 1440px) {
+	section {
+		width: 720px;
+	}
+}
+
+@media only screen and (max-width: 720px) {
+	section {
+		width: 360px;
+	}
+}
+
+
+p {
+	margin: 0px;
+}

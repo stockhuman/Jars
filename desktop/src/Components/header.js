@@ -21,32 +21,25 @@ class Header {
 
 	mount () {
 		// create overall container
-		const container = document.createElement('section')
-		container.className = 'header'
+		const container = elem('section', { className: 'header'})
 
 		// create logo and greeting container
-		const logogreet = document.createElement('header')
-		logogreet.className = 'fraction-container'
+		const logogreet = elem('header', { className: 'fraction-container'})
 
-		this.elem.greeting = document.createElement('div')
-		this.elem.greeting.className = 'greeting'
-		this.elem.logo = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+		this.elem.greeting = elem('div', { className: 'greeting'})
+		this.elem.logo = elemNS('http://www.w3.org/2000/svg', 'svg')
 		this.elem.logo.setAttributeNS(null, 'viewBox', "0 0 128 128")
 
 		// create container for year + buttons
-		const yearContainer = document.createElement('p')
-		yearContainer.className = 'year'
+		const yearContainer = elem('p', {className: 'year'})
 
 		// create individual container for buttons
-		const buttons = document.createElement('span')
-		this.elem.year = document.createElement('span')
-		this.elem.year.className = 'year-span'
+		const buttons = elem('span')
+		this.elem.year = elem('span', { className: 'year-span'})
 
 		// create buttons
-		this.btns.ff = document.createElement('a')
-		this.btns.ff.innerHTML = '+'
-		this.btns.rw = document.createElement('a')
-		this.btns.rw.innerHTML = '-'
+		this.btns.ff = elem('a', { innerHTML: '+' })
+		this.btns.rw = elem('a', { innerHTML: '-' })
 
 		// add buttons to local container
 		buttons.appendChild(this.btns.rw)
@@ -57,12 +50,10 @@ class Header {
 		yearContainer.appendChild(this.elem.year)
 
 		// create subtitle
-		this.elem.subtitle = document.createElement('p')
+		this.elem.subtitle = elem('p')
 
 		// create container to subtitle and year changer
-		const yearControls = document.createElement('div')
-		yearControls.className = 'year-controls'
-
+		const yearControls = elem('div', { className: 'year-controls' })
 
 		// tie everything together
 		logogreet.appendChild(this.elem.logo)

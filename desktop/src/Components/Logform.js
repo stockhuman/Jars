@@ -32,16 +32,14 @@ class LogForm extends Module {
 		}
 
 		// build out element programmatically
-		let container = document.createElement('section')
-		container.className = 'log'
+		let container = elem('section', { className: 'log' })
 
 		// live update
-		this.preview = document.createElement('div')
-		this.preview.className = 'live-update'
+		this.preview = elem('div', { className: 'live-update' })
 		container.appendChild(this.preview)
 
 		// logger
-		this.input = document.createElement('input')
+		this.input = elem('input')
 		this.setAttributes(this.input, {
 			type: 'text',
 			class:'log-input',

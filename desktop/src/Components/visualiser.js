@@ -1,19 +1,11 @@
-// TODO: hardcoded strings
-const _scales = [
-	'a year',
-	'half a year',
-	'four months',
-	'three months',
-	'this month'
-]
-
-class Visualiser {
-	constructor({ root = null }) {
+class Visualiser extends Module {
+	constructor(props) {
+		super(props)
 		this.state = {
 			year: new Date().getFullYear(),
 			scale: 2,
-			root,
 			strings: locales('logform'),
+			scales: locales('visualiser'),
 			svg: null,
 			meta: null,
 			container: null
@@ -32,7 +24,7 @@ class Visualiser {
 		// tie it together
 		this.state.container.appendChild(this.state.svg)
 		this.state.container.appendChild(this.state.meta)
-		this.state.root.appendChild(this.state.container)
+		this.root.appendChild(this.state.container)
 
 		this.state.meta.addEventListener('click', () => this.setScale( this.state.scale + 1))
 
@@ -47,7 +39,7 @@ class Visualiser {
 
 	setScale (scale) {
 		this.state.container.className = ''
-		this.state.scale = scale % _scales.length
+		this.state.scale = scale % this.state.scales.length
 		this.render()
 	}
 
@@ -146,7 +138,7 @@ class Visualiser {
 
 		// most commonly entered time of day for work
 		const modalTod =
-			`Scale: ${_scales[this.state.scale]}. Mode: ${mode(data.records.map(item => item.tod))}.`
+			`Scale: ${this.state.scales[this.state.scale]}. Mode: ${mode(data.records.map(item => item.tod))}.`
 
 		this.state.container.className = 'ready'
 		this.state.svg.innerHTML = svg

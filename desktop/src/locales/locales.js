@@ -51,7 +51,14 @@ const en = {
 				"comment": "CMNT"
 		},
 		"success": "bean committed!"
-	}
+	},
+	"visualiser": [
+		'a year',
+		'half a year',
+		'four months',
+		'three months',
+		'this month'
+	]
 }
 
 // NOTE: this file has been significantly pared down

@@ -47,7 +47,7 @@ const dayNames = [
 	'Sunday'
 ]
 
-class Calendar extends Module{
+class Calendar extends Module {
 
 	constructor(props) {
 		super(props)

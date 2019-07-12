@@ -18,10 +18,10 @@ function YYYYMMDD (date = new Date()) {
 }
 
 
-class LogForm {
-	constructor ({ root = null }) {
+class LogForm extends Module {
+	constructor (props) {
+		super(props)
 		this.state = {
-			root,
 			strings: locales('logform'),
 			placeholder: 'log time',
 			inputValue: '',
@@ -51,22 +51,10 @@ class LogForm {
 			placeholder: this.state.placeholder
 		})
 		container.appendChild(this.input)
-		this.state.root.appendChild(container)
+		this.root.appendChild(container)
 
 		this.render()
 		this.events()
-	}
-
-	setAttributes(element, attributes) {
-		Object.keys(attributes).forEach(name => {
-			element.setAttribute(name, attributes[name])
-		})
-	}
-
-	// shim for native non-react code
-	setState (props) {
-		this.state = { ...this.state, ...props }
-		this.render()
 	}
 
 	// assures that the bean is properly formatted to some degree

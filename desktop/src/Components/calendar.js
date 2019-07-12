@@ -47,21 +47,21 @@ const dayNames = [
 	'Sunday'
 ]
 
-class Calendar {
+class Calendar extends Module{
 
-	constructor({ root = null, year = new Date().getFullYear()}) {
+	constructor(props) {
+		super(props)
 		let t = new Date()
 		let today = new Date(t.getFullYear(), t.getMonth(), t.getDate() -1, 0)
 
 		this.state = {
-			root,
-			year,
+			year: props.year || new Date().getFullYear(),
 			today
 		}
 		this.listeners = []
 
 		// 'mount' component
-		this.state.root.innerHTML = `<section id="calendar">${this.render()}</section>`
+		this.root.innerHTML = `<section id="calendar">${this.render()}</section>`
 		this.events() // hook events
 	}
 
@@ -128,9 +128,36 @@ class Calendar {
 
 	setYear (year) {
 		this.state.year = year
-		this.state.root.innerHTML = `<section id="calendar">${this.render()}</section>`
+		this.root.innerHTML = `<section id="calendar">${this.render()}</section>`
 		this.listeners = []
 		this.events()
+	}
+
+	// update text describing chosen date in calendar
+	info (selectedDay) {
+		let month = selectedDay.getUTCMonth()
+		let date = selectedDay.getUTCDate()
+		let day = selectedDay.getUTCDay() - 1
+		if (day < 0) day = 6
+
+
+		let diff = ((new Date(
+			new Date().getUTCFullYear(),
+			new Date().getUTCMonth(),
+			new Date().getUTCDate(),
+			0) - new Date(year, month, date)) / 86400000)
+		let num = Math.abs(diff).toFixed()
+		let calc
+
+		if (diff < 0) {
+			calc = `In ${num} Day${num > 1 ? 's' : ''}.`
+		} else if (diff == 0) {
+			calc = `Today.`
+		} else {
+			calc = `${num} Day${num > 1 ? 's' : ''} ago.`
+		}
+
+		return `<p>${monthNames[month]} ${date}, ${dayNames[day]}. ${calc}</p>`
 	}
 
 	render () {

@@ -11,7 +11,7 @@ class Visualiser {
 	constructor({ root = null }) {
 		this.state = {
 			year: new Date().getFullYear(),
-			scale: 4,
+			scale: 2,
 			root,
 			strings: locales('logform'),
 			svg: null,

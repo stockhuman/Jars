@@ -14,7 +14,7 @@ class Meta extends Module {
 			this.root.innerHTML = 'fetching...'
 
 			// see https://github.com/mevdschee/php-crud-api
-			let query = `?filter=date,sw,${selectedDay.toISOString().slice(0, 10)}`
+			let query = `?filter=date,eq,${YYYYMMDD(selectedDay)}`
 			let db = await fetch(window.api + query).then(r => r.json())
 
 			if (db && db.records.length > 0) {
@@ -23,7 +23,7 @@ class Meta extends Module {
 
 		} else {
 			let keys = Object.keys(localStorage)
-			keys = keys.filter(key => key.startsWith(selectedDay.toISOString().slice(0, 10)))
+			keys = keys.filter(key => key.startsWith(YYYYMMDD(selectedDay)))
 			keys.forEach(key => {
 				records.push(JSON.parse(localStorage.getItem(key)))
 			})
@@ -35,7 +35,7 @@ class Meta extends Module {
 			<span class="cat ${res.category || 'null'}">[${res.category || 'null'}]</span>
 			<span class="hours">(${res.hours}) </span>
 			<span class="name">${res.project} - ${res.task}</span>
-			<span class="time">${res.tod || new Date(res.date).toTimeString().split(' ')[0]}</span>
+			<span class="time">${res.tod}</span>
 		</div>`
 		})
 

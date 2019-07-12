@@ -12,14 +12,12 @@ class Visualiser extends Module {
 		}
 
 		// 'mount'
-		this.state.container = document.createElement('section')
-		this.state.container.id = 'visualiser'
+		this.state.container = elem('section', { id: 'visualiser' })
 
-		this.state.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+		this.state.svg = elemNS('http://www.w3.org/2000/svg', 'svg')
 		this.state.svg.setAttributeNS(null, 'viewBox', '0 0 600 105')
 
-		this.state.meta = document.createElement('p')
-		this.state.meta.className = 'vis-meta'
+		this.state.meta = elem('p', { className: 'vis-meta' })
 
 		// tie it together
 		this.state.container.appendChild(this.state.svg)
@@ -50,27 +48,26 @@ class Visualiser extends Module {
 		// defines the query to be sent according to scaled view over time
 		const makeQuery = () => {
 			const monthsBack = months => {
-				let str = ''
-				for (let i = 0; i < months; i++) {
-					let mon = String(new Date().getMonth() + 1 - i)
-					// see https://github.com/mevdschee/php-crud-api#multiple-filters
-					str += `&filter${i + 1}=date,sw,${this.state.year}-${mon.padStart(2, 0)}`
-				}
-				return str
+				let d = new Date()
+				let start = YYYYMMDD(new Date(d.getFullYear(), d.getMonth() - months, 0))
+				let end = YYYYMMDD()
+				// this is v2 date formatting, each date stored as an int
+				// see https://github.com/mevdschee/php-crud-api#filters
+				return `&filter=date,bt,${start},${end}`
 			}
 
 			switch (this.state.scale) {
-				case 0: return `filter=date,sw,${this.state.year}` // whole year
+				case 0: return `filter=date,gt,${this.state.year}0000` // whole year
 				case 1: return monthsBack(6)
 				case 2: return monthsBack(4)
 				case 3: return monthsBack(3)
 				case 4:
-					return `filter=date,sw,${SQLDate(
+					return `filter=date,gt,${YYYYMMDD(
 						new Date(
 							this.state.year,
 							new Date().getMonth()
-						)).slice(0, 7)
-						}`
+						)).slice(0, 6)
+						}00`
 			}
 		}
 
@@ -80,7 +77,7 @@ class Visualiser extends Module {
 		// construct a single log <rect />
 		const day = day => {
 			let y = 0
-			let x = ratio * dist(furthest, new Date(day.date))
+			let x = ratio * dist(furthest, fromSQL(day.date))
 			let w = ratio * day.hours
 
 			// determine y given svg viewBox height of 105

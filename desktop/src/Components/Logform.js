@@ -1,23 +1,3 @@
-function filterFloat(value) {
-	if (value.startsWith('.')) value = '0' + value
-	if ((/^(\|\+)?([0-9]+(\.[0-9]+)?|Infinity)$/).test(value)) {
-		return Number(value)
-	} else {
-		return NaN
-	}
-}
-
-function SQLDate(date = new Date()) {
-	// convert date string to the 'YYYY-MM-DD HH:MM:SS' SQL format
-	return new Date(date).toISOString().slice(0, 19).replace('T', ' ')
-}
-
-// truncates time from date info
-function YYYYMMDD (date = new Date()) {
-	return new Date(date.getFullYear(), date.getMonth(), date.getDate())
-}
-
-
 class LogForm extends Module {
 	constructor (props) {
 		super(props)
@@ -68,7 +48,7 @@ class LogForm extends Module {
 
 	alterDate (newDate) {
 		const d = YYYYMMDD(newDate)
-		const isToday = d.getTime() == YYYYMMDD().getTime()
+		const isToday = d == YYYYMMDD()
 
 		if (!isToday) {
 			// date passed is not the current date
@@ -241,11 +221,10 @@ class LogForm extends Module {
 					console.log('now on stage ' + this.state.stage)
 				} else {
 
-					// set appropriate date
 					if (this.state.customDate) {
-						this.state.commit.date = SQLDate(this.state.customDate)
+						this.state.commit.date = YYYYMMDD(this.state.customDate)
 					} else {
-						this.state.commit.date = SQLDate()
+						this.state.commit.date = YYYYMMDD()
 					}
 
 					if (!this.assure()) {

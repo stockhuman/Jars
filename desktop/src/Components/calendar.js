@@ -59,6 +59,7 @@ class Calendar extends Module {
 			today
 		}
 		this.listeners = []
+		this.info = props.info
 
 		// 'mount' component
 		this.root.innerHTML = `<section id="calendar">${this.render()}</section>`
@@ -134,17 +135,16 @@ class Calendar extends Module {
 	}
 
 	// update text describing chosen date in calendar
-	info (selectedDay) {
-		let month = selectedDay.getUTCMonth()
-		let date = selectedDay.getUTCDate()
-		let day = selectedDay.getUTCDay() - 1
+	describe (selectedDay) {
+		let month = selectedDay.getMonth()
+		let date = selectedDay.getDate()
+		let day = selectedDay.getDay() - 1
 		if (day < 0) day = 6
 
-
 		let diff = ((new Date(
-			new Date().getUTCFullYear(),
-			new Date().getUTCMonth(),
-			new Date().getUTCDate(),
+			new Date().getFullYear(),
+			new Date().getMonth(),
+			new Date().getDate(),
 			0) - new Date(year, month, date)) / 86400000)
 		let num = Math.abs(diff).toFixed()
 		let calc
@@ -157,7 +157,7 @@ class Calendar extends Module {
 			calc = `${num} Day${num > 1 ? 's' : ''} ago.`
 		}
 
-		return `<p>${monthNames[month]} ${date}, ${dayNames[day]}. ${calc}</p>`
+		this.info.innerHTML = `<p>${monthNames[month]} ${date}, ${dayNames[day]}. ${calc}</p>`
 	}
 
 	render () {

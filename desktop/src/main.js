@@ -10,29 +10,17 @@ const setup = () => {
 	if (d === null) {
 		// NOTE: prompt does not work in electron :(
 		alert('Manually set date of birth in localStorage formatted as MM/DD/YYYY, key "dob"')
-		// let d = prompt('Enter your date of birth\nin the format MM/DD/YYYY')
-		// if (d === null) {
-		// 	console.log('[Jars] Date of birth defaulting to 01/01/2000')
-		// 	localStorage.setItem('dob', '01/01/2000')
-		// } else {
-		// 	localStorage.setItem('dob', d)
-		// }
 	}
 
 	let api = localStorage.getItem('api')
 	if (api === null) {
-		// api = prompt('Enter the api url to your database\nex: https://api.jars.com/v1/')
-		// if (api === null) {
 			alert('Jars set to localStorage mode.')
 			alert('Manually set API URL in localStorage with key "api"')
-		// } else {
-		// 	localStorage.setItem('api', api)
-		// 	window.api = api
-		// }
 	} else {
 		window.api = api
 	}
 }
+
 setup()
 
 // Files are to be written so that they may one day be migrated to 'modern' approaches
@@ -55,7 +43,7 @@ const events = () => {
 		selectedDay = new Date(e.detail)
 		log.alterDate(selectedDay)
 		meta.render(selectedDay)
-		cal.info(selectedDay)
+		cal.describe(selectedDay)
 	})
 
 	document.addEventListener('commit', () => {

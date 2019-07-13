@@ -59,3 +59,32 @@ const events = () => {
 }
 
 events()
+
+// Updates dates and time every hour
+// via https://stackoverflow.com/questions/19847412/
+const tick = () => {
+	setInterval(() => {
+		let stillToday = selectedDay.getDate() === new Date().getDate()
+		if (!stillToday) {
+			selectedDay = new Date()
+			log.alterDate(selectedDay)
+			meta.render(selectedDay)
+			cal.describe(selectedDay)
+			vis.render()
+		}
+		// render every hour (for greetings)
+		header.render()
+	}, 1000 * 60 * 60)
+}
+
+let intervalDate = new Date()
+if (intervalDate.getMinutes() === 0) {
+	tick()
+} else {
+	intervalDate.setHours(intervalDate.getHours() + 1)
+	intervalDate.setMinutes(0)
+	intervalDate.setSeconds(0)
+
+	let difference = intervalDate - new Date()
+	setTimeout(tick, difference)
+}

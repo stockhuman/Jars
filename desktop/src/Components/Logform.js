@@ -37,7 +37,8 @@ class LogForm extends Module {
 
 	// assures that the bean is properly formatted to some degree
 	assure () {
-		const { hours, tod, project, task, category } = this.state.commit
+		const { date, hours, tod, project, task, category } = this.state.commit
+		if (!isValidAPIDate(date)) return false
 		if (typeof filterFloat(hours) != 'number') return false
 		if (tod == '') return false
 		if (project == '') return false

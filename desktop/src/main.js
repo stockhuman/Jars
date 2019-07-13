@@ -14,8 +14,8 @@ const setup = () => {
 
 	let api = localStorage.getItem('api')
 	if (api === null) {
-			alert('Jars set to localStorage mode.')
-			alert('Manually set API URL in localStorage with key "api"')
+		alert('Jars set to localStorage mode.')
+		alert('Manually set API URL in localStorage with key "api"')
 	} else {
 		window.api = api
 	}

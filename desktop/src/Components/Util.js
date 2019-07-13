@@ -1,3 +1,4 @@
+// creates an element and assigns properties. convenience method
 function elem (type, options = {}) {
 	let e = document.createElement(type)
 	for (property in options) {
@@ -6,6 +7,7 @@ function elem (type, options = {}) {
 	return e
 }
 
+// as above, but for SVG
 function elemNS (ns, type) {
 	return document.createElementNS(ns, type)
 }
@@ -24,7 +26,9 @@ function filterFloat(value) {
  * @since v.2.0.1
  * @param {Date} date date to be operated upon, or now
  */
-function YYYYMMDD(date = new Date()) {
+function YYYYMMDD(date) {
+	if (date && isValidAPIDate(date)) return date // date is already formatted
+	if (!(date instanceof Date)) date = new Date()
 	return date.toISOString().replace(/-/g, '').slice(0, 8)
 }
 
@@ -39,4 +43,26 @@ function fromSQL(date) {
 		Number(date.substring(5, 6)) - 1, // month, zero indexed (???)
 		date.substring(7)
 	)
+}
+
+// returns true if date is a valid YYYYMMDD int
+function isValidAPIDate(date) {
+	if (!date) return false
+	if (date instanceof Date) return false
+
+	let d = date.toString()
+	if (d.length !== 8) return false
+
+	let year = Number(d.substring(0, 4))
+	// Jars cannot log productivity before year zero
+	if (year >= 0 && year <= 9999) {
+		let month = Number(d.substring(5, 6))
+		if (month > 0 && month < 13) {
+			let day = Number(d.substring(7))
+			if (day > 0 && day < 32) {
+				// it's a valid date, within reason.
+				return true
+			}
+		} else return false
+	} else return false
 }

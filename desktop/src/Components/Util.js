@@ -29,7 +29,9 @@ function filterFloat(value) {
 function YYYYMMDD(date) {
 	if (date && isValidAPIDate(date)) return date // date is already formatted
 	if (!(date instanceof Date)) date = new Date()
-	return date.toISOString().replace(/-/g, '').slice(0, 8)
+
+	// FR-CA returns a very useful YYYY-MM-DD string with local timezone
+	return date.toLocaleString('fr-ca').replace(/-/g, '').slice(0, 8)
 }
 
 // returns a date from a 'YYYYMMDD' string

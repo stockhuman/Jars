@@ -96,10 +96,12 @@ class Calendar extends Module {
 				let tabIndex = `tabIndex="0"`
 
 				if (day.getDay() != week) {
-					tabIndex = ''
 					style = 'null'
 					date--
-				} else if (String(day) == String(this.state.today)) style = 'today'
+				} else if (String(day) == String(this.state.today)) {
+					style = 'today'
+					tabIndex = `tabIndex="1"`
+				}
 				else if (day < this.state.today) style = 'gone'
 				else if (day.getDay() == 5 || day.getDay() == 6) style = 'weekend'
 				else style = 'day'

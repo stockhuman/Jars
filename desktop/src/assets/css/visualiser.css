@@ -25,3 +25,8 @@
 	fill:var(--b-high);
 	font-size:8px
 }
+
+#visualiser rect:hover {
+	stroke: white;
+	cursor: help
+}

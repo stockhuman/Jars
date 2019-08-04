@@ -3,7 +3,7 @@ class Visualiser extends Module {
 		super(props)
 		this.state = {
 			year: new Date().getFullYear(),
-			scale: 2,
+			scale: 3,
 			strings: locales('logform'),
 			scales: locales('visualiser'),
 			svg: null,
@@ -91,11 +91,15 @@ class Visualiser extends Module {
 				case todstrs[6].abbr: y = 70; break // well past sundown
 			}
 
-			return `<rect x="${x}" y="${y}" width="${w}" height="3" rx="1.5" class="${day.category}"/>`
+			return elemNS('http://www.w3.org/2000/svg', 'rect', {
+				x, y, width: w, height: 3, rx: 1.5,
+				class: day.category,
+				data: [day.project, day.date, day.hours, day.tod].join()
+			}).outerHTML
 		}
 
 		// Query database for logs in date range
-		const query = `?${makeQuery()}&exclude=id,comment,task`
+		const query = `?${makeQuery()}&exclude=ID,comment,task`
 		const data = await fetch(window.api + query).then(r => r.json())
 		const todstrs = this.state.strings.s1.values
 
@@ -140,5 +144,20 @@ class Visualiser extends Module {
 		this.state.container.className = 'ready'
 		this.state.svg.innerHTML = svg
 		this.state.meta.innerHTML = modalTod
+
+		// Add events to display log details on hover
+		this.state.svg.querySelectorAll('rect').forEach(el => {
+			el.addEventListener('mouseover', e => {
+				const d = e.target.attributes.data.value.split(',')
+				const meta = ` <span class="detail">${d[1]}, ${d[2]}hrs@${d[3]} on ${d[0]}</span>`
+				this.state.meta.innerHTML = modalTod + meta
+			})
+		})
+
+		this.state.svg.addEventListener('mouseleave', () => {
+			setTimeout(() => {
+				this.state.meta.innerHTML = modalTod
+			}, 1000);
+		})
 	}
 }

@@ -1,0 +1,83 @@
+#editor-pill {
+	position: fixed;
+	background: var(--b-low);
+	border-radius: 50%;
+	width: 300vh;
+	height: 300vh;
+	transform: translate(-50%, -50%);
+	animation: .5s grow;
+}
+
+#editor-pill.closed {
+	animation: .5s shrink;
+	transform: translate(-50%, -50%) scale(0);
+}
+
+#editor-close {
+	position: fixed;
+	color: white;
+	left: calc(var(--u) * 3);
+	top: calc(var(--u) * 3);
+	z-index: 22;
+}
+
+#editor {
+	z-index: 21;
+	position: absolute;
+	top: 0;
+	width: 100%;
+	padding-top: calc(var(--u)* 5)
+}
+
+#editor .loading {
+	text-align: center;
+	position: relative;
+	transform: translateY(50%);
+	height: 100%;
+}
+
+#editor section {
+	text-transform: initial;
+	overflow-wrap: break-word;
+	font-family: monospace;
+}
+
+.editor-log {
+}
+
+.editor-log span {
+	padding: 2px;
+	display: table-cell;
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+}
+
+@keyframes grow {
+	from {
+    transform: translate(-50%, -50%) scale(0);
+  }
+
+  to {
+  	transform: translate(-50%, -50%) scale(1)
+  }
+}
+
+@keyframes shrink {
+	from {
+		transform: translate(-50%, -50%) scale(1);
+  }
+
+  to {
+		transform: translate(-50%, -50%) scale(0);
+  }
+}

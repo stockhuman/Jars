@@ -152,6 +152,31 @@ class Header {
 	_events () {
 		this.btns.ff.addEventListener('click', () => this.changeYear(this.year + 1))
 		this.btns.rw.addEventListener('click', () => this.changeYear(this.year - 1))
+
+		// opens the log editor
+		this.elem.logo.addEventListener('click', this.loadEditor)
+	}
+
+	loadEditor (click) {
+		if (!window.editor)
+			fetch('editor.html')
+			// When the page is loaded convert it to text
+			.then(response => response.text())
+			.then(html => {
+				const parser = new DOMParser()
+				const editor = parser.parseFromString(html, "text/html")
+
+				const main = editor.getElementById('editor')
+				const resources = editor.querySelectorAll('[inject]')
+
+				resources.forEach(resource => document.head.appendChild(resource))
+				document.body.appendChild(main)
+
+
+				window.editor = new Editor({ root: main, click })
+			})
+			.catch(err => console.warn('Error in fetch: ', err))
+		else window.editor.show()
 	}
 
 	render () {

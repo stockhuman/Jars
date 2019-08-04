@@ -1,9 +1,12 @@
 {
   "name": "jars",
   "productName": "Jars",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A personal productivity tracker",
   "main": "src/index.js",
+  "build": {
+    "appId": "co.arthem.jars"
+  },
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
@@ -19,7 +22,9 @@
       "electronPackagerConfig": {
         "icon": "src/assets/icons/icon_large.png"
       },
-      "packagerConfig": {},
+      "packagerConfig": {
+        "icon": "src/assets/icons/icon_large.png"
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",

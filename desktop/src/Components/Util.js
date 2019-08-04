@@ -8,8 +8,12 @@ function elem (type, options = {}) {
 }
 
 // as above, but for SVG
-function elemNS (ns, type) {
-	return document.createElementNS(ns, type)
+function elemNS (ns, type, options = {}) {
+	let e = document.createElementNS(ns, type)
+	for (property in options) {
+		e.setAttributeNS(null, property, options[property])
+	}
+	return e
 }
 
 function filterFloat(value) {

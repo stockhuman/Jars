@@ -20,10 +20,10 @@
   "config": {
     "forge": {
       "electronPackagerConfig": {
-        "icon": "src/assets/icons/icon_large.png"
+        "icon": "./src/assets/icons/icon"
       },
       "packagerConfig": {
-        "icon": "src/assets/icons/icon_large.png"
+        "icon": "./src/assets/icons/icon"
       },
       "makers": [
         {

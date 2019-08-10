@@ -39,7 +39,7 @@ class LogForm extends Module {
 	assure () {
 		const { date, hours, tod, project, task, category } = this.state.commit
 		if (!isValidAPIDate(date)) return false
-		if (typeof filterFloat(hours) != 'number') return false
+		if (isNaN(filterFloat(hours))) return false
 		if (tod == '') return false
 		if (project == '') return false
 		if (task == '') console.warn(`It's nice to log a task with a project`)

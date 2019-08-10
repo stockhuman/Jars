@@ -17,6 +17,7 @@ function elemNS (ns, type, options = {}) {
 }
 
 function filterFloat(value) {
+	if (!value) return NaN; else value = String(value)
 	if (value.startsWith('.')) value = '0' + value
 	if ((/^(\|\+)?([0-9]+(\.[0-9]+)?|Infinity)$/).test(value)) {
 		return Number(value)
@@ -62,13 +63,13 @@ function isValidAPIDate(date) {
 	let year = Number(d.substring(0, 4))
 	// Jars cannot log productivity before year zero
 	if (year >= 0 && year <= 9999) {
-		let month = Number(d.substring(5, 6))
+		let month = Number(d.substring(4, 6))
 		if (month > 0 && month < 13) {
-			let day = Number(d.substring(7))
+			let day = Number(d.substring(6, 8))
 			if (day > 0 && day < 32) {
 				// it's a valid date, within reason.
 				return true
-			}
+			} else return false
 		} else return false
 	} else return false
 }

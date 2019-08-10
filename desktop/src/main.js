@@ -5,23 +5,8 @@
 // really do enjoy it, I have come to realise that I can't go on.
 
 // check for setup credentials
-const setup = () => {
-	let d = localStorage.getItem('dob')
-	if (d === null) {
-		// NOTE: prompt does not work in electron :(
-		alert('Manually set date of birth in localStorage formatted as MM/DD/YYYY, key "dob"')
-	}
-
-	let api = localStorage.getItem('api')
-	if (api === null) {
-		alert('Jars set to localStorage mode.')
-		alert('Manually set API URL in localStorage with key "api"')
-	} else {
-		window.api = api
-	}
-}
-
-setup()
+window.dob = localStorage.getItem('dob')
+window.api = localStorage.getItem('api')
 
 // Files are to be written so that they may one day be migrated to 'modern' approaches
 const log = new LogForm({ root: document.getElementById('log-root') })
@@ -67,10 +52,12 @@ const tick = () => {
 		let stillToday = selectedDay.getDate() === new Date().getDate()
 		if (!stillToday) {
 			selectedDay = new Date()
+			cal.today()
 			log.alterDate(selectedDay)
 			meta.render(selectedDay)
-			cal.describe(selectedDay)
 			vis.render()
+			cal.render()
+			cal.describe(selectedDay)
 		}
 		// render every hour (for greetings)
 		header.render()

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Mocha Tests</title>
+
+	<link rel="stylesheet" href="../src/assets/css/main.css">
+	<link rel="stylesheet" href="../src/assets/css/header.css">
+	<link rel="stylesheet" href="../src/assets/css/visualiser.css">
+	<link rel="stylesheet" href="../src/assets/css/calendar.css" />
+	<link rel="stylesheet" href="../src/assets/css/logform.css">
+	<link rel="stylesheet" href="../src/assets/css/meta.css">
+	<link rel="dns-prefetch" href="https://api.arthem.co/">
+
+	<script src="../node_modules/chai/chai.js"></script>
+	<script src="../node_modules/mocha/mocha.js"></script>
+	<link rel="stylesheet" href="../node_modules/mocha/mocha.css">
+	<style>#mocha-stats {background:bisque;border-radius:2px;
+	padding:5px!important;}#mocha{text-transform: none;}</style>
+</head>
+<body>
+	<div id="mocha"></div>
+	<script>mocha.setup('bdd'); mocha.checkLeaks(); window.assert = chai.assert</script>
+
+	<!-- Default log items, should reflect non-test index -->
+	<div id="header-root"></div>
+	<div id="vis-root"></div>
+	<div id="cal-root"></div>
+	<section id="cal-info"></section>
+	<section id="meta-root"></section>
+	<div id="log-root"></div>
+
+	<script src="../src/Components/Util.js"></script>
+	<script src="../src/locales/locales.js"></script>
+	<script src="../src/Components/Module.js"></script>
+	<script src="../src/Components/Meta.js"></script>
+	<script src="../src/Components/logform.js"></script>
+	<script src="../src/Components/calendar.js"></script>
+	<script src="../src/Components/header.js"></script>
+	<script src="../src/Components/Visualiser.js"></script>
+	<script src="../src/Components/Editor.js" defer></script>
+	<!-- End normal log -->
+
+	<!-- replaces normal main file -->
+	<script src="test.js"></script>
+
+	<script>
+		// TESTS!
+
+
+	</script>
+
+	<script>mocha.run();</script>
+</body>
+</html>

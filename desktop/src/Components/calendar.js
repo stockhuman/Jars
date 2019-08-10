@@ -62,7 +62,7 @@ class Calendar extends Module {
 		this.info = props.info
 
 		// 'mount' component
-		this.root.innerHTML = `<section id="calendar">${this.render()}</section>`
+		this.render()
 		this.events() // hook events
 	}
 
@@ -131,9 +131,13 @@ class Calendar extends Module {
 
 	setYear (year) {
 		this.state.year = year
-		this.root.innerHTML = `<section id="calendar">${this.render()}</section>`
+		this.render()
 		this.listeners = []
 		this.events()
+	}
+
+	today () {
+		this.setState({ today: new Date(t.getFullYear(), t.getMonth(), t.getDate() - 1, 0)})
 	}
 
 	// update text describing chosen date in calendar
@@ -177,6 +181,6 @@ class Calendar extends Module {
 			month++
 		}
 
-		return html
+		this.root.innerHTML = `<section id="calendar">${html}</section>`
 	}
 }

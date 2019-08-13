@@ -89,7 +89,14 @@ class LogForm extends Module {
 		setTimeout(() => {
 			this.input.blur()
 			this.input.classList.remove('error')
-		}, 1000)
+		}, 1500)
+	}
+
+	// engages the hidden setup menu from the logform
+	_setup () {
+		this.input.blur()
+		let e = new CustomEvent('setup')
+		document.dispatchEvent(e)
 	}
 
 	events () {
@@ -116,7 +123,11 @@ class LogForm extends Module {
 		l.addEventListener('keyup', event => {
 			if (event.key === 'Enter') {
 				switch (this.state.stage) {
-					case 0: // amount worked
+					case 0: // amount of time worked
+						if (this.state.inputValue === 'setup') {
+							this._setup()
+							return
+						}
 						this.setState({
 							placeholder: strings.s0.placeholder,
 							commit: { ...this.state.commit, hours: this.state.inputValue}

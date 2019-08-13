@@ -23,5 +23,4 @@ class Module {
 			element.setAttribute(name, attributes[name])
 		})
 	}
-
 }

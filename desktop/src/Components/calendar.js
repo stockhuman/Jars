@@ -98,6 +98,7 @@ class Calendar extends Module {
 				if (day.getDay() != week) {
 					style = 'null'
 					date--
+					tabIndex = `tabIndex="-1"`
 				} else if (String(day) == String(this.state.today)) {
 					style = 'today'
 					tabIndex = `tabIndex="1"`

@@ -5,8 +5,9 @@
 // really do enjoy it, I have come to realise that I can't go on.
 
 // check for setup credentials
-window.dob = localStorage.getItem('dob')
-window.api = localStorage.getItem('api')
+new Config().pollute()
+
+if (window.api == null) window.location.href = 'setup.html'
 
 // Files are to be written so that they may one day be migrated to 'modern' approaches
 const log = new LogForm({ root: document.getElementById('log-root') })
@@ -41,6 +42,10 @@ const events = () => {
 		cal.setYear(year)
 		vis.setYear(year)
 	})
+
+	document.addEventListener('setup', () => {
+		window.location.href = 'setup.html'
+	})
 }
 
 events()
@@ -52,12 +57,13 @@ const tick = () => {
 		let stillToday = selectedDay.getDate() === new Date().getDate()
 		if (!stillToday) {
 			selectedDay = new Date()
-			cal.today()
 			log.alterDate(selectedDay)
 			meta.render(selectedDay)
+			cal.describe(selectedDay)
+			cal.today()
 			vis.render()
 			cal.render()
-			cal.describe(selectedDay)
+			console.log('Date changed')
 		}
 		// render every hour (for greetings)
 		header.render()

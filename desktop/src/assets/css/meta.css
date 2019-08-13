@@ -28,15 +28,11 @@
 .log-detail:hover .cat {
 	opacity: 1;
 }
-.log-detail:hover .cat.code {
-	color: #D4BFFF;
-}
+
 .log-detail:hover .cat.null {
 	color: #3C526A;
 }
-.log-detail:hover .cat.read {
-	color: #A6CC70;
-}
+
 
 @media only screen and (max-width: 720px) {
 	.log-detail .name {

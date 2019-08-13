@@ -1,7 +1,7 @@
 {
   "name": "jars",
   "productName": "Jars",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "A personal productivity tracker",
   "main": "src/index.js",
   "build": {
@@ -21,10 +21,10 @@
   "config": {
     "forge": {
       "electronPackagerConfig": {
-        "icon": "./src/assets/icons/icon-v2.1.0"
+        "icon": "./src/assets/icons/icon-v211"
       },
       "packagerConfig": {
-        "icon": "./src/assets/icons/icon-v2.1.0"
+        "icon": "./src/assets/icons/icon-v211"
       },
       "makers": [
         {

@@ -36,7 +36,11 @@ function handleDrop(e) {
 	let dt = e.dataTransfer
 	let files = dt.files
 
-	if (files[0].type.match('application/json')) handleFiles(files)
+	if (
+		files[0].type.match('application/json') || // firefox
+		files[0].type.match('text/plain')) { // chrome
+		handleFiles(files)
+	}
 }
 
 function handleFiles(files) {
@@ -46,6 +50,10 @@ function handleFiles(files) {
 	reader.onload = function(e) {
 		let json = JSON.parse(e.target.result)
 		new Config(json).init()
+		document.getElementById('directions').innerHTML = 'Config loaded, setting up your jars.'
+		setTimeout(() => {
+			window.location.assign('index.html')
+		}, 1200);
 	}
 
 	reader.readAsText(file)
@@ -91,8 +99,8 @@ document.getElementById('current').addEventListener('click', () => {
 })
 
 // go back home on esc
-document.addEventListener('keydown', key => {
-	if (key.charCode == 0) {
+document.addEventListener('keydown', event => {
+	if (event.key === "Escape") {
 		window.location.assign('index.html')
 	}
 })

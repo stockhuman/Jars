@@ -19,14 +19,17 @@ const createWindow = () => {
     skipTaskbar: false,
     frame: false,
     setAutoHideMenuBar: true,
-    titleBarStyle: 'hiddenInset'
+    titleBarStyle: 'hiddenInset',
+    // webPreferences: {
+    //   devTools: false
+    // }
   })
 
   // and load the index.html of the app.
   mainWindow.loadURL(`file://${__dirname}/index.html`);
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {

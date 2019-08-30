@@ -43,12 +43,12 @@ function YYYYMMDD(date) {
 function fromSQL(date) {
 	if (!date) return new Date()
 
-	date = String(date)
+	date = date.toString()
 
 	return new Date(
 		date.substring(0, 4), // year
-		Number(date.substring(5, 6)) - 1, // month, zero indexed (???)
-		date.substring(7)
+		Number(date.substring(4, 6)) - 1, // month, zero indexed (???)
+		date.substring(6, 8)
 	)
 }
 

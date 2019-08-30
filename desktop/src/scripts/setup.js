@@ -1,4 +1,4 @@
-// stolen entirely from
+// base functionality derived hastily from
 // https://www.smashingmagazine.com/2018/01/drag-drop-file-uploader-vanilla-js/
 // and a little of
 // this https://gist.github.com/andjosh/7867934

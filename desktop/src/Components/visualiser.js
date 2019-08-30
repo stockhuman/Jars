@@ -111,7 +111,7 @@ class Visualiser extends Module {
 			case 0: furthest = new Date(this.state.year, fmonth - 12); break
 			case 1: furthest = new Date(this.state.year, fmonth - 6); break
 			case 2: furthest = new Date(this.state.year, fmonth - 4); break
-			case 3: furthest = new Date(this.state.year, fmonth - 3); break
+			case 3: furthest = new Date(this.state.year, fmonth - 2); break
 			case 4: furthest = new Date(this.state.year, fmonth); break
 		}
 

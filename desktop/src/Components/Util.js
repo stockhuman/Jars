@@ -27,6 +27,43 @@ function filterFloat(value) {
 }
 
 /**
+ * Returns true if string matches 00:00:00 format
+ * @since v.2.1.5
+ * @param {String} string timestamp to be checked
+ */
+function TODfromTimestamp(timestamp, hours, locale) {
+	let tsParts = timestamp.split(':')
+	let h = Number(tsParts[0]) // hour component of timestamp, 24hr time
+	let m = Number(tsParts[1]) // minute component
+
+	h += (m / 60) // convert minutes to hour fraction (ex 5.6 hrs) and add
+	h -= Number(hours) / 2 // Approximate time of work from point of commit
+
+	// assure commits done in the early morning don't return impossible times
+	h = (h % 24).toFixed(2)
+
+	switch (true) {
+		case h <= 4: return locale.values[6].abbr // well past sundown
+		case h <= 6: return locale.values[0].abbr // in the early morning
+		case h <= 11: return locale.values[1].abbr // in the morning
+		case h <= 13: return locale.values[2].abbr // around midday
+		case h <= 16: return locale.values[3].abbr // in the afternoon
+		case h <= 20: return locale.values[4].abbr // in the evening
+		case h <= 24: return locale.values[4].abbr // around nighttime
+	}
+}
+
+/**
+ * Returns true if string matches 00:00:00 format
+ * @since v.2.1.5
+ * @param {String} string timestamp to be checked
+ */
+function isTimestamp (string) {
+	if (string.match(/(\d{2}:){2}\d{2}/g)) return true
+	else return false
+}
+
+/**
  * Returns a number representing a YYYY-MM-DD date
  * @since v.2.0.1
  * @param {Date} date date to be operated upon, or now

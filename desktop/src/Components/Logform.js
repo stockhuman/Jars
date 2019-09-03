@@ -38,8 +38,9 @@ class LogForm extends Module {
 	// assures that the bean is properly formatted to some degree
 	assure () {
 		const { date, hours, tod, project, task, category } = this.state.commit
+		const possible = (h) => Number(h) != 0 && Number(h) < 24
 		if (!isValidAPIDate(date)) return false
-		if (isNaN(filterFloat(hours))) return false
+		if (isNaN(filterFloat(hours)) || !possible(hours)) return false
 		if (tod == '') return false
 		if (project == '') return false
 		if (task == '') console.warn(`It's nice to log a task with a project`)
@@ -85,11 +86,12 @@ class LogForm extends Module {
 
 	error (message) {
 		this.input.classList.add('error')
+		this.preview.innerHTML = message
 		console.warn(message, this.state.commit)
 		setTimeout(() => {
 			this.input.blur()
 			this.input.classList.remove('error')
-		}, 1500)
+		}, 2500)
 	}
 
 	// engages the hidden setup menu from the logform
@@ -142,11 +144,12 @@ class LogForm extends Module {
 									summary: `${this.state.inputValue} ${strings.s0.pluralHour} `
 								})
 							}
-						} else this.error('Commit time not a valid number')
+						} else return this.error('Commit time not a valid number')
 						break;
 					case 1: // time of day
 						const s1s = strings.s1 // alias stage 1 strings
 						let humanTOD = '' // TOD == time of day
+						let ts = new Date().toTimeString().split(' ')[0]
 
 						switch (this.state.inputValue) {
 							case s1s.values[0].abbr: // 'in the early morning'
@@ -173,17 +176,19 @@ class LogForm extends Module {
 							default: // if something else (or nothing) is input,
 								if (this.state.inputValue === '') {
 									// return 'HH:MM:SS'
-									humanTOD = `@ ${new Date().toTimeString().split(' ')[0]}`
+									humanTOD = `@ ${ts} (${TODfromTimestamp(ts, this.state.commit.hours, s1s)})`
 								} else {
-									// or what was input
-									humanTOD = `@ ${this.state.inputValue}`
+									this.error('Jars no longer supports custom TOD strings')
+									return
 								}
 						}
 
 						this.setState({
 							placeholder: s1s.placeholder, // 'project'
 							summary: this.state.summary + `${humanTOD} ${s1s.transition} `,
-							commit: { ...this.state.commit, tod: this.state.inputValue }
+							commit: {
+								...this.state.commit,
+								tod: this.state.inputValue || TODfromTimestamp(ts, this.state.commit.hours, s1s) }
 						})
 						break;
 					case 2: // project value

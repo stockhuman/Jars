@@ -138,6 +138,7 @@ class Calendar extends Module {
 	}
 
 	today () {
+		let t = new Date()
 		this.setState({ today: new Date(t.getFullYear(), t.getMonth(), t.getDate() - 1, 0)})
 	}
 

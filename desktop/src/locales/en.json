@@ -7,8 +7,7 @@
 			"Good Afternoon",
 			"Good Evening",
 			"Good Night"
-		],
-		"fraction": "This time will pass today"
+		]
 	},
 	"logform": {
 		"misc": {
@@ -51,5 +50,36 @@
 			"comment": "CMNT"
 		},
 		"success": "bean committed!"
-	}
+	},
+	"dayNames": [
+		"Monday",
+		"Tuesday",
+		"Wednesday",
+		"Thursday",
+		"Friday",
+		"Saturday",
+		"Sunday"
+	],
+	"monthNames": [
+		"January",
+		"February",
+		"March",
+		"April",
+		"May",
+		"June",
+		"July",
+		"August",
+		"September",
+		"October",
+		"November",
+		"December"
+	],
+	"visualiser": [
+		"a year",
+		"half a year",
+		"four months",
+		"three months",
+		"this month"
+	],
+	"noTranslationWarning": "No translation is available for"
 }

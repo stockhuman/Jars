@@ -6,49 +6,54 @@
 
 // check for setup credentials
 new Config().pollute()
-
 if (window.api == null) window.location.href = 'setup.html'
+if (!window.localeStrings) setLocaleStrings()
 
-// Files are to be written so that they may one day be migrated to 'modern' approaches
-const log = new LogForm({ root: document.getElementById('log-root') })
-const cal = new Calendar({
-	root: document.getElementById('cal-root'),
-	info: document.getElementById('cal-info')
-})
-const vis = new Visualiser({ root: document.getElementById('vis-root') })
-const header = new Header({ root: document.getElementById('header-root') })
-const meta = new Meta({ root: document.getElementById('meta-root') })
-
-// This script shall function as a controller in an MVC pattern
-let year = new Date().getFullYear()
-let selectedDay = new Date()
-
-// listen for custom events
-const events = () => {
-	document.addEventListener('calendar-select', e => {
-		selectedDay = new Date(e.detail)
-		log.alterDate(selectedDay)
-		meta.render(selectedDay)
-		cal.describe(selectedDay)
+const init = () => {
+	// Files are to be written so that they may one day be migrated to 'modern' approaches
+	const log = new LogForm({ root: document.getElementById('log-root') })
+	const cal = new Calendar({
+		root: document.getElementById('cal-root'),
+		info: document.getElementById('cal-info')
 	})
+	const vis = new Visualiser({ root: document.getElementById('vis-root') })
+	const header = new Header({ root: document.getElementById('header-root') })
+	const meta = new Meta({ root: document.getElementById('meta-root') })
 
-	document.addEventListener('commit', () => {
-		meta.render(selectedDay)
-		vis.render()
-	})
+	// This script shall function as a controller in an MVC pattern
+	let year = new Date().getFullYear()
+	let selectedDay = new Date()
 
-	document.addEventListener('year-change', e => {
-		year = e.detail
-		cal.setYear(year)
-		vis.setYear(year)
-	})
+	// listen for custom events
+	const events = () => {
+		document.addEventListener('calendar-select', e => {
+			selectedDay = new Date(e.detail)
+			log.alterDate(selectedDay)
+			meta.render(selectedDay)
+			cal.describe(selectedDay)
+		})
 
-	document.addEventListener('setup', () => {
-		window.location.href = 'setup.html'
-	})
+		document.addEventListener('commit', () => {
+			meta.render(selectedDay)
+			vis.render()
+		})
+
+		document.addEventListener('year-change', e => {
+			year = e.detail
+			cal.setYear(year)
+			vis.setYear(year)
+		})
+
+		document.addEventListener('setup', () => {
+			window.location.href = 'setup.html'
+		})
+	}
+
+	events()
 }
 
-events()
+document.addEventListener('localesReady', init)
+navigator.serviceWorker.register('scripts/sw.js', {})
 
 // Updates dates and time every hour
 // via https://stackoverflow.com/questions/19847412/

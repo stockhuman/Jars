@@ -22,31 +22,6 @@
  * SOFTWARE.
  */
 
-const monthNames = [
-	'January',
-	'February',
-	'March',
-	'April',
-	'May',
-	'June',
-	'July',
-	'August',
-	'September',
-	'October',
-	'November',
-	'December'
-]
-
-const dayNames = [
-	'Monday',
-	'Tuesday',
-	'Wednesday',
-	'Thursday',
-	'Friday',
-	'Saturday',
-	'Sunday'
-]
-
 class Calendar extends Module {
 
 	constructor(props) {
@@ -60,6 +35,8 @@ class Calendar extends Module {
 		}
 		this.listeners = []
 		this.info = props.info
+		this.monthNames = locales('monthNames')
+		this.dayNames = locales('dayNames')
 
 		// 'mount' component
 		this.render()
@@ -72,7 +49,7 @@ class Calendar extends Module {
 
 		for (let i = 0; i < 7; i++) {
 			y = (i * 14);
-			html += `<text class='dayLabel' x='5' y='${y}' dy='10'>${dayNames[i].substr(0, 1)}</text>`
+			html += `<text class='dayLabel' x='5' y='${y}' dy='10'>${this.dayNames[i].substr(0, 1)}</text>`
 		}
 		return html
 	}
@@ -144,6 +121,7 @@ class Calendar extends Module {
 
 	// update text describing chosen date in calendar
 	describe (selectedDay) {
+		let year = selectedDay.getFullYear()
 		let month = selectedDay.getMonth()
 		let date = selectedDay.getDate()
 		let day = selectedDay.getDay() - 1
@@ -165,7 +143,7 @@ class Calendar extends Module {
 			calc = `${num} Day${num > 1 ? 's' : ''} ago.`
 		}
 
-		this.info.innerHTML = `<p>${monthNames[month]} ${date}, ${dayNames[day]}. ${calc}</p>`
+		this.info.innerHTML = `<p>${this.monthNames[month]} ${date}, ${this.dayNames[day]}. ${calc}</p>`
 	}
 
 	render () {
@@ -173,13 +151,14 @@ class Calendar extends Module {
 		let html = ''
 
 		while (month < 12) {
-			html += `<div class='month'>
-					<p class='m'>${monthNames[new Date(this.state.year, month).getMonth()].substr(0, 3)}</p>
-					<svg class='graph' id="${monthNames[month]}">
-						${this._labels()}
-						${this._month(month)}
-					</svg>
-				</div>`
+			html +=
+			`<div class='month'>
+				<p class='m'>${this.monthNames[new Date(this.state.year, month).getMonth()].substr(0, 3)}</p>
+				<svg class='graph' id="${this.monthNames[month]}">
+					${this._labels()}
+					${this._month(month)}
+				</svg>
+			</div>`
 			month++
 		}
 

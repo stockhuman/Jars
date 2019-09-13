@@ -1,68 +1,34 @@
-const en = {
-	"header": {
-		"greetings": [
-			"You’re up early",
-			"Good Morning",
-			"Good Day",
-			"Good Afternoon",
-			"Good Evening",
-			"Good Night"
-		],
-			"fraction": "This time will pass today"
-	},
-	"logform": {
-		"misc": {
-			"begin": "log time (press enter to commit)",
-			"placeholder": "log time",
-			"recap": "committed this week:"
-		},
-		"s0": {
-			"placeholder": "time of day? (em|m|md|an|ev|n|ln)",
-			"singularHour": "An hour",
-			"singularHourNoPronoun": "hour",
-			"pluralHour": "hours",
-			"minutes": "minutes"
-		},
-		"s1": {
-			"placeholder": "project",
-			"values": [
-				{ "abbr": "em", "expa": "in the early morning" },
-				{ "abbr": "m", "expa": "in the morning" },
-				{ "abbr": "md", "expa": "around midday" },
-				{ "abbr": "an", "expa": "in the afternoon" },
-				{ "abbr": "ev", "expa": "in the evening" },
-				{ "abbr": "n", "expa": "around nighttime" },
-				{ "abbr": "ln", "expa": "well past sundown" }
-			],
-			"transition": "working on"
-		},
-		"s2": {
-			"placeholder": "task"
-		},
-		"s3": {
-			"placeholder": "work category",
-				"category": "cat"
-		},
-		"s4": {
-			"placeholder": "comments?"
-		},
-		"s5": {
-			"placeholder": "Press Enter to commit this bean",
-				"comment": "CMNT"
-		},
-		"success": "bean committed!"
-	},
-	"visualiser": [
-		'a year',
-		'half a year',
-		'four months',
-		'three months',
-		'this month'
-	]
+/* eslint-disable no-sequences */
+/* eslint-disable no-unused-vars */
+
+const setLocaleStrings = async () => {
+	window.locale = localStorage.getItem('locale') || 'en'
+	window.localeStrings = await fetch(`./locales/${window.locale}.json`)
+		.then(data => data.json())
+		.catch(async () => {
+			console.warn(`⚠️ Jars does not support '${window.locale}' ❌`)
+			console.info(`🌐 Jars speaks: EN, FR, DE, JP, IT, ZH. ✅`)
+			// if the specified language does not exist, default to english
+			return await fetch(`./locales/en.json`).then(data => data.json())
+		})
+	window.defaultLocaleStrings = await fetch(`./locales/en.json`)
+		.then(data => data.json())
+
+	document.dispatchEvent(new CustomEvent('localesReady'))
 }
 
-// NOTE: this file has been significantly pared down
-// so as to work without node (for now)
+// this class is so built to handle grammatical exceptions,
+// where a language's syntax doesn't fit into this prescribed form,
+// and so must return something different.
+//
+// As cases arise, different exports should be created to handle edges
 function locales (keys) {
-	return en[keys];
+
+	const w = () => {
+		console.warn(`🌐 ${window.localeStrings.noTranslationWarning} '${keys}'`)
+	}
+
+	// Falls back to english (or another form of the language if available)
+	// for any desired translation chunk
+	return window.localeStrings[keys] || (w(), window.defaultLocaleStrings[keys])
 }

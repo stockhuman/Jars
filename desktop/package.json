@@ -1,7 +1,7 @@
 {
   "name": "jars",
   "productName": "Jars",
-  "version": "2.1.5",
+  "version": "2.1.6",
   "description": "A personal productivity tracker",
   "main": "src/index.js",
   "build": {

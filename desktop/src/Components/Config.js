@@ -15,13 +15,18 @@ class Config {
 	}
 
 	pollute () {
-		let { APIurl, dateOfBirth, motto } = this.get()
-		window.api = APIurl
-		window.dob = dateOfBirth
-		window.motto = motto
+		let { APIurl, dateOfBirth, motto, locale } = this.get()
+
+		locale = locale ? locale.toLowerCase() : 'en'
+
+		window.api = APIurl // CRUD endpoint URL
+		window.dob = dateOfBirth // used to calculate jars icon
+		window.motto = motto // flair
+		window.locale = locale // language to use in app
 
 		localStorage.setItem('api', APIurl)
 		localStorage.setItem('dob', dateOfBirth)
+		localStorage.setItem('locale', locale)
 
 		// function also creates css from css key in LS
 		let s = document.createElement('style')

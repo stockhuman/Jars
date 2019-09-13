@@ -2,6 +2,7 @@
 	"APIurl":"",
 	"dateOfBirth": "",
 	"motto": "",
+	"locale": "en",
 	"colors": {
 		"code": "#fff"
 	}

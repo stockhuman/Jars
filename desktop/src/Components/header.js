@@ -193,7 +193,7 @@ class Header {
 		this.elem.greeting.innerHTML =
 			`<div>${this.greeting()}</div>
 				<p class="fraction">
-				${ frac[0] + '/' + frac[1]}${window.motto ? window.motto : ' - ' + this.strings.fraction}
+				${ frac[0] + '/' + frac[1]}${window.motto ? window.motto : ''}
 			 </p>`
 	}
 }

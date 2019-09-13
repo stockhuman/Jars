@@ -15,7 +15,7 @@ class Meta extends Module {
 
 			// see https://github.com/mevdschee/php-crud-api
 			let query = `?filter=date,eq,${YYYYMMDD(selectedDay)}`
-			let db = await fetch(window.api + query).then(r => r.json())
+			let db = await fetch(window.api + query).then(r => r.json()).catch(() => [])
 
 			if (db && db.records.length > 0) {
 				records = db.records

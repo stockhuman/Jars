@@ -99,9 +99,12 @@ class Visualiser extends Module {
 		}
 
 		// Query database for logs in date range
+		const todstrs = this.state.strings.s1.values
 		const query = `?${makeQuery()}&exclude=ID,comment,task`
 		const data = await fetch(window.api + query).then(r => r.json())
-		const todstrs = this.state.strings.s1.values
+			.catch(e => { console.warn(e); return null })
+
+		if (!data) { return }
 
 		let svg = ''
 		let fmonth = new Date().getMonth()

@@ -52,8 +52,15 @@ const init = () => {
 	events()
 }
 
+// Await strings before building UI
 document.addEventListener('localesReady', init)
-navigator.serviceWorker.register('scripts/sw.js', {})
+
+// Register service worker to make app offline-ready
+navigator.serviceWorker.register('sw.js', {scope: './'}).then(registration => {
+	console.log('Service worker registration succeeded:', registration)
+}, error => {
+	console.warn('Service worker registration failed:', error)
+})
 
 // Updates dates and time every hour
 // via https://stackoverflow.com/questions/19847412/

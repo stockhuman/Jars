@@ -9,6 +9,10 @@ new Config().pollute()
 if (window.api == null) window.location.href = 'setup.html'
 if (!window.localeStrings) setLocaleStrings()
 
+// This script shall function as a controller in an MVC pattern
+let year = new Date().getFullYear()
+let selectedDay = new Date()
+
 const init = () => {
 	// Files are to be written so that they may one day be migrated to 'modern' approaches
 	const log = new LogForm({ root: document.getElementById('log-root') })
@@ -19,10 +23,6 @@ const init = () => {
 	const vis = new Visualiser({ root: document.getElementById('vis-root') })
 	const header = new Header({ root: document.getElementById('header-root') })
 	const meta = new Meta({ root: document.getElementById('meta-root') })
-
-	// This script shall function as a controller in an MVC pattern
-	let year = new Date().getFullYear()
-	let selectedDay = new Date()
 
 	// listen for custom events
 	const events = () => {
@@ -47,6 +47,20 @@ const init = () => {
 		document.addEventListener('setup', () => {
 			window.location.href = 'setup.html'
 		})
+
+		document.addEventListener('render', date => {
+			// accomodate the format of custom events
+			date = date.detail.selectedDay || date
+
+			log.alterDate(date)
+			meta.render(date)
+			cal.describe(date)
+			cal.today()
+			vis.render()
+			cal.render()
+		})
+
+		document.addEventListener('tick', header.render)
 	}
 
 	events()
@@ -55,11 +69,26 @@ const init = () => {
 // Await strings before building UI
 document.addEventListener('localesReady', init)
 
-// Register service worker to make app offline-ready
-navigator.serviceWorker.register('sw.js', {scope: './'}).then(registration => {
-	console.log('Service worker registration succeeded:', registration)
-}, error => {
-	console.warn('Service worker registration failed:', error)
+/**
+ * Register service worker to make app offline-ready
+ * @since v2.1.6
+ * @disabled Caused fetch to fail on multiple occasions
+ */
+// navigator.serviceWorker.register('sw.js', {scope: './'}).then(registration => {
+// 	console.log('Service worker registration succeeded:', registration)
+// }, error => {
+// 	console.warn('Service worker registration failed:', error)
+// })
+
+let waitingForDailyUpdate = false
+
+// event fires when app regains network connection
+window.addEventListener('online', () => {
+	if (waitingForDailyUpdate) {
+		waitingForDailyUpdate = false
+		selectedDay = new Date()
+		document.dispatchEvent(new CustomEvent('render', { detail: selectedDay }))
+	}
 })
 
 // Updates dates and time every hour
@@ -67,18 +96,16 @@ navigator.serviceWorker.register('sw.js', {scope: './'}).then(registration => {
 const tick = () => {
 	setInterval(() => {
 		let stillToday = selectedDay.getDate() === new Date().getDate()
-		if (!stillToday) {
-			selectedDay = new Date()
-			log.alterDate(selectedDay)
-			meta.render(selectedDay)
-			cal.describe(selectedDay)
-			cal.today()
-			vis.render()
-			cal.render()
-			console.log('Date changed')
+		if (!stillToday) { // it is now another day, app shoudl update UI
+			if (navigator.onLine) { // device is online
+				selectedDay = new Date()
+				document.dispatchEvent(new CustomEvent('render', { detail: selectedDay }))
+			} else { // device is not online, but date has changed (likely overnight)
+				waitingForDailyUpdate = true
+			}
 		}
 		// render every hour (for greetings)
-		header.render()
+		document.dispatchEvent(new CustomEvent('tick'))
 	}, 1000 * 60 * 60)
 }
 

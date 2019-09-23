@@ -13,16 +13,22 @@ if (!window.localeStrings) setLocaleStrings()
 let year = new Date().getFullYear()
 let selectedDay = new Date()
 
+let log
+let cal
+let vis
+let header
+let meta
+
 const init = () => {
 	// Files are to be written so that they may one day be migrated to 'modern' approaches
-	const log = new LogForm({ root: document.getElementById('log-root') })
-	const cal = new Calendar({
+	log = new LogForm({ root: document.getElementById('log-root') })
+	cal = new Calendar({
 		root: document.getElementById('cal-root'),
 		info: document.getElementById('cal-info')
 	})
-	const vis = new Visualiser({ root: document.getElementById('vis-root') })
-	const header = new Header({ root: document.getElementById('header-root') })
-	const meta = new Meta({ root: document.getElementById('meta-root') })
+	vis = new Visualiser({ root: document.getElementById('vis-root') })
+	header = new Header({ root: document.getElementById('header-root') })
+	meta = new Meta({ root: document.getElementById('meta-root') })
 
 	// listen for custom events
 	const events = () => {
@@ -60,7 +66,7 @@ const init = () => {
 			cal.render()
 		})
 
-		document.addEventListener('tick', header.render)
+		document.addEventListener('tick', () => header.render())
 	}
 
 	events()

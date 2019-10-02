@@ -54,7 +54,7 @@ const init = () => {
 			window.location.href = 'setup.html'
 		})
 
-		document.addEventListener('render', date => {
+		document.addEventListener('render', (date = new Date()) => {
 			// accomodate the format of custom events
 			date = date.detail.selectedDay || date
 

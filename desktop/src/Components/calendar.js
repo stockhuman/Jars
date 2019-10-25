@@ -121,6 +121,10 @@ class Calendar extends Module {
 
 	// update text describing chosen date in calendar
 	describe (selectedDay) {
+		// temp? attempt to fix broken day roll-over render event
+		if (!(selectedDay instanceof Date)) {
+			selectedDay = new Date()
+		}
 		let year = selectedDay.getFullYear()
 		let month = selectedDay.getMonth()
 		let date = selectedDay.getDate()

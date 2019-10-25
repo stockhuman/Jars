@@ -19,7 +19,7 @@ This app contains no external dependencies, but relies on some modern Javascript
 A prominent component of this version of Jars utilises a calendar representation written by [Alexey Botkov](https://github.com/nomand/). Jars' visual design, raison d'etre and current programming ethos were heavily inpired by [a close friend's log](https://v-os.ca/timekeeping) and associated projects.
 
 Jars contains code from the following repos:
-* [PHP CRUD API](https://github.com/mevdschee/php-crud-api), (c) 2019 Maurits van der Schee, [MIT](https://github.com/alixaxel/ArrestDB/blob/master/LICENSE)
+* [PHP CRUD API](https://github.com/mevdschee/php-crud-api), (c) 2019 Maurits van der Schee, [MIT](https://github.com/mevdschee/php-crud-api/blob/master/LICENSE)
 * [Letnice](https://github.com/nomand/Letnice), (c) 2018 Alexey Botkov, [MIT](https://github.com/nomand/Letnice/blob/master/LICENSE.md)
 
 Additional reading regarding Crawford: [Kotaku](https://kotaku.com/30-years-later-one-mans-still-trying-to-fix-video-gam-1490377821)

@@ -1,7 +1,7 @@
 {
   "name": "jars",
   "productName": "Jars",
-  "version": "2.1.8",
+  "version": "2.1.9",
   "description": "A personal productivity tracker",
   "main": "src/index.js",
   "build": {
@@ -17,7 +17,7 @@
   },
   "keywords": [],
   "author": "Michael Hemingway",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "config": {
     "forge": {
       "electronPackagerConfig": {

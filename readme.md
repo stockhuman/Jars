@@ -1,4 +1,4 @@
-![Sweet promotional banner](design/jars-v2.0.0.jpg)
+![Sweet promotional banner](design/jars-v2.1.4.jpg)
 
 # Jars
 

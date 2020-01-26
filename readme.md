@@ -26,4 +26,4 @@ Additional reading regarding Crawford: [Kotaku](https://kotaku.com/30-years-late
 
 ## License
 
-[MIT](licence.md)
+[GPL-3.0](licence.md)

@@ -57,28 +57,27 @@ class Visualiser extends Module {
 			}
 
 			switch (this.state.scale) {
-				case 0: return `filter=date,gt,${this.state.year}0000` // whole year
+				case 0: return monthsBack(12) // whole year
 				case 1: return monthsBack(6)
 				case 2: return monthsBack(4)
 				case 3: return monthsBack(3)
-				case 4:
-					return `filter=date,gt,${YYYYMMDD(
-						new Date(
-							this.state.year,
-							new Date().getMonth()
-						)).slice(0, 6)
-						}00`
+				case 4: return monthsBack(1)
 			}
 		}
 
 		// returns distance in days
 		const dist = (a, b) => Math.abs(Math.round(((a - b) / (1000 * 60 * 60 * 24))))
+		// via https://gist.github.com/xposedbones/75ebaef3c10060a3ee3b246166caab56
+		const map = (value, x1, y1, x2, y2) => (value - x1) * (y2 - x2) / (y1 - x1) + x2
+
+		// via https://stackoverflow.com/questions/19225414/
+		const hrDiff = (t1, t2) => Math.abs(t1 - t2) / 36e5
 
 		// construct a single log <rect />
 		const day = day => {
 			let y = 0
-			let x = ratio * dist(furthest, fromSQL(day.date))
-			let w = ratio * day.hours
+			let x = map(ratio * dist(furthest, fromSQL(day.date)), 0, 600, 16, 600)
+			let w = day.hours * ratio
 
 			// determine y given svg viewBox height of 105
 			switch (day.tod) {
@@ -115,7 +114,7 @@ class Visualiser extends Module {
 			case 1: furthest = new Date(this.state.year, fmonth - 6); break
 			case 2: furthest = new Date(this.state.year, fmonth - 4); break
 			case 3: furthest = new Date(this.state.year, fmonth - 2); break
-			case 4: furthest = new Date(this.state.year, fmonth); break
+			case 4: furthest = new Date(this.state.year, fmonth - 1); break
 		}
 
 		let ratio = 600 / dist(furthest, new Date())

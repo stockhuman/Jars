@@ -1,7 +1,7 @@
 {
   "name": "jars",
   "productName": "Jars",
-  "version": "2.1.10",
+  "version": "2.1.11",
   "description": "A personal productivity tracker",
   "main": "src/index.js",
   "build": {
@@ -9,6 +9,7 @@
   },
   "scripts": {
     "start": "electron-forge start",
+    "build": "electron-forge publish",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",

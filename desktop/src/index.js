@@ -20,9 +20,10 @@ const createWindow = () => {
     frame: false,
     setAutoHideMenuBar: true,
     titleBarStyle: 'hiddenInset',
-    // webPreferences: {
+    webPreferences: {
+      nodeIntegration: true
     //   devTools: false
-    // }
+    }
   })
 
   // and load the index.html of the app.

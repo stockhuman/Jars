@@ -54,8 +54,7 @@
   "dependencies": {
     "chai": "^4.2.0",
     "electron-squirrel-startup": "^1.0.0",
-    "node-abi": "^2.15.0",
-    "npm-check-updates": "^4.1.0"
+    "node-abi": "^2.15.0"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.50",

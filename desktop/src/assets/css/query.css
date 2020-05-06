@@ -1,7 +1,34 @@
+body {
+	display: grid;
+	overflow: hidden;
+	grid-template-rows: auto 1fr;
+}
+
+#vis-root {
+	margin-top: 2rem;
+}
+
+.vis-meta {
+	margin-bottom: 0;
+}
+
+#query-root>section.loaded:first-of-type {
+	margin-bottom: 7rem;
+}
+
 h3 {
 	text-align: center;
 	font-weight: 100;
 	font-family: 'Input Sans';
 	text-transform: lowercase;
-	margin-top: 3rem;
+	margin-top: 2.5rem;
+}
+
+.editor-log {
+	font-size: 12px;
+	text-transform: none;
+}
+.editor-log-list {
+	max-height: calc(100vh - 25rem);
+	overflow-y: scroll;
 }

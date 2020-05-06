@@ -24,6 +24,12 @@ document.addEventListener('query-response', ({ detail }) => {
 	querymodule.setData(detail)
 })
 
+document.addEventListener('keyup', event => {
+	if (event.key === 'Escape') {
+		window.location.href = 'index.html'
+	}
+})
+
 
 // Window control code, duplicated from main.js
 // ------------------

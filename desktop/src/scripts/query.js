@@ -8,7 +8,7 @@ let vis
 
 // Await strings before building UI
 document.addEventListener('localesReady', () => {
-	vis = new Visualiser({ root: document.getElementById('vis-root'), mode: 'query' })
+	vis = new Visualiser({ root: document.getElementById('vis-root'), scale: 0 })
 	querymodule = new Query({ root: document.getElementById('query-root') })
 })
 
@@ -21,7 +21,7 @@ document.addEventListener('query-request', ({ detail }) => {
 // feeds response data to querymodule
 document.addEventListener('query-response', ({ detail }) => {
 	console.log('query response', detail)
-	querymodule.render(detail)
+	querymodule.setData(detail)
 })
 
 

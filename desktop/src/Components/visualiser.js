@@ -3,7 +3,7 @@ class Visualiser extends Module {
 		super(props)
 		this.state = {
 			year: new Date().getFullYear(),
-			scale: 2,
+			scale: props.scale || 2,
 			strings: locales('logform'),
 			scales: locales('visualiser'),
 			svg: null,

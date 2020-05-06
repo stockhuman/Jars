@@ -115,7 +115,7 @@ class Editor extends Module {
 			container.appendChild(li)
 		})
 
-		this.root.innerHTML = `<h3>${data.records.length} logs from ${start} - ${end}</h3>`
+		this.root.innerHTML = `<h3>${data.records.length} log${data.records.length==1?'':'s'} from ${start} - ${end}</h3>`
 		this.root.appendChild(container)
 		this.root.classList = 'loaded'
 	}

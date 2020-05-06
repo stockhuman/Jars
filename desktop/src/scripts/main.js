@@ -54,6 +54,10 @@ const init = () => {
 			window.location.href = 'setup.html'
 		})
 
+		document.addEventListener('query', () => {
+			window.location.href = 'query.html'
+		})
+
 		document.addEventListener('render', (date = new Date()) => {
 			// accomodate the format of custom events
 			date = date.detail.selectedDay || date
@@ -127,41 +131,41 @@ if (intervalDate.getMinutes() === 0) {
 	setTimeout(tick, difference)
 }
 
-const remote = require('electron').remote;
+const remote = require('electron').remote
 
-const win = remote.getCurrentWindow();
+const win = remote.getCurrentWindow()
 
 // When document has loaded, initialise
 document.onreadystatechange = (event) => {
 	if (document.readyState == "complete") {
-		handleWindowControls();
+		handleWindowControls()
 	}
-};
+}
 
 window.onbeforeunload = (event) => {
 	/* If window is reloaded, remove win event listeners
 	(DOM element listeners get auto garbage collected but not
 	Electron win listeners as the win is not dereferenced unless closed) */
-	win.removeAllListeners();
+	win.removeAllListeners()
 }
 
 function handleWindowControls() {
 	// Make minimise/maximise/restore/close buttons work when they are clicked
 	document.getElementById('min-button').addEventListener("click", event => {
-		win.minimize();
-	});
+		win.minimize()
+	})
 
 	document.getElementById('max-button').addEventListener("click", event => {
-		win.maximize();
-	});
+		win.maximize()
+	})
 
 	document.getElementById('restore-button').addEventListener("click", event => {
-		win.unmaximize();
-	});
+		win.unmaximize()
+	})
 
 	document.getElementById('close-button').addEventListener("click", event => {
-		win.close();
-	});
+		win.close()
+	})
 
 	// Toggle maximise/restore buttons when maximisation/unmaximisation occurs
 	toggleMaxRestoreButtons();
@@ -170,9 +174,9 @@ function handleWindowControls() {
 
 	function toggleMaxRestoreButtons() {
 		if (win.isMaximized()) {
-			document.body.classList.add('maximized');
+			document.body.classList.add('maximized')
 		} else {
-			document.body.classList.remove('maximized');
+			document.body.classList.remove('maximized')
 		}
 	}
 }

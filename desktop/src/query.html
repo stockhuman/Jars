@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="Content-Security-Policy"
+		content="default-src 'self' https://api.arthem.co/; style-src 'self' 'unsafe-inline'">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Jars - Query</title>
+	<link rel="stylesheet" href="assets/css/main.css">
+	<link rel="stylesheet" href="assets/css/header.css">
+	<link rel="stylesheet" href="assets/css/visualiser.css">
+	<link rel="stylesheet" href="assets/css/logform.css">
+	<link rel="stylesheet" href="assets/css/query.css">
+	<link rel="dns-prefetch" href="https://api.arthem.co/">
+</head>
+
+<body>
+	<div id="titlebar">
+		<div id="drag-region">
+			<div id="window-controls">
+				<div class="button" id="min-button">
+					<img class="icon"
+						srcset="assets/icons/titlebar-win/min-w-10.png 1x, assets/icons/titlebar-win/min-w-12.png 1.25x, assets/icons/titlebar-win/min-w-15.png 1.5x, assets/icons/titlebar-win/min-w-15.png 1.75x, assets/icons/titlebar-win/min-w-20.png 2x, assets/icons/titlebar-win/min-w-20.png 2.25x, assets/icons/titlebar-win/min-w-24.png 2.5x, assets/icons/titlebar-win/min-w-30.png 3x, assets/icons/titlebar-win/min-w-30.png 3.5x"
+						draggable="false" />
+				</div>
+				<div class="button" id="max-button">
+					<img class="icon"
+						srcset="assets/icons/titlebar-win/max-w-10.png 1x, assets/icons/titlebar-win/max-w-12.png 1.25x, assets/icons/titlebar-win/max-w-15.png 1.5x, assets/icons/titlebar-win/max-w-15.png 1.75x, assets/icons/titlebar-win/max-w-20.png 2x, assets/icons/titlebar-win/max-w-20.png 2.25x, assets/icons/titlebar-win/max-w-24.png 2.5x, assets/icons/titlebar-win/max-w-30.png 3x, assets/icons/titlebar-win/max-w-30.png 3.5x"
+						draggable="false" />
+				</div>
+				<div class="button" id="restore-button">
+					<img class="icon"
+						srcset="assets/icons/titlebar-win/restore-w-10.png 1x, assets/icons/titlebar-win/restore-w-12.png 1.25x, assets/icons/titlebar-win/restore-w-15.png 1.5x, assets/icons/titlebar-win/restore-w-15.png 1.75x, assets/icons/titlebar-win/restore-w-20.png 2x, assets/icons/titlebar-win/restore-w-20.png 2.25x, assets/icons/titlebar-win/restore-w-24.png 2.5x, assets/icons/titlebar-win/restore-w-30.png 3x, assets/icons/titlebar-win/restore-w-30.png 3.5x"
+						draggable="false" />
+				</div>
+				<div class="button" id="close-button">
+					<img class="icon"
+						srcset="assets/icons/titlebar-win/close-w-10.png 1x, assets/icons/titlebar-win/close-w-12.png 1.25x, assets/icons/titlebar-win/close-w-15.png 1.5x, assets/icons/titlebar-win/close-w-15.png 1.75x, assets/icons/titlebar-win/close-w-20.png 2x, assets/icons/titlebar-win/close-w-20.png 2.25x, assets/icons/titlebar-win/close-w-24.png 2.5x, assets/icons/titlebar-win/close-w-30.png 3x, assets/icons/titlebar-win/close-w-30.png 3.5x"
+						draggable="false" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<h3>Query Module</h3>
+	<div id="vis-root"></div>
+	<div id="query-root"></div>
+	<script src="Components/Util.js"></script>
+	<script src="locales/locales.js"></script>
+	<script src="Components/Module.js"></script>
+	<script src="Components/Config.js"></script>
+	<script src="Components/Visualiser.js"></script>
+	<script src="Components/Query.js"></script>
+	<script src="scripts/query.js"></script>
+</body>
+
+</html>

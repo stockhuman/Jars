@@ -3,12 +3,14 @@ class Visualiser extends Module {
 		super(props)
 		this.state = {
 			year: new Date().getFullYear(),
-			scale: 3,
+			scale: 2,
 			strings: locales('logform'),
 			scales: locales('visualiser'),
 			svg: null,
 			meta: null,
-			container: null
+			container: null,
+			mode: props.mode || null,
+			querystring: null
 		}
 
 		// 'mount'
@@ -39,6 +41,10 @@ class Visualiser extends Module {
 		this.state.container.className = ''
 		this.state.scale = scale % this.state.scales.length
 		this.render()
+	}
+
+	setQuery (querystring) {
+		this.setState({querystring, mode: 'query'})
 	}
 
 	async render () {
@@ -99,7 +105,9 @@ class Visualiser extends Module {
 
 		// Query database for logs in date range
 		const todstrs = this.state.strings.s1.values
-		const query = `?${makeQuery()}&exclude=ID,comment,task`
+		const qstring = this.state.querystring
+		const query = qstring ? qstring : `?${makeQuery()}&exclude=ID,comment,task`
+
 		const data = await fetch(window.api + query).then(r => r.json())
 			.catch(e => { console.warn(e); return null })
 
@@ -126,6 +134,12 @@ class Visualiser extends Module {
 
 		// append logs to svg
 		data.records.forEach( el => svg += day(el) )
+
+		// communicate with query script
+		if (this.state.mode === 'query') {
+			let e = new CustomEvent('query-response', {detail:data.records})
+			document.dispatchEvent(e)
+		}
 
 		// discover modal time of day
 		// via https://stackoverflow.com/questions/52898456/

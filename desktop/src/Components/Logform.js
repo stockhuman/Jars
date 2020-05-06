@@ -101,6 +101,11 @@ class LogForm extends Module {
 		document.dispatchEvent(e)
 	}
 
+	_query () {
+		let e = new CustomEvent('query')
+		document.dispatchEvent(e)
+	}
+
 	events () {
 		let strings = this.state.strings
 		let l = this.input
@@ -126,22 +131,27 @@ class LogForm extends Module {
 			if (event.key === 'Enter') {
 				switch (this.state.stage) {
 					case 0: // amount of time worked
-						if (this.state.inputValue === 'setup') {
+						const ival = this.state.inputValue
+						if (ival === 'setup') {
 							this._setup()
+							return
+						}
+						if (ival === 'query' || ival === 'q') {
+							this._query()
 							return
 						}
 						this.setState({
 							placeholder: strings.s0.placeholder,
-							commit: { ...this.state.commit, hours: this.state.inputValue}
+							commit: { ...this.state.commit, hours: ival}
 						})
-						if (!isNaN(filterFloat(this.state.inputValue))) {
-							if (this.state.inputValue === '1') {
+						if (!isNaN(filterFloat(ival))) {
+							if (ival === '1') {
 								this.setState({
 									summary: `${strings.s0.singularHour} `
 								})
 							} else {
 								this.setState({
-									summary: `${this.state.inputValue} ${strings.s0.pluralHour} `
+									summary: `${ival} ${strings.s0.pluralHour} `
 								})
 							}
 						} else return this.error('Commit time not a valid number')

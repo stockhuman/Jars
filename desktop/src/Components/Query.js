@@ -73,30 +73,35 @@ class Query extends Module {
 
 		const container = elem('div', {className: 'editor-log-list'})
 
+		// tally total hours selected
+		let hours = 0
+
 		data.forEach(l => {
 			// create individual, editable portions of each log
 			const li = elem('div', { className: 'editor-log' })
 
 			const parts = {
 				id: elem('span', { innerHTML: ("0000" + l.ID).substr(-4, 4), className: 'id' }),
-				date: elem('span', { contentEditable: true, innerHTML: l.date, className: 'date' }),
-				hours: elem('span', { contentEditable: true, innerHTML: l.hours, className: 'hours' }),
-				proj: elem('span', { contentEditable: true, innerHTML: l.project, className: 'project' }),
-				tod: elem('span', { contentEditable: true, innerHTML: l.tod, className: 'tod' }),
-				task: elem('span', { contentEditable: true, innerHTML: l.task, className: 'task' }),
-				cat: elem('span', { contentEditable: true, innerHTML: l.category, className: 'category' }),
-				comment: elem('span', { contentEditable: true, innerHTML: l.comment, className: 'comment' })
+				date: elem('span', { innerHTML: l.date, className: 'date' }),
+				hours: elem('span', { innerHTML: l.hours, className: 'hours' }),
+				proj: elem('span', { innerHTML: l.project, className: 'project' }),
+				tod: elem('span', { innerHTML: l.tod, className: 'tod' }),
+				task: elem('span', { innerHTML: l.task, className: 'task' }),
+				cat: elem('span', { innerHTML: l.category, className: 'category' }),
+				comment: elem('span', { innerHTML: l.comment, className: 'comment' })
 			}
+
+			hours += parseFloat(l.hours)
 
 			Object.values(parts).forEach(el => {
 				li.appendChild(el)
-				// el.addEventListener('input', () => this.alter(parts))
 			})
 
 			container.appendChild(li)
 		})
 
-		this.results.innerHTML = `<h3>${data.length} log${data.length==1?'':'s'}</h3>`
+		this.results.innerHTML =
+			`<h3>${data.length} log${data.length==1?'':'s'} selected - ${hours} hours</h3>`
 		this.results.appendChild(container)
 		this.results.classList = 'loaded'
 	}

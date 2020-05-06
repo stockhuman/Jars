@@ -58,3 +58,16 @@ section {
 p {
 	margin: 0px;
 }
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+	background: var(--b-low);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--b-high);
+  outline: 1px solid slategrey;
+}

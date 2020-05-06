@@ -1,7 +1,7 @@
 {
   "name": "jars",
   "productName": "Jars",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "A personal productivity tracker",
   "main": "src/index.js",
   "build": {
@@ -54,15 +54,15 @@
   "dependencies": {
     "chai": "^4.2.0",
     "electron-squirrel-startup": "^1.0.0",
-    "node-abi": "^2.15.0"
+    "node-abi": "^2.16.0"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^6.0.0-beta.50",
-    "@electron-forge/maker-deb": "^6.0.0-beta.50",
-    "@electron-forge/maker-rpm": "^6.0.0-beta.50",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.50",
-    "@electron-forge/maker-zip": "^6.0.0-beta.50",
-    "electron": "^8.2.0",
-    "mocha": "^7.1.1"
+    "@electron-forge/cli": "^6.0.0-beta.51",
+    "@electron-forge/maker-deb": "^6.0.0-beta.51",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.51",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.51",
+    "@electron-forge/maker-zip": "^6.0.0-beta.51",
+    "electron": "^8.2.5",
+    "mocha": "^7.1.2"
   }
 }

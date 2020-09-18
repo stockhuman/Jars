@@ -54,15 +54,15 @@
   "dependencies": {
     "chai": "^4.2.0",
     "electron-squirrel-startup": "^1.0.0",
-    "node-abi": "^2.16.0"
+    "node-abi": "^2.19.1"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^6.0.0-beta.51",
-    "@electron-forge/maker-deb": "^6.0.0-beta.51",
-    "@electron-forge/maker-rpm": "^6.0.0-beta.51",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.51",
-    "@electron-forge/maker-zip": "^6.0.0-beta.51",
-    "electron": "^8.2.5",
-    "mocha": "^7.1.2"
+    "@electron-forge/cli": "^6.0.0-beta.53",
+    "@electron-forge/maker-deb": "^6.0.0-beta.53",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.53",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.53",
+    "@electron-forge/maker-zip": "^6.0.0-beta.53",
+    "electron": "^10.1.2",
+    "mocha": "^8.1.3"
   }
 }

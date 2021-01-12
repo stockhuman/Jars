@@ -15,6 +15,10 @@
 	font-size: var(--u);
 }
 
+.log-input:focus {
+	outline: none;
+}
+
 .log-input.altered-date {
 	border-right: var(--u) #FFA759 solid;
 }

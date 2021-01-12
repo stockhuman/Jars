@@ -6,11 +6,12 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Jars - Setup</title>
 	<link rel="stylesheet" href="assets/css/main.css">
+	<link rel="stylesheet" href="assets/css/header.css">
 	<style>body{text-align: center}p{width: 100%;}
-#drop-area{transition:background .5s;border:1px solid var(--f-high);border-radius:5px;width:100%;height:40vh;font-family:sans-serif;text-align:center;margin:100px auto;}#drop-area.highlight{border-color:#A6CC70; background:var(--b-low)}p{margin-top:0}.form{height: 100%;
-display: flex;flex-wrap: wrap;
-align-items: center;margin-bottom:10px}.button{display:inline-block;color:var(--f-mid);border:none;    margin: 0 auto;
-padding:13px 1.5rem;background:var(--b-low);cursor:pointer;border-radius:5px;}.button:hover{background:var(--b-inv)}#fileElem{display:none}
+#drop-area{transition:background .5s;border:1px solid var(--f-high);border-radius:5px;width:100%;height:40vh;font-family:sans-serif;text-align:center;margin:100px auto;}#drop-area.highlight{border-color:#A6CC70;background:var(--b-low)}p{margin-top:0}.form{height: 100%;
+display:flex;flex-wrap: wrap;
+align-items: center;margin-bottom:10px}.dbutton{display:inline-block;color:var(--f-mid);border:none;margin:0 auto;
+padding:13px 1.5rem;background:var(--b-low);cursor:pointer;border-radius:5px;}.dbutton:hover{background:var(--b-inv)}#fileElem{display:none}
 	</style>
 </head>
 <body>
@@ -46,11 +47,11 @@ padding:13px 1.5rem;background:var(--b-low);cursor:pointer;border-radius:5px;}.b
 			<form class="form">
 				<p id="directions">Drop & load a configuration file</p>
 				<input type="file" id="fileElem" accept="application/json" onchange="handleFiles(this.files)">
-				<label class="button" for="fileElem">Select config.json</label>
+				<label class="dbutton" for="fileElem">Select config.json</label>
 			</form>
 		</div>
-		<button id="template" class="button">Download Template</button>
-		<button id="current" class="button">Download Current</button>
+		<button id="template" class="dbutton">Download Template</button>
+		<button id="current" class="dbutton">Download Current</button>
 	</section>
 	<script src="Components/Util.js"></script>
 	<script src="locales/locales.js"></script>

@@ -4,6 +4,11 @@
 	margin-bottom: calc(var(--u) * 3)
 }
 
+.vis-meta .hrs {
+	color: var(--f-high);
+	font-style: normal;
+}
+
 #visualiser {
 	opacity: 0;
 	transition: opacity .2s ease-in;

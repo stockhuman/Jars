@@ -13,18 +13,19 @@ let mainWindow
 const createWindow = () => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 1022,
-    icon: path.join(__dirname, 'assets/icons/icon_large.png'),
-    skipTaskbar: false,
-    frame: false,
-    setAutoHideMenuBar: true,
-    titleBarStyle: 'hiddenInset',
-    webPreferences: {
-      nodeIntegration: true
-    //   devTools: false
-    }
-  })
+		width: 800,
+		height: 1022,
+		icon: path.join(__dirname, 'assets/icons/icon_large.png'),
+		skipTaskbar: false,
+		frame: false,
+		setAutoHideMenuBar: true,
+		titleBarStyle: 'hiddenInset',
+		webPreferences: {
+			nodeIntegration: true,
+			contextIsolation: false,
+			//   devTools: false
+		},
+	})
 
   // and load the index.html of the app.
   mainWindow.loadURL(`file://${__dirname}/index.html`);

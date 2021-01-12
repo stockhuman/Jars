@@ -34,10 +34,19 @@ class Visualiser extends Module {
 	setYear(year) {
 		this.state.container.className = ''
 		this.state.year = year
-		this.render()
+		let thisYear = new Date()
+		if (this.state.year !== thisYear.getFullYear()) {
+			this.state.scale = 0 // year view
+			this.render()
+		} else {
+			this.render()
+		}
 	}
 
 	setScale (scale) {
+		if (this.state.year !== new Date().getFullYear()) {
+			return
+		}
 		this.state.container.className = ''
 		this.state.scale = scale % this.state.scales.length
 		this.render()
@@ -51,12 +60,18 @@ class Visualiser extends Module {
 		// silently fail if no API provided
 		if (!window.api) return
 
+		const thisYear = this.state.year === new Date().getFullYear()
+
 		// defines the query to be sent according to scaled view over time
 		const makeQuery = () => {
 			const monthsBack = months => {
-				let d = new Date()
-				let start = YYYYMMDD(new Date(d.getFullYear(), d.getMonth() - months, 0))
-				let end = YYYYMMDD()
+				const d = new Date()
+				let start = thisYear
+					?	YYYYMMDD(new Date(this.state.year, d.getMonth() - months, 0))
+					: YYYYMMDD(new Date(this.state.year, 0, 1))
+				let end = thisYear
+					? YYYYMMDD()
+					: YYYYMMDD(new Date(this.state.year, 11, 31)) // Dec 31
 				// this is v2 date formatting, each date stored as an int
 				// see https://github.com/mevdschee/php-crud-api#filters
 				return `&filter=date,bt,${start},${end}`
@@ -82,8 +97,10 @@ class Visualiser extends Module {
 		// construct a single log <rect />
 		const day = day => {
 			let y = 0
-			let x = map(ratio * dist(furthest, fromSQL(day.date)), 0, 600, 16, 600)
-			let w = day.hours * ratio
+			let x = thisYear
+				? map(ratio * dist(furthest, fromSQL(day.date)), 0, 600, 16, 600)
+				: map(ratio * dist(new Date(this.state.year, 0, 1), fromSQL(day.date)), 0, 600, 16, 600)
+			let w = ratio - 0.5
 
 			// determine y given svg viewBox height of 105
 			switch (day.tod) {
@@ -97,7 +114,7 @@ class Visualiser extends Module {
 			}
 
 			return elemNS('http://www.w3.org/2000/svg', 'rect', {
-				x, y, width: w, height: 3, rx: 1.5,
+				x, y, width: w, height: 7, rx: 2.4,
 				class: day.category,
 				data: [day.project, day.date, day.hours, day.tod].join()
 			}).outerHTML
@@ -125,7 +142,7 @@ class Visualiser extends Module {
 			case 4: furthest = new Date(this.state.year, fmonth - 1); break
 		}
 
-		let ratio = 600 / dist(furthest, new Date())
+		let ratio = thisYear ? 600 / dist(furthest, new Date()) : 1.58 // ~full year
 
 		// create 'time of day' labels
 		for (let i = 0; i < 7; i++) {
@@ -161,11 +178,12 @@ class Visualiser extends Module {
 		this.state.svg.innerHTML = svg
 		this.state.meta.innerHTML = modalTod
 
-		// Add events to display log details on hover
+		// Add events to display log details on hoverW
 		this.state.svg.querySelectorAll('rect').forEach(el => {
 			el.addEventListener('mouseover', e => {
 				const d = e.target.attributes.data.value.split(',')
-				const meta = ` <span class="detail">${d[1]}, ${d[2]}hrs@${d[3]} on ${d[0]}</span>`
+				const date = fromSQL(d[1]).toDateString().slice(0, -5) // remove ' YYYY'
+				const meta = ` <span class="detail">${date}, <em class="hrs">${d[2]}</em>hrs@${d[3]} on ${d[0]}</span>`
 				this.state.meta.innerHTML = modalTod + meta
 			})
 		})

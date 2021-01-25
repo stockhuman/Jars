@@ -4,6 +4,8 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta http-equiv="Content-Security-Policy"
+	content="default-src 'self' https://api.arthem.co/ 'unsafe-inline'; style-src 'self' 'unsafe-inline'">
 	<title>Jars - Setup</title>
 	<link rel="stylesheet" href="assets/css/main.css">
 	<link rel="stylesheet" href="assets/css/header.css">
@@ -53,6 +55,7 @@ padding:13px 1.5rem;background:var(--b-low);cursor:pointer;border-radius:5px;}.d
 		<button id="template" class="dbutton">Download Template</button>
 		<button id="current" class="dbutton">Download Current</button>
 	</section>
+	<script>document.body.classList.add(process.platform)</script>
 	<script src="Components/Util.js"></script>
 	<script src="locales/locales.js"></script>
 	<script src="Components/Config.js"></script>

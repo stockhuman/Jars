@@ -4,11 +4,12 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="Content-Security-Policy"
-		content="default-src 'self' https://api.arthem.co/; style-src 'self' 'unsafe-inline'">
+		content="default-src 'self' https://api.arthem.co/ 'unsafe-inline'; style-src 'self' 'unsafe-inline'">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Jars - Editor</title>
 	<link rel="stylesheet" href="assets/css/editor.css" inject>
 	<link rel="dns-prefetch" href="https://api.arthem.co/">
+	<script>document.body.classList.add(process.platform)</script>
 </head>
 <body>
 	<div id="titlebar">
@@ -38,6 +39,7 @@
 		</div>
 		</div>
 	<div id="editor"></div>
+	<script>document.body.classList.add(process.platform)</script>
 	<script src="Components/Util.js"></script>
 	<script src="locales/locales.js"></script>
 	<script src="Components/Module.js"></script>

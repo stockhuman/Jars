@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="Content-Security-Policy"
-		content="default-src 'self' https://api.arthem.co/; style-src 'self' 'unsafe-inline'">
+		content="default-src 'self' 'unsafe-inline' https://api.arthem.co/; style-src 'self' 'unsafe-inline'">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Jars</title>
 	<link rel="stylesheet" href="assets/css/main.css">
@@ -46,6 +46,7 @@
 	<section id="cal-info"></section>
 	<section id="meta-root"></section>
 	<div id="log-root"></div>
+	<script>document.body.classList.add(process.platform)</script>
 	<script src="locales/locales.js"></script>
 	<script src="Components/Util.js"></script>
 	<script src="Components/Config.js"></script>

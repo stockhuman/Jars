@@ -75,6 +75,11 @@
   display: none !important;
 }
 
+/* Disable on MacOS */
+.darwin #window-controls {
+  display: none;
+}
+
 .maximized #titlebar {
   width: 100%;
   padding: 0;

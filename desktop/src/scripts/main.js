@@ -6,10 +6,10 @@
 
 // check for setup credentials
 new Config().pollute()
-if (!window.api && window.store != 'local') window.location.href = 'setup.html'
+window.storage = new StorageHandler()
 if (!window.localeStrings) setLocaleStrings()
 
-// This script shall function as a controller in an MVC pattern
+// This script functions as the controller in an MVC pattern
 let year = new Date().getFullYear()
 let selectedDay = new Date()
 
@@ -78,17 +78,6 @@ const init = () => {
 
 // Await strings before building UI
 document.addEventListener('localesReady', init)
-
-/**
- * Register service worker to make app offline-ready
- * @since v2.1.6
- * @disabled Caused fetch to fail on multiple occasions
- */
-// navigator.serviceWorker.register('sw.js', {scope: './'}).then(registration => {
-// 	console.log('Service worker registration succeeded:', registration)
-// }, error => {
-// 	console.warn('Service worker registration failed:', error)
-// })
 
 let waitingForDailyUpdate = false
 

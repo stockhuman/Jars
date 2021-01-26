@@ -261,24 +261,10 @@ class LogForm extends Module {
 					}
 
 					// commit!
-					if (window.store != 'local' && window.api) {
-						fetch(window.api, {
-							method: 'POST',
-							mode: 'no-cors',
-							credentials: 'omit',
-							headers: { 'Content-Type': 'application/json' },
-							body: JSON.stringify(this.state.commit)
-						})
-						.then(() => {
-							let e = new CustomEvent('commit', { detail: this.state.commit })
-							document.dispatchEvent(e)
-						}).catch(() => alert('Failed to commit bean'))
-					} else {
-						// save locally
-						localStorage.setItem(this.state.commit.date, JSON.stringify(this.state.commit))
+					window.storage.set(this.state.commit).then(() => {
 						let e = new CustomEvent('commit', { detail: this.state.commit })
 						document.dispatchEvent(e)
-					}
+					}).catch(() => alert('Failed to commit bean'))
 
 					// reset
 					this.setState({

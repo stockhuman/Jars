@@ -9,24 +9,15 @@ class Meta extends Module {
 		let hours = 0
 		let records = []
 
-		if (window.api && window.store != 'local') {
-			// imediately set a 'loading' text
-			this.root.innerHTML = 'fetching...'
+		// imediately set a 'loading' text
+		this.root.innerHTML = 'fetching...'
 
-			// see https://github.com/mevdschee/php-crud-api
-			let query = `?filter=date,eq,${YYYYMMDD(selectedDay)}`
-			let db = await fetch(window.api + query).then(r => r.json()).catch(() => [])
+		// see https://github.com/mevdschee/php-crud-api
+		let query = `?filter=date,eq,${YYYYMMDD(selectedDay)}`
+		let db = await window.storage.get(query)
 
-			if (db && db.records.length > 0) {
-				records = db.records
-			}
-
-		} else {
-			let keys = Object.keys(localStorage)
-			keys = keys.filter(key => key.startsWith(YYYYMMDD(selectedDay)))
-			keys.forEach(key => {
-				records.push(JSON.parse(localStorage.getItem(key)))
-			})
+		if (db && db.length > 0) {
+			records = db
 		}
 
 		records.forEach(res => {

@@ -126,12 +126,7 @@ class Visualiser extends Module {
 		const qstring = this.state.querystring
 		const query = qstring ? qstring : `?${makeQuery()}&exclude=ID,comment,task`
 
-
-		const data = window.store != 'local' && window.api
-			? await fetch(window.api + query)
-				.then(r => r.json())
-				.catch(e => { console.warn(e); return null })
-			: fromLocalStorage(query)
+		const data = await window.storage.get(query)
 
 		if (!data) { return }
 
@@ -155,11 +150,11 @@ class Visualiser extends Module {
 		}
 
 		// append logs to svg
-		data.records.forEach( el => svg += day(el) )
+		data.forEach( el => svg += day(el) )
 
 		// communicate with query script
 		if (this.state.mode === 'query') {
-			let e = new CustomEvent('query-response', {detail:data.records})
+			let e = new CustomEvent('query-response', {detail:data})
 			document.dispatchEvent(e)
 		}
 
@@ -177,7 +172,7 @@ class Visualiser extends Module {
 
 		// most commonly entered time of day for work
 		const modalTod =
-			`Scale: ${this.state.scales[this.state.scale]}. Mode: ${mode(data.records.map(item => item.tod))}.`
+			`Scale: ${this.state.scales[this.state.scale]}. Mode: ${mode(data.map(item => item.tod))}.`
 
 		this.state.container.className = 'ready'
 		this.state.svg.innerHTML = svg
@@ -199,23 +194,4 @@ class Visualiser extends Module {
 			}, 1000);
 		})
 	}
-}
-
-// &filter=date,bt,${start},${end}
-function fromLocalStorage(query) {
-	const start = query.split(',')[2]
-	let end = query.split(',')[3]
-	end = end.split('&')[0] // remove extra qp
-
-	// elite hacks
-	let i = start
-	let array = []
-
-	while (i <= end) {
-		let item = localStorage.getItem(i)
-		if (item) array.push(JSON.parse(item))
-		i++
-	}
-	console.log(start, end, array)
-	return {records: array}
 }

@@ -23,6 +23,7 @@ class Editor extends Module {
 
 	hide () {
 		if (this.state.modified.length > 0) {
+			
 			this.state.modified.forEach((log, id) => this.confirm(id, log))
 			this.state.closebtn.innerHTML = 'close'
 			this.state.modified = []
@@ -44,7 +45,8 @@ class Editor extends Module {
 	alter (data) {
 		data.id.style.color = '#F29E74'
 		this.state.closebtn.innerHTML = 'update'
-		this.state.modified[Number(data.id.innerHTML)] = {
+
+		let log = {
 			category: data.cat.innerHTML,
 			comment: data.comment.innerHTML,
 			date: data.date.innerHTML,
@@ -53,20 +55,17 @@ class Editor extends Module {
 			task: data.task.innerHTML,
 			tod: data.tod.innerHTML
 		}
+
+		if (window.store == 'CRUD') {
+			this.state.modified[Number(data.id.data)] = log
+		} else if (window.store == 'local') {
+			this.state.modified[data.id.data] = {...log, key: data.id.data}
+		}
 	}
 
 	confirm (id, log) {
 		console.log(`Updated log #${id} with fields:`, log)
-
-		fetch(`${window.api}/${id}` , {
-			method: 'PUT',
-			// 	mode: 'cors', // no-cors, cors, *same-origin
-			// 	credentials: 'same-origin', // include, *same-origin, omit
-			headers: { 'Content-Type': 'application/json' },
-			referrer: 'no-referrer',
-			body: JSON.stringify(log),
-		})
-		.then(response => console.log(response.json()))
+		window.storage.update(id, log)
 	}
 
 	// This method adapts a similar one seen in Visualiser.js
@@ -86,18 +85,19 @@ class Editor extends Module {
 		// see https://github.com/mevdschee/php-crud-api#filters
 		// Query database for logs in date range
 		const query = `?$&filter=date,bt,${start},${end}`
-		const data = await fetch(window.api + query).then(r => r.json())
+		const data = await window.storage.get(query)
 
-		data.records.reverse() // display nearest logs first
+		data.reverse() // display nearest logs first
 
 		const container = elem('section', {className: 'editor-log-list'})
 
-		data.records.forEach(l => {
+		data.forEach(l => {
 			// create individual, editable portions of each log
 			const li = elem('div', { className: 'editor-log' })
+			const uid = window.store == 'CRUD' ? l.ID : l.id
 
 			const parts = {
-				id: elem('span', { innerHTML: ("0000" + l.ID).substr(-4, 4), className: 'id' }),
+				id: elem('span', { innerHTML: ("0000" + uid).substr(-4, 4), className: 'id', data: uid }),
 				date: elem('span', { contentEditable: true, innerHTML: l.date, className: 'date' }),
 				hours: elem('span', { contentEditable: true, innerHTML: l.hours, className: 'hours' }),
 				proj: elem('span', { contentEditable: true, innerHTML: l.project, className: 'project' }),
@@ -115,7 +115,7 @@ class Editor extends Module {
 			container.appendChild(li)
 		})
 
-		this.root.innerHTML = `<h3>${data.records.length} log${data.records.length==1?'':'s'} from ${start} - ${end}</h3>`
+		this.root.innerHTML = `<h3>${data.length} log${data.length==1?'':'s'} from ${start} - ${end}</h3>`
 		this.root.appendChild(container)
 		this.root.classList = 'loaded'
 	}

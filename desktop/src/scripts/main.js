@@ -6,7 +6,7 @@
 
 // check for setup credentials
 new Config().pollute()
-if (window.api == null) window.location.href = 'setup.html'
+if (!window.api && window.store != 'local') window.location.href = 'setup.html'
 if (!window.localeStrings) setLocaleStrings()
 
 // This script shall function as a controller in an MVC pattern

@@ -9,7 +9,7 @@ class Meta extends Module {
 		let hours = 0
 		let records = []
 
-		if (window.api) {
+		if (window.api && window.store != 'local') {
 			// imediately set a 'loading' text
 			this.root.innerHTML = 'fetching...'
 

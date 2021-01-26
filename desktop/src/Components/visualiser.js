@@ -52,13 +52,14 @@ class Visualiser extends Module {
 		this.render()
 	}
 
+	// controlled by the query module, accessed with logform
 	setQuery (querystring) {
 		this.setState({querystring, mode: 'query'})
 	}
 
 	async render () {
 		// silently fail if no API provided
-		if (!window.api) return
+		if (!window.api && window.store != 'local') return
 
 		const thisYear = this.state.year === new Date().getFullYear()
 
@@ -125,8 +126,12 @@ class Visualiser extends Module {
 		const qstring = this.state.querystring
 		const query = qstring ? qstring : `?${makeQuery()}&exclude=ID,comment,task`
 
-		const data = await fetch(window.api + query).then(r => r.json())
-			.catch(e => { console.warn(e); return null })
+
+		const data = window.store != 'local' && window.api
+			? await fetch(window.api + query)
+				.then(r => r.json())
+				.catch(e => { console.warn(e); return null })
+			: fromLocalStorage(query)
 
 		if (!data) { return }
 
@@ -194,4 +199,23 @@ class Visualiser extends Module {
 			}, 1000);
 		})
 	}
+}
+
+// &filter=date,bt,${start},${end}
+function fromLocalStorage(query) {
+	const start = query.split(',')[2]
+	let end = query.split(',')[3]
+	end = end.split('&')[0] // remove extra qp
+
+	// elite hacks
+	let i = start
+	let array = []
+
+	while (i <= end) {
+		let item = localStorage.getItem(i)
+		if (item) array.push(JSON.parse(item))
+		i++
+	}
+	console.log(start, end, array)
+	return {records: array}
 }

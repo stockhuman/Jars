@@ -15,12 +15,15 @@ class Config {
 	}
 
 	pollute () {
-		let { APIurl, dateOfBirth, motto, locale, mode } = this.get()
+		let { APIurl, dateOfBirth, motto, locale, store } = this.get()
 
 		locale = locale ? locale.toLowerCase() : 'en'
 
-		if (mode == 'local') window.mode = 'local'
-		if (!APIurl) window.mode = 'local'
+		if (store == 'local') window.store = 'local'
+		if (!APIurl) window.store = 'local'
+		if (window.store == 'local') {
+			localStorage.setItem('store', 'local')
+		}
 
 		window.api = APIurl // CRUD endpoint URL
 		window.dob = dateOfBirth // used to calculate jars icon

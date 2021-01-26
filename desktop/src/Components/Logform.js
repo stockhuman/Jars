@@ -261,7 +261,7 @@ class LogForm extends Module {
 					}
 
 					// commit!
-					if (window.api) {
+					if (window.store != 'local' && window.api) {
 						fetch(window.api, {
 							method: 'POST',
 							mode: 'no-cors',

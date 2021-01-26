@@ -12,7 +12,6 @@
     "build": "electron-forge publish",
     "package": "electron-forge package",
     "make": "electron-forge make",
-    "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\"",
     "test": "echo \"Open ./tests and run index.html\""
   },

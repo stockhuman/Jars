@@ -23,8 +23,19 @@ class Editor extends Module {
 
 	hide () {
 		if (this.state.modified.length > 0) {
+			if (window.store == 'CRUD') {
+				this.state.modified.forEach((log, id) => this.confirm(id, log))
+			} else if (window.store == 'IPFS') {
+				// TODO
+			} else {
+				this.state.modified.forEach(entry => {
+					const key = entry.key
+					let log = entry
+					delete entry.key // local uses a hash, this is not part of the entry
+					this.confirm(key, log)
+				})
+			}
 			
-			this.state.modified.forEach((log, id) => this.confirm(id, log))
 			this.state.closebtn.innerHTML = 'close'
 			this.state.modified = []
 		}

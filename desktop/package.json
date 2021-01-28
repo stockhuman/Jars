@@ -21,10 +21,10 @@
   "config": {
     "forge": {
       "electronPackagerConfig": {
-        "icon": "./src/assets/icons/icon-v211"
+        "icon": "./src/assets/icons/icon-v243"
       },
       "packagerConfig": {
-        "icon": "./src/assets/icons/icon-v211"
+        "icon": "./src/assets/icons/icon-v243"
       },
       "makers": [
         {

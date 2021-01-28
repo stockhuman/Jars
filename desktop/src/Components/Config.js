@@ -19,12 +19,12 @@ class Config {
 
 		locale = locale ? locale.toLowerCase() : 'en'
 
-		if (store == 'local') window.store = 'local'
-		if (!APIurl) window.store = 'local'
-		if (window.store == 'local') {
-			localStorage.setItem('store', 'local')
+		if (!APIurl && (store != 'local')) {
+			window.location.assign('setup.html')
+			return
 		}
 
+		window.store = store
 		window.api = APIurl // CRUD endpoint URL
 		window.dob = dateOfBirth // used to calculate jars icon
 		window.motto = motto // flair
@@ -33,6 +33,7 @@ class Config {
 		localStorage.setItem('api', APIurl)
 		localStorage.setItem('dob', dateOfBirth)
 		localStorage.setItem('locale', locale)
+		localStorage.setItem('store', store)
 
 		// function also creates css from css key in LS
 		let s = document.createElement('style')

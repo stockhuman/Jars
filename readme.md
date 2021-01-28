@@ -10,7 +10,7 @@ You can find Jars ready-to-run for your own use [here](https://github.com/stockH
 
 Upon first use you'll be asked to provide a .json file formatted with at least some of these settings:
 
-```json
+```js
 {
 	"APIurl": "string", // API URL, if you have one.
 	"mode": "local", // or CRUD. Optional

@@ -66,11 +66,12 @@ class Editor extends Module {
 			task: data.task.innerHTML,
 			tod: data.tod.innerHTML
 		}
-
 		if (window.store == 'CRUD') {
 			this.state.modified[Number(data.id.data)] = log
 		} else if (window.store == 'local') {
-			this.state.modified[data.id.data] = {...log, key: data.id.data}
+			// this will trigger at every keystroke, but ultimately works.
+			// The last (and therefore intentional) item will overwrite the previous
+			this.state.modified = [...this.state.modified, {...log, key: data.id.data}]
 		}
 	}
 
@@ -83,7 +84,7 @@ class Editor extends Module {
 	async render () {
 		this.root.innerHTML = `<p class="loading">Loading...</p>`
 
-		if (!window.api) {
+		if (!window.api && window.store != 'local') {
 			this.root.innerHTML = `<p class="loading">API not set</p>`
 			return
 		}
@@ -96,16 +97,17 @@ class Editor extends Module {
 		// see https://github.com/mevdschee/php-crud-api#filters
 		// Query database for logs in date range
 		const query = `?$&filter=date,bt,${start},${end}`
-		const data = await window.storage.get(query)
+		const data = await window.storage.get(query, true)
 
 		data.reverse() // display nearest logs first
 
 		const container = elem('section', {className: 'editor-log-list'})
 
-		data.forEach(l => {
+		data.forEach(log => {
 			// create individual, editable portions of each log
 			const li = elem('div', { className: 'editor-log' })
-			const uid = window.store == 'CRUD' ? l.ID : l.id
+			const uid = window.store == 'CRUD' ? log.ID : log[0]
+			const l = window.store == 'CRUD' ? log : log[1]
 
 			const parts = {
 				id: elem('span', { innerHTML: ("0000" + uid).substr(-4, 4), className: 'id', data: uid }),

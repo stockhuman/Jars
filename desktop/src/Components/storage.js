@@ -17,11 +17,11 @@ class StorageHandler {
    * @param {string} query PHP-CRUD-API formatted string
    * @returns {Array} Array of commits
    */
-  async get (query) {
+  async get (query, withKey = false) {
     switch (window.store) {
       case 'CRUD': return await this._CRUDGet(query)
       case 'local':
-      default: return this._localGet(query)
+      default: return this._localGet(query, withKey)
     }
   }
 
@@ -36,7 +36,8 @@ class StorageHandler {
   async update (id, data) {
     switch (window.store) {
       case 'CRUD': return this._CRUDUpdate(id, data)
-      case 'local': return this._localUpdate(id, data)
+      case 'local':
+      default: return this._localUpdate(id, data)
     }
   }
 
@@ -69,7 +70,7 @@ class StorageHandler {
   }
 
   
-  _localGet(query) {
+  _localGet(query, withKey) {
     const splitq = query.split(',')
     const type = splitq[1]
     const start = splitq[2]
@@ -80,7 +81,11 @@ class StorageHandler {
     if (type == 'eq') { // exact date match
 			keys = keys.filter(key => key.startsWith(YYYYMMDD(start)))
 			keys.forEach(key => {
-				array.push(JSON.parse(localStorage.getItem(key)))
+        if (withKey) {
+          array.push([key, JSON.parse(localStorage.getItem(key))])
+        } else {
+          array.push(JSON.parse(localStorage.getItem(key)))
+        }
 			})
     } else if (type == 'bt') { // range
       // Since local keys are indexed as `date-hash`, to avoid overwriting
@@ -96,7 +101,13 @@ class StorageHandler {
 			this.getDaysArray(start, end).forEach(day => {
         let match = keys.filter(item => item.startsWith(day))
         let lsm = localStorage.getItem(match)
-        if (lsm) array.push(JSON.parse(lsm))
+        if (lsm) {
+          if (withKey) {
+            array.push([match, JSON.parse(lsm)])
+          } else {
+            array.push(JSON.parse(lsm))
+          }
+        }
 			})
     }
 

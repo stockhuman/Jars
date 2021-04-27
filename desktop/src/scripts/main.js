@@ -120,17 +120,18 @@ if (intervalDate.getMinutes() === 0) {
 	setTimeout(tick, difference)
 }
 
-const remote = require('@electron/remote')
+const remote = require('electron').remote
+
 const win = remote.getCurrentWindow()
 
 // When document has loaded, initialise
-document.onreadystatechange = () => {
+document.onreadystatechange = (event) => {
 	if (document.readyState == "complete") {
 		handleWindowControls()
 	}
 }
 
-window.onbeforeunload = () => {
+window.onbeforeunload = (event) => {
 	/* If window is reloaded, remove win event listeners
 	(DOM element listeners get auto garbage collected but not
 	Electron win listeners as the win is not dereferenced unless closed) */

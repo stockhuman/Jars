@@ -1,9 +1,8 @@
 const { app, BrowserWindow } = require('electron')
-require('@electron/remote/main').initialize()
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
-  app.quit()
+  app.quit();
 }
 
 // Keep a global reference of the window object, if you don't, the window will

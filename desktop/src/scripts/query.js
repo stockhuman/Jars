@@ -33,7 +33,8 @@ document.addEventListener('keyup', event => {
 
 // Window control code, duplicated from main.js
 // ------------------
-const remote = require('@electron/remote')
+const remote = require('electron').remote
+
 const win = remote.getCurrentWindow()
 
 // When document has loaded, initialise

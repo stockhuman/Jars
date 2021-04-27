@@ -11,27 +11,23 @@
     "start": "electron-forge start",
     "build": "electron-forge publish",
     "package": "electron-forge package",
-    "make": "electron-forge make",
-    "lint": "echo \"No linting configured\"",
-    "test": "echo \"Open ./tests and run index.html\""
+    "make": "electron-forge make"
   },
   "keywords": [],
   "author": "Michael Hemingway",
   "license": "GPL-3.0",
   "config": {
     "forge": {
-      "electronPackagerConfig": {
-        "icon": "./src/assets/icons/icon-v243"
-      },
       "packagerConfig": {
-        "icon": "./src/assets/icons/icon-v243"
+        "name": "Jars",
+        "icon": "./src/assets/icons/icon-v243",
+        "appCategoryType": "public.app-category.lifestyle",
+        "appCopyright": "Jars is licensed under the GNU Public License, version 3. Thanks for checking."
       },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "Jars"
-          }
+          "config": {}
         },
         {
           "name": "@electron-forge/maker-zip",
@@ -51,9 +47,6 @@
     }
   },
   "dependencies": {
-    "electron": "^12.0.5",
-    "@electron/remote": "^1.1.0",
-    "chai": "^4.3.4",
     "electron-squirrel-startup": "^1.0.0",
     "node-abi": "^2.26.0"
   },
@@ -63,6 +56,8 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.54",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
     "@electron-forge/maker-zip": "^6.0.0-beta.54",
+    "@electron/remote": "^1.1.0",
+    "electron": "^12.0.5",
     "mocha": "^8.3.2"
   }
 }

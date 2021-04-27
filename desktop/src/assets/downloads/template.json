@@ -1,7 +1,8 @@
 {
 	"APIurl":"",
-	"dateOfBirth": "",
-	"motto": "",
+	"store": "local",
+	"dateOfBirth": "1/1/1970",
+	"motto": "Hello there!",
 	"locale": "en",
 	"colors": {
 		"code": "#fff"

@@ -14,7 +14,7 @@ const createWindow = () => {
   mainWindow = new BrowserWindow({
 		width: 800,
     height: 1022,
-    show: false,
+    // show: false,
 		skipTaskbar: false,
 		frame: false,
 		setAutoHideMenuBar: true,
@@ -30,9 +30,9 @@ const createWindow = () => {
   // and load the index.html of the app.
   mainWindow.loadURL(`file://${__dirname}/index.html`)
 
-  mainWindow.once('ready-to-show', () => {
-    mainWindow.show()
-  })
+  // mainWindow.once('ready-to-show', () => {
+  //   mainWindow.show()
+  // })
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()

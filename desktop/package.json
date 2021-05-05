@@ -1,7 +1,7 @@
 {
   "name": "jars",
   "productName": "Jars",
-  "version": "2.4.3",
+  "version": "2.4.4",
   "description": "A personal productivity tracker",
   "main": "src/index.js",
   "build": {
@@ -20,7 +20,7 @@
     "forge": {
       "packagerConfig": {
         "name": "Jars",
-        "icon": "./src/assets/icons/icon-v243",
+        "icon": "./src/assets/icons/icon-v244",
         "appCategoryType": "public.app-category.lifestyle",
         "appCopyright": "Jars is licensed under the GNU Public License, version 3. Thanks for checking."
       },

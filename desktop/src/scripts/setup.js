@@ -48,9 +48,25 @@ function handleFiles(files) {
 	const reader = new FileReader()
 
 	reader.onload = function(e) {
-		let json = JSON.parse(e.target.result)
-		new Config(json).init()
-		document.getElementById('directions').innerHTML = 'Config loaded, setting up your jars.'
+		const directions = document.getElementById('directions')
+		let json
+		try {
+			json = JSON.parse(e.target.result)
+		} catch (err) {
+			directions.textContent = `That file isn't valid JSON: ${err.message}`
+			return
+		}
+
+		// new settings are merged over the old ones, so check the result
+		const config = new Config(json)
+		config.merge()
+		if (!config.json.APIurl && config.json.store != 'local') {
+			directions.textContent = 'The config needs an "APIurl", or "store": "local"'
+			return
+		}
+
+		config.init()
+		directions.innerHTML = 'Config loaded, setting up your jars.'
 		setTimeout(() => {
 			window.location.assign('index.html')
 		}, 1200);

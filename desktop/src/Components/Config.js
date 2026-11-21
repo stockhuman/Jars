@@ -43,7 +43,7 @@ class Config {
 
 	// creates CSS to dynamically color categories
 	css () {
-		const { colors } = this.json
+		const colors = this.json.colors || {} // optional
 		const keys = Object.keys(colors)
 		const values = Object.values(colors)
 

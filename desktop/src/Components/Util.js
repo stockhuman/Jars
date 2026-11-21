@@ -1,7 +1,7 @@
 // creates an element and assigns properties. convenience method
 function elem (type, options = {}) {
 	let e = document.createElement(type)
-	for (property in options) {
+	for (const property in options) {
 		e[property] = options[property]
 	}
 	return e
@@ -10,7 +10,7 @@ function elem (type, options = {}) {
 // as above, but for SVG
 function elemNS (ns, type, options = {}) {
 	let e = document.createElementNS(ns, type)
-	for (property in options) {
+	for (const property in options) {
 		e.setAttributeNS(null, property, options[property])
 	}
 	return e

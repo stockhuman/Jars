@@ -11,7 +11,8 @@
     "start": "electron-forge start",
     "build": "electron-forge publish",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "test": "electron tests/main.js"
   },
   "keywords": [],
   "author": "Michael Hemingway",

@@ -3,11 +3,14 @@
 
 const setLocaleStrings = async () => {
 	window.locale = localStorage.getItem('locale') || 'en'
+	// 19 September is International Talk Like a Pirate Day
+	const today = new Date()
+	if (window.locale == 'en' && today.getMonth() == 8 && today.getDate() == 19) window.locale = 'pirate'
 	window.localeStrings = await fetch(`./locales/${window.locale}.json`)
 		.then(data => data.json())
 		.catch(async () => {
 			console.warn(`⚠️ Jars does not support '${window.locale}' ❌`)
-			console.info(`🌐 Jars speaks: EN, FR, DE, JP, IT, ZH. ✅`)
+			console.info(`🌐 Jars speaks: EN, FR, DE, ES, JP, IT, ZH, and PIRATE. ✅`)
 			// if the specified language does not exist, default to english
 			return await fetch(`./locales/en.json`).then(data => data.json())
 		})

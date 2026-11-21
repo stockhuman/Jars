@@ -1,0 +1,87 @@
+{
+	"header": {
+		"greetings": [
+			"Ye be up before the bosun",
+			"Ahoy, matey",
+			"Avast, ’tis nearly noon",
+			"Afternoon, ye scallywag",
+			"Evenin’, ye scurvy dog",
+			"Drop anchor an’ get some sleep"
+		],
+		"friday": "It be Friday. Splice the mainbrace."
+	},
+	"logform": {
+		"misc": {
+			"begin": "how many hours did ye toil? (press enter to bury the treasure)",
+			"placeholder": "log yer plunder",
+			"recap": "plundered this week:"
+		},
+		"s0": {
+			"placeholder": "which watch? (em|m|md|an|ev|n|ln)",
+			"singularHour": "An hour o’ toil",
+			"singularHourNoPronoun": "hour",
+			"pluralHour": "hours o’ toil",
+			"minutes": "minutes"
+		},
+		"s1": {
+			"placeholder": "which ship, cap’n?",
+			"values": [
+				{ "abbr": "em", "expa": "in the morning watch" },
+				{ "abbr": "m", "expa": "in the forenoon watch" },
+				{ "abbr": "md", "expa": "at eight bells" },
+				{ "abbr": "an", "expa": "in the afternoon watch" },
+				{ "abbr": "ev", "expa": "in the dog watches" },
+				{ "abbr": "n", "expa": "in the first watch" },
+				{ "abbr": "ln", "expa": "in the middle watch" }
+			],
+			"transition": "plunderin’"
+		},
+		"s2": {
+			"placeholder": "what be the task?"
+		},
+		"s3": {
+			"placeholder": "what manner o’ booty?",
+			"category": "booty"
+		},
+		"s4": {
+			"placeholder": "any last words?"
+		},
+		"s5": {
+			"placeholder": "press enter to bury this bean",
+			"comment": "LAST WORDS"
+		},
+		"success": "bean buried! x marks the spot.",
+		"receipt": "that be {share}% o’ the rest o’ yer life. dead men log no hours."
+	},
+	"dayNames": [
+		"Monday",
+		"Tuesday",
+		"Wednesday",
+		"Thursday",
+		"Friday",
+		"Saturday",
+		"Sunday"
+	],
+	"monthNames": [
+		"January",
+		"February",
+		"March",
+		"April",
+		"May",
+		"June",
+		"July",
+		"August",
+		"September",
+		"October",
+		"November",
+		"December"
+	],
+	"visualiser": [
+		"a year at sea",
+		"half a voyage",
+		"four moons",
+		"three moons",
+		"this moon"
+	],
+	"noTranslationWarning": "Arr, there be no translation fer"
+}

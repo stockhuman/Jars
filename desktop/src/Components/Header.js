@@ -72,8 +72,15 @@ class Header {
 	}
 
 	subtitle () {
+		// outside the 80 years the logo counts
+		const dob = localStorage.getItem('dob')
+		const born = dob ? new Date(dob).getFullYear() : NaN
+		if (this.year < born) return 'BEFORE YOUR TIME'
+		if (this.year > born + 80) return 'THE JAR OUTLIVES YOU'
+
 		const diff = new Date() - new Date(this.year, 0, 1, 0)
-		const progress = ((diff / 31536000000) * 100).toFixed(2)
+		const yearLength = new Date(this.year + 1, 0, 1) - new Date(this.year, 0, 1) // 366 days in leap years
+		const progress = ((diff / yearLength) * 100).toFixed(2)
 		const yd = Math.abs((progress / 100).toFixed(2))
 
 		if (progress < 0) {
@@ -89,7 +96,10 @@ class Header {
 		const formatTime = time => Math.ceil(time / (1000 * 3600 * 24))
 
 		// compute how long I have to live
-		let birth = new Date(localStorage.getItem('dob'))
+		const dob = localStorage.getItem('dob')
+		let birth = new Date(dob)
+		if (!dob || isNaN(birth)) return null // no (valid) dateOfBirth in the config
+
 		let death = new Date(birth.getFullYear() + 80, birth.getMonth(), birth.getDate())
 
 		let DDC = formatTime(death) - formatTime(birth) // formatted to 29000
@@ -102,6 +112,9 @@ class Header {
 	greeting () {
 		let hr = new Date().getHours()
 		let msg = ''
+
+		// Friday afternoon outranks the time of day (if the language has an opinion)
+		if (new Date().getDay() == 5 && hr >= 16 && hr < 23 && this.strings.friday) return this.strings.friday
 
 		switch (hr) {
 			case 3:
@@ -181,19 +194,21 @@ class Header {
 
 	render () {
 		let frac = this.fraction()
+		// share of the logo to fill: the viewBox is 128 wide, not 100
+		let lived = frac ? Math.min(Math.max(frac[0] / frac[1], 0), 1) : 0
 		// only updates values.
 		this.elem.year.innerHTML = this.year
 		this.elem.subtitle.innerHTML = this.subtitle()
 		this.elem.logo.innerHTML =
 			`<circle id="base" cx="64" cy="64" r="64" fill="#FFFFFF"/>
 			<clipPath id="clippath">
-				<rect width="${((frac[0] / frac[1]) || 0) * 100}" height="128"/>
+				<rect width="${lived * 128}" height="128"/>
 			</clipPath>
 			<circle id="clip" fill="var(--f-high)" cx="64" cy="64" r="64" style="clip-path:url(#clippath);"/>`
 		this.elem.greeting.innerHTML =
 			`<div>${this.greeting()}</div>
 				<p class="fraction">
-				${ frac[0] + '/' + frac[1]}${window.motto ? window.motto : ''}
+				${frac ? frac[0] + '/' + frac[1] : ''}${window.motto ? window.motto : ''}
 			 </p>`
 	}
 }

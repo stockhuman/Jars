@@ -15,20 +15,26 @@ class Meta extends Module {
 		// see https://github.com/mevdschee/php-crud-api
 		let query = `?filter=date,eq,${YYYYMMDD(selectedDay)}`
 		let db = await window.storage.get(query)
+		if (db === null) {
+			this.root.innerHTML = `Couldn't reach the API`
+			return
+		}
 
 		if (db && db.length > 0) {
 			records = db
 		}
 
 		records.forEach(res => {
+			const cat = escapeHTML(res.category || 'null')
 			hours += filterFloat(res.hours)
 			html += `<div class="log-detail">
-			<span class="cat ${res.category || 'null'}">[${res.category || 'null'}]</span>
-			<span class="hours">(${res.hours}) </span>
-			<span class="name">${res.project} - ${res.task}</span>
-			<span class="time">${res.tod}</span>
+			<span class="cat ${cat}">[${cat}]</span>
+			<span class="hours">(${escapeHTML(res.hours)}) </span>
+			<span class="name">${escapeHTML(res.project)} - ${escapeHTML(res.task)}</span>
+			<span class="time">${escapeHTML(res.tod)}</span>
 		</div>`
 		})
+		hours = Math.round(hours * 100) / 100 // 1.1 + 2.2 is 3.3000000000000003
 
 
 		this.root.innerHTML =

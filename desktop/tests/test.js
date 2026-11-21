@@ -1,5 +1,8 @@
 window.api = null
 window.dob = '01/01/1990'
+window.store = 'local'
+// the components read their strings from here; test in English
+window.localeStrings = window.defaultLocaleStrings = require('../src/locales/en.json')
 
 
 // Util tests
@@ -120,3 +123,146 @@ describe('log.assure', () => {
   })
 })
 // end log tests
+
+describe('escapeHTML', () => {
+  it('escapes markup and quotes', () => {
+    assert.equal(escapeHTML(`<b class="x">R&D's</b>`), '&lt;b class=&quot;x&quot;&gt;R&amp;D&#39;s&lt;/b&gt;')
+  })
+  it('turns missing values into an empty string', () => {
+    assert.equal(escapeHTML(undefined), '')
+    assert.equal(escapeHTML(null), '')
+  })
+})
+
+describe('TODfromTimestamp', () => {
+  const s1 = window.localeStrings.logform.s1
+  it('files late-evening work under night', () => {
+    assert.equal(TODfromTimestamp('22:30:00', 1, s1), 'n')
+  })
+  it('wraps work that started before midnight', () => {
+    // six hours ending at 1am are centred on 10pm
+    assert.equal(TODfromTimestamp('01:00:00', 6, s1), 'n')
+  })
+  it('still finds the morning', () => {
+    assert.equal(TODfromTimestamp('09:00:00', 1, s1), 'm')
+  })
+})
+
+describe('StorageHandler (local mode)', () => {
+  const storage = new StorageHandler()
+  const log = (date, project) => ({ date, hours: '1', tod: 'm', project, task: 't', category: 'c', comment: '' })
+
+  beforeEach(async () => {
+    localStorage.clear()
+    localStorage.setItem('config', '{}') // not a log, must be skipped
+    await storage.set(log('20200105', 'Jars'))
+    await storage.set(log('20200105', 'R&D, misc'))
+    await storage.set(log('20200110', 'Jars'))
+    await storage.set(log('20200301', 'Jars'))
+  })
+  after(() => localStorage.clear())
+
+  it('returns every log on a day that has several', async () => {
+    assert.equal((await storage.get('?filter=date,eq,20200105')).length, 2)
+    assert.equal((await storage.get('?filter=date,bt,20200101,20200131')).length, 3)
+  })
+
+  it('returns logs oldest first', async () => {
+    const logs = await storage.get('?filter=date,bt,20200101,20201231')
+    assert.deepEqual(logs.map(l => l.date), ['20200105', '20200105', '20200110', '20200301'])
+  })
+
+  it('filters on other fields, with URL-encoded values', async () => {
+    const logs = await storage.get(`?&filter=project,eq,${encodeURIComponent('R&D, misc')}`)
+    assert.equal(logs.length, 1)
+    assert.equal(logs[0].project, 'R&D, misc')
+  })
+
+  it('finds an edited log on its new date', async () => {
+    const [[key, entry]] = await storage.get('?filter=date,eq,20200301', true)
+    await storage.update(key, { ...entry, date: '20200102' })
+    assert.equal((await storage.get('?filter=date,eq,20200102')).length, 1)
+    assert.equal((await storage.get('?filter=date,eq,20200301')).length, 0)
+  })
+})
+
+describe('Calendar', () => {
+  it('keeps days selectable after re-rendering', () => {
+    const cal = new Calendar({ root: document.getElementById('cal-root'), info: document.getElementById('cal-info') })
+    cal.today() // re-renders, like the midnight roll-over does
+
+    let selected = null
+    const onSelect = e => { selected = e.detail }
+    document.addEventListener('calendar-select', onSelect)
+    cal.root.querySelector('.graph rect:not(.null)').dispatchEvent(new FocusEvent('focus'))
+    document.removeEventListener('calendar-select', onSelect)
+
+    assert.ok(selected, 'no calendar-select event')
+  })
+})
+
+describe('Header', () => {
+  const root = document.getElementById('header-root')
+  const fill = () => Number(root.querySelector('#clippath rect').getAttribute('width'))
+
+  beforeEach(() => { root.innerHTML = '' })
+  after(() => localStorage.removeItem('dob'))
+
+  it('fills half the logo at 40', () => {
+    const born = new Date()
+    born.setFullYear(born.getFullYear() - 40)
+    localStorage.setItem('dob', born.toDateString())
+    new Header({ root })
+    assert.ok(Math.abs(fill() - 64) < 1, `filled ${fill()} of 128`)
+  })
+
+  it('copes without a birthday', () => {
+    localStorage.setItem('dob', 'undefined') // what Config stores when it's missing
+    new Header({ root })
+    assert.equal(fill(), 0)
+    assert.ok(!root.querySelector('.fraction').textContent.includes('NaN'))
+  })
+})
+
+describe('pirate.json', () => {
+  it('has every string en.json has, and the same time-of-day codes', () => {
+    const en = require('../src/locales/en.json')
+    const pirate = require('../src/locales/pirate.json')
+    const keys = (o, p = '') => Object.entries(o).flatMap(([k, v]) =>
+      v && typeof v === 'object' && !Array.isArray(v) ? [p + k, ...keys(v, `${p}${k}.`)] : [p + k])
+    assert.deepEqual(keys(pirate).sort(), keys(en).sort())
+    assert.deepEqual(pirate.logform.s1.values.map(v => v.abbr), en.logform.s1.values.map(v => v.abbr))
+  })
+})
+
+describe('Header, philosophically', () => {
+  const root = document.getElementById('header-root')
+  before(() => { root.innerHTML = ''; localStorage.setItem('dob', '06/15/1990') })
+  after(() => localStorage.removeItem('dob'))
+
+  it('knows when you weren’t around yet', () => {
+    assert.equal(new Header({ root, year: 1989 }).subtitle(), 'BEFORE YOUR TIME')
+  })
+
+  it('knows the jar outlives you', () => {
+    assert.equal(new Header({ root, year: 2071 }).subtitle(), 'THE JAR OUTLIVES YOU')
+  })
+})
+
+describe('LogForm, emotionally', () => {
+  const form = new LogForm({ root: document.getElementById('log-root') })
+  after(() => localStorage.removeItem('dob'))
+
+  it('puts a bean in perspective', () => {
+    const born = new Date()
+    born.setFullYear(born.getFullYear() - 40)
+    localStorage.setItem('dob', born.toDateString())
+    // one hour out of the ~350,640 left
+    assert.equal(form._receipt('1'), ' that was 0.00029% of the rest of your life. no pressure.')
+  })
+
+  it('stops counting after 80', () => {
+    localStorage.setItem('dob', '01/01/1900')
+    assert.equal(form._receipt('1'), '')
+  })
+})

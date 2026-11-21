@@ -10,7 +10,8 @@ class Visualiser extends Module {
 			meta: null,
 			container: null,
 			mode: props.mode || null,
-			querystring: null
+			querystring: null,
+			summary: '' // the scale/mode line under the chart
 		}
 
 		// 'mount'
@@ -27,6 +28,13 @@ class Visualiser extends Module {
 		this.root.appendChild(this.state.container)
 
 		this.state.meta.addEventListener('click', () => this.setScale( this.state.scale + 1))
+
+		// put the summary back a moment after the pointer leaves the chart
+		this.state.svg.addEventListener('mouseleave', () => {
+			setTimeout(() => {
+				this.state.meta.innerHTML = this.state.summary
+			}, 1000)
+		})
 
 		this.render()
 	}
@@ -67,8 +75,8 @@ class Visualiser extends Module {
 		const makeQuery = () => {
 			const monthsBack = months => {
 				const d = new Date()
-				let start = thisYear
-					?	YYYYMMDD(new Date(this.state.year, d.getMonth() - months, 0))
+				let start = thisYear // the 1st of the month, same as `furthest` below
+					?	YYYYMMDD(new Date(this.state.year, d.getMonth() - months, 1))
 					: YYYYMMDD(new Date(this.state.year, 0, 1))
 				let end = thisYear
 					? YYYYMMDD()
@@ -117,7 +125,11 @@ class Visualiser extends Module {
 			return elemNS('http://www.w3.org/2000/svg', 'rect', {
 				x, y, width: w, height: 7, rx: 2.4,
 				class: day.category,
-				data: [day.project, day.date, day.hours, day.tod].join()
+				// separate attributes: project names can contain commas
+				'data-project': day.project,
+				'data-date': day.date,
+				'data-hours': day.hours,
+				'data-tod': day.tod
 			}).outerHTML
 		}
 
@@ -138,11 +150,16 @@ class Visualiser extends Module {
 			case 0: furthest = new Date(this.state.year, fmonth - 12); break
 			case 1: furthest = new Date(this.state.year, fmonth - 6); break
 			case 2: furthest = new Date(this.state.year, fmonth - 4); break
-			case 3: furthest = new Date(this.state.year, fmonth - 2); break
+			case 3: furthest = new Date(this.state.year, fmonth - 3); break
 			case 4: furthest = new Date(this.state.year, fmonth - 1); break
 		}
 
-		let ratio = thisYear ? 600 / dist(furthest, new Date()) : 1.58 // ~full year
+		// one slot per day, today's included. Measuring up to `new Date()` rounded
+		// off the time of day, so before noon today's bars landed at x=600, just
+		// past the right edge.
+		const now = new Date()
+		const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+		let ratio = thisYear ? 600 / (dist(furthest, today) + 1) : 1.58 // ~full year
 
 		// create 'time of day' labels
 		for (let i = 0; i < 7; i++) {
@@ -172,26 +189,21 @@ class Visualiser extends Module {
 
 		// most commonly entered time of day for work
 		const modalTod =
-			`Scale: ${this.state.scales[this.state.scale]}. Mode: ${mode(data.map(item => item.tod))}.`
+			`Scale: ${this.state.scales[this.state.scale]}. Mode: ${escapeHTML(mode(data.map(item => item.tod)))}.`
 
 		this.state.container.className = 'ready'
 		this.state.svg.innerHTML = svg
 		this.state.meta.innerHTML = modalTod
+		this.state.summary = modalTod
 
 		// Add events to display log details on hoverW
 		this.state.svg.querySelectorAll('rect').forEach(el => {
 			el.addEventListener('mouseover', e => {
-				const d = e.target.attributes.data.value.split(',')
-				const date = fromSQL(d[1]).toDateString().slice(0, -5) // remove ' YYYY'
-				const meta = ` <span class="detail">${date}, <em class="hrs">${d[2]}</em>hrs@${d[3]} on ${d[0]}</span>`
+				const { project, date, hours, tod } = e.target.dataset
+				const day = fromSQL(date).toDateString().slice(0, -5) // remove ' YYYY'
+				const meta = ` <span class="detail">${day}, <em class="hrs">${escapeHTML(hours)}</em>hrs@${escapeHTML(tod)} on ${escapeHTML(project)}</span>`
 				this.state.meta.innerHTML = modalTod + meta
 			})
-		})
-
-		this.state.svg.addEventListener('mouseleave', () => {
-			setTimeout(() => {
-				this.state.meta.innerHTML = modalTod
-			}, 1000);
 		})
 	}
 }

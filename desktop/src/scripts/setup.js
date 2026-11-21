@@ -48,9 +48,25 @@ function handleFiles(files) {
 	const reader = new FileReader()
 
 	reader.onload = function(e) {
-		let json = JSON.parse(e.target.result)
-		new Config(json).init()
-		document.getElementById('directions').innerHTML = 'Config loaded, setting up your jars.'
+		const directions = document.getElementById('directions')
+		let json
+		try {
+			json = JSON.parse(e.target.result)
+		} catch (err) {
+			directions.textContent = `That file isn't valid JSON: ${err.message}`
+			return
+		}
+
+		// new settings are merged over the old ones, so check the result
+		const config = new Config(json)
+		config.merge()
+		if (!config.json.APIurl && config.json.store != 'local') {
+			directions.textContent = 'The config needs an "APIurl", or "store": "local"'
+			return
+		}
+
+		config.init()
+		directions.innerHTML = 'Config loaded, setting up your jars.'
 		setTimeout(() => {
 			window.location.assign('index.html')
 		}, 1200);
@@ -104,53 +120,3 @@ document.addEventListener('keydown', event => {
 		window.location.assign('index.html')
 	}
 })
-
-const remote = require('electron').remote
-
-const win = remote.getCurrentWindow()
-
-// When document has loaded, initialise
-document.onreadystatechange = (event) => {
-	if (document.readyState == "complete") {
-		handleWindowControls()
-	}
-}
-
-window.onbeforeunload = (event) => {
-	/* If window is reloaded, remove win event listeners
-	(DOM element listeners get auto garbage collected but not
-	Electron win listeners as the win is not dereferenced unless closed) */
-	win.removeAllListeners()
-}
-
-function handleWindowControls() {
-	// Make minimise/maximise/restore/close buttons work when they are clicked
-	document.getElementById('min-button').addEventListener("click", event => {
-		win.minimize()
-	})
-
-	document.getElementById('max-button').addEventListener("click", event => {
-		win.maximize()
-	})
-
-	document.getElementById('restore-button').addEventListener("click", event => {
-		win.unmaximize()
-	})
-
-	document.getElementById('close-button').addEventListener("click", event => {
-		win.close()
-	})
-
-	// Toggle maximise/restore buttons when maximisation/unmaximisation occurs
-	toggleMaxRestoreButtons();
-	win.on('maximize', toggleMaxRestoreButtons);
-	win.on('unmaximize', toggleMaxRestoreButtons);
-
-	function toggleMaxRestoreButtons() {
-		if (win.isMaximized()) {
-			document.body.classList.add('maximized')
-		} else {
-			document.body.classList.remove('maximized')
-		}
-	}
-}

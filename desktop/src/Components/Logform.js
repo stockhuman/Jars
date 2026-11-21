@@ -106,6 +106,43 @@ class LogForm extends Module {
 		document.dispatchEvent(e)
 	}
 
+	// puts a bean in perspective: its share of the rest of your life,
+	// counted to the same 80 years as the logo in the header
+	_receipt (hours) {
+		const template = this.state.strings.receipt
+		const birth = new Date(localStorage.getItem('dob'))
+		const end = new Date(birth.getFullYear() + 80, birth.getMonth(), birth.getDate())
+		const hoursLeft = (end - new Date()) / 36e5
+		if (!template || !(hoursLeft > 0)) return '' // no birthday, or living on bonus time
+		return ' ' + template.replace('{share}', (filterFloat(hours) / hoursLeft * 100).toPrecision(2))
+	}
+
+	// it's raining beans
+	_beans () {
+		this.input.blur()
+		if (matchMedia('(prefers-reduced-motion: reduce)').matches) return this.error('Imagine it raining beans.')
+
+		const varieties = ['#8a5a44', '#9b2d30', '#c9a27e', '#3b2f2f', '#efe0c8'] // brown, kidney, pinto, black, navy (navy beans are white. look it up)
+		for (let i = 0; i < 80; i++) {
+			const bean = elem('div', { className: 'bean' })
+			bean.style.left = `${Math.random() * 100}vw`
+			bean.style.background = varieties[i % varieties.length]
+			bean.style.animationDelay = `${Math.random() * 2}s`
+			bean.style.animationDuration = `${1.5 + Math.random() * 2}s`
+			bean.style.setProperty('--spin', `${Math.round(Math.random() * 1440 - 720)}deg`)
+			bean.addEventListener('animationend', () => bean.remove())
+			document.body.appendChild(bean)
+		}
+	}
+
+	_barrelRoll () {
+		this.input.blur()
+		if (matchMedia('(prefers-reduced-motion: reduce)').matches) return this.error('Imagine a barrel roll.')
+
+		document.body.classList.add('barrel-roll')
+		setTimeout(() => document.body.classList.remove('barrel-roll'), 1000)
+	}
+
 	events () {
 		let strings = this.state.strings
 		let l = this.input
@@ -140,6 +177,16 @@ class LogForm extends Module {
 							this._query()
 							return
 						}
+						const said = ival.trim().toLowerCase()
+						if (said === 'beans') return this._beans()
+						if (said === 'do a barrel roll') return this._barrelRoll()
+						if (said.startsWith('sudo')) {
+							return this.error('You are not in the sudoers file. This incident will be reported.')
+						}
+						if (filterFloat(ival) === 0) return this.error(`0 hours? That's not a bean, that's a nap.`)
+						if (filterFloat(ival) >= 24) {
+							return this.error(`${escapeHTML(ival)} hours? There are only 24 in a day. Even for you.`)
+						}
 						this.setState({
 							placeholder: strings.s0.placeholder,
 							commit: { ...this.state.commit, hours: ival}
@@ -154,7 +201,7 @@ class LogForm extends Module {
 									summary: `${ival} ${strings.s0.pluralHour} `
 								})
 							}
-						} else return this.error('Commit time not a valid number')
+						} else return this.error(`"${escapeHTML(ival)}" isn't a number of hours. That's OK. Numbers are hard.`)
 						break;
 					case 1: // time of day
 						const s1s = strings.s1 // alias stage 1 strings
@@ -260,6 +307,8 @@ class LogForm extends Module {
 						return
 					}
 
+					const receipt = this._receipt(this.state.commit.hours)
+
 					// commit!
 					window.storage.set(this.state.commit).then(() => {
 						let e = new CustomEvent('commit', { detail: this.state.commit })
@@ -268,7 +317,7 @@ class LogForm extends Module {
 
 					// reset
 					this.setState({
-						placeholder: strings.success,
+						placeholder: strings.success + receipt,
 						summary: '',
 						commit: {}
 					})
@@ -276,7 +325,7 @@ class LogForm extends Module {
 					// blurs() the input, returning focus to the main window
 					setTimeout(() => {
 						this.input.blur()
-					}, 2000)
+					}, receipt ? 4000 : 2000) // time to read about your mortality
 				}
 			} else if (event.key === 'Escape') {
 				l.blur()

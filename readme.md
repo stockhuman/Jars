@@ -14,7 +14,7 @@ Upon first use you'll be asked to provide a .json file formatted with at least s
 {
 	"APIurl": "string", // API URL, if you have one.
 	"store": "local", // "local" (no server) or "CRUD". Optional with an APIurl
-	"locale": "en", // or fr, de, es, jp, it, zh. Optional
+	"locale": "en", // or fr, de, es, jp, it, zh, pirate. Optional
 	"dateOfBirth": "MM/DD/YYYY", // to calculate the logo
 	"motto": " - a motto of yours, optional",
 	"colors": {
@@ -27,6 +27,10 @@ Upon first use you'll be asked to provide a .json file formatted with at least s
 ```
 
 View the `/desktop` directory to view the codebase and install.
+
+## Easter eggs
+
+There are no easter eggs in Jars. Please stop typing things into the log box.
 
 ## Credits
 

@@ -223,3 +223,14 @@ describe('Header', () => {
     assert.ok(!root.querySelector('.fraction').textContent.includes('NaN'))
   })
 })
+
+describe('pirate.json', () => {
+  it('has every string en.json has, and the same time-of-day codes', () => {
+    const en = require('../src/locales/en.json')
+    const pirate = require('../src/locales/pirate.json')
+    const keys = (o, p = '') => Object.entries(o).flatMap(([k, v]) =>
+      v && typeof v === 'object' && !Array.isArray(v) ? [p + k, ...keys(v, `${p}${k}.`)] : [p + k])
+    assert.deepEqual(keys(pirate).sort(), keys(en).sort())
+    assert.deepEqual(pirate.logform.s1.values.map(v => v.abbr), en.logform.s1.values.map(v => v.abbr))
+  })
+})

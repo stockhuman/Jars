@@ -44,3 +44,41 @@
 	margin-bottom: 8px;
 	margin-left: 12px;
 }
+
+/* type "beans" into the log box */
+.bean {
+	position: fixed;
+	top: -16px;
+	z-index: 100;
+	width: 16px;
+	height: 10px;
+	border-radius: 55% 45% 50% 50% / 65% 65% 35% 35%;
+	pointer-events: none;
+	animation: bean-fall 3s ease-in forwards;
+}
+
+.bean::after { /* the hilum: every bean's little eye */
+	content: '';
+	position: absolute;
+	top: 2px;
+	left: 6px;
+	width: 4px;
+	height: 2px;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, .4);
+}
+
+@keyframes bean-fall {
+	to { transform: translateY(calc(100vh + 32px)) rotate(var(--spin)); }
+}
+
+/* type "do a barrel roll" */
+.barrel-roll {
+	min-height: 100vh; /* so the fixed log box spins about the window's centre */
+	overflow: hidden; /* and no scrollbars flash up mid-roll */
+	animation: barrel-roll 1s ease-in-out;
+}
+
+@keyframes barrel-roll {
+	to { transform: rotate(360deg); }
+}

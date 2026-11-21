@@ -106,6 +106,32 @@ class LogForm extends Module {
 		document.dispatchEvent(e)
 	}
 
+	// it's raining beans
+	_beans () {
+		this.input.blur()
+		if (matchMedia('(prefers-reduced-motion: reduce)').matches) return this.error('Imagine it raining beans.')
+
+		const varieties = ['#8a5a44', '#9b2d30', '#c9a27e', '#3b2f2f', '#efe0c8'] // brown, kidney, pinto, black, navy (navy beans are white. look it up)
+		for (let i = 0; i < 80; i++) {
+			const bean = elem('div', { className: 'bean' })
+			bean.style.left = `${Math.random() * 100}vw`
+			bean.style.background = varieties[i % varieties.length]
+			bean.style.animationDelay = `${Math.random() * 2}s`
+			bean.style.animationDuration = `${1.5 + Math.random() * 2}s`
+			bean.style.setProperty('--spin', `${Math.round(Math.random() * 1440 - 720)}deg`)
+			bean.addEventListener('animationend', () => bean.remove())
+			document.body.appendChild(bean)
+		}
+	}
+
+	_barrelRoll () {
+		this.input.blur()
+		if (matchMedia('(prefers-reduced-motion: reduce)').matches) return this.error('Imagine a barrel roll.')
+
+		document.body.classList.add('barrel-roll')
+		setTimeout(() => document.body.classList.remove('barrel-roll'), 1000)
+	}
+
 	events () {
 		let strings = this.state.strings
 		let l = this.input
@@ -139,6 +165,12 @@ class LogForm extends Module {
 						if (ival === 'query' || ival === 'q') {
 							this._query()
 							return
+						}
+						const said = ival.trim().toLowerCase()
+						if (said === 'beans') return this._beans()
+						if (said === 'do a barrel roll') return this._barrelRoll()
+						if (said.startsWith('sudo')) {
+							return this.error('You are not in the sudoers file. This incident will be reported.')
 						}
 						this.setState({
 							placeholder: strings.s0.placeholder,

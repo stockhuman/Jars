@@ -1,7 +1,7 @@
 // creates an element and assigns properties. convenience method
 function elem (type, options = {}) {
 	let e = document.createElement(type)
-	for (property in options) {
+	for (const property in options) {
 		e[property] = options[property]
 	}
 	return e
@@ -10,10 +10,17 @@ function elem (type, options = {}) {
 // as above, but for SVG
 function elemNS (ns, type, options = {}) {
 	let e = document.createElementNS(ns, type)
-	for (property in options) {
+	for (const property in options) {
 		e.setAttributeNS(null, property, options[property])
 	}
 	return e
+}
+
+// makes text safe to drop into innerHTML. Logs can come from a server, and
+// with nodeIntegration on, markup that runs in the page can reach Node.
+function escapeHTML (text) {
+	const entities = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }
+	return String(text ?? '').replace(/[&<>"']/g, c => entities[c])
 }
 
 function filterFloat(value) {
@@ -27,9 +34,11 @@ function filterFloat(value) {
 }
 
 /**
- * Returns true if string matches 00:00:00 format
+ * Guesses the time-of-day abbreviation for work that was just committed
  * @since v.2.1.5
- * @param {String} string timestamp to be checked
+ * @param {String} timestamp time of the commit, as HH:MM:SS
+ * @param {Number} hours how long the work took
+ * @param {Object} locale the logform's stage 1 strings
  */
 function TODfromTimestamp(timestamp, hours, locale) {
 	let tsParts = timestamp.split(':')
@@ -39,8 +48,9 @@ function TODfromTimestamp(timestamp, hours, locale) {
 	h += (m / 60) // convert minutes to hour fraction (ex 5.6 hrs) and add
 	h -= Number(hours) / 2 // Approximate time of work from point of commit
 
-	// assure commits done in the early morning don't return impossible times
-	h = (h % 24).toFixed(2)
+	// assure commits done in the early morning don't return impossible times:
+	// six hours of work committed at 1am are centred on 10pm, not on -2
+	h = (((h % 24) + 24) % 24).toFixed(2)
 
 	switch (true) {
 		case h <= 4: return locale.values[6].abbr // well past sundown
@@ -49,7 +59,7 @@ function TODfromTimestamp(timestamp, hours, locale) {
 		case h <= 13: return locale.values[2].abbr // around midday
 		case h <= 16: return locale.values[3].abbr // in the afternoon
 		case h <= 20: return locale.values[4].abbr // in the evening
-		case h <= 24: return locale.values[4].abbr // around nighttime
+		case h <= 24: return locale.values[5].abbr // around nighttime
 	}
 }
 

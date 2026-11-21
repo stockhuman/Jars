@@ -58,16 +58,14 @@ const init = () => {
 			window.location.href = 'query.html'
 		})
 
-		document.addEventListener('render', (date = new Date()) => {
-			// accomodate the format of custom events
-			date = date.detail.selectedDay || date
+		document.addEventListener('render', e => {
+			const date = e.detail instanceof Date ? e.detail : new Date()
 
 			log.alterDate(date)
 			meta.render(date)
 			cal.describe(date)
-			cal.today()
+			cal.today() // also re-renders the calendar
 			vis.render()
-			cal.render()
 		})
 
 		document.addEventListener('tick', () => header.render())
@@ -79,33 +77,39 @@ const init = () => {
 // Await strings before building UI
 document.addEventListener('localesReady', init)
 
+let currentDay = YYYYMMDD() // the real date, not whichever day is selected
 let waitingForDailyUpdate = false
+
+const newDay = () => {
+	currentDay = YYYYMMDD()
+	selectedDay = new Date()
+	document.dispatchEvent(new CustomEvent('render', { detail: selectedDay }))
+}
 
 // event fires when app regains network connection
 window.addEventListener('online', () => {
 	if (waitingForDailyUpdate) {
 		waitingForDailyUpdate = false
-		selectedDay = new Date()
-		document.dispatchEvent(new CustomEvent('render', { detail: selectedDay }))
+		newDay()
 	}
 })
 
 // Updates dates and time every hour
 // via https://stackoverflow.com/questions/19847412/
 const tick = () => {
-	setInterval(() => {
-		let stillToday = selectedDay.getDate() === new Date().getDate()
-		if (!stillToday) { // it is now another day, app shoudl update UI
-			if (navigator.onLine) { // device is online
-				selectedDay = new Date()
-				document.dispatchEvent(new CustomEvent('render', { detail: selectedDay }))
+	const hourly = () => {
+		if (YYYYMMDD() !== currentDay) { // it is now another day, app should update UI
+			if (navigator.onLine || window.store == 'local') {
+				newDay()
 			} else { // device is not online, but date has changed (likely overnight)
 				waitingForDailyUpdate = true
 			}
 		}
 		// render every hour (for greetings)
 		document.dispatchEvent(new CustomEvent('tick'))
-	}, 1000 * 60 * 60)
+	}
+	hourly() // we're on the hour now, so don't wait another one
+	setInterval(hourly, 1000 * 60 * 60)
 }
 
 let intervalDate = new Date()
@@ -118,54 +122,4 @@ if (intervalDate.getMinutes() === 0) {
 
 	let difference = intervalDate - new Date()
 	setTimeout(tick, difference)
-}
-
-const remote = require('electron').remote
-
-const win = remote.getCurrentWindow()
-
-// When document has loaded, initialise
-document.onreadystatechange = (event) => {
-	if (document.readyState == "complete") {
-		handleWindowControls()
-	}
-}
-
-window.onbeforeunload = (event) => {
-	/* If window is reloaded, remove win event listeners
-	(DOM element listeners get auto garbage collected but not
-	Electron win listeners as the win is not dereferenced unless closed) */
-	win.removeAllListeners()
-}
-
-function handleWindowControls() {
-	// Make minimise/maximise/restore/close buttons work when they are clicked
-	document.getElementById('min-button').addEventListener("click", event => {
-		win.minimize()
-	})
-
-	document.getElementById('max-button').addEventListener("click", event => {
-		win.maximize()
-	})
-
-	document.getElementById('restore-button').addEventListener("click", event => {
-		win.unmaximize()
-	})
-
-	document.getElementById('close-button').addEventListener("click", event => {
-		win.close()
-	})
-
-	// Toggle maximise/restore buttons when maximisation/unmaximisation occurs
-	toggleMaxRestoreButtons();
-	win.on('maximize', toggleMaxRestoreButtons);
-	win.on('unmaximize', toggleMaxRestoreButtons);
-
-	function toggleMaxRestoreButtons() {
-		if (win.isMaximized()) {
-			document.body.classList.add('maximized')
-		} else {
-			document.body.classList.remove('maximized')
-		}
-	}
 }

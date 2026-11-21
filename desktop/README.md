@@ -13,6 +13,9 @@ npm install
 # develop locally
 npm start
 
+# run the tests
+npm test
+
 # build electron application for production
 npm run package
 

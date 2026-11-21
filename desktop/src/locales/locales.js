@@ -7,7 +7,7 @@ const setLocaleStrings = async () => {
 		.then(data => data.json())
 		.catch(async () => {
 			console.warn(`⚠️ Jars does not support '${window.locale}' ❌`)
-			console.info(`🌐 Jars speaks: EN, FR, DE, JP, IT, ZH. ✅`)
+			console.info(`🌐 Jars speaks: EN, FR, DE, ES, JP, IT, ZH. ✅`)
 			// if the specified language does not exist, default to english
 			return await fetch(`./locales/en.json`).then(data => data.json())
 		})

@@ -12,9 +12,7 @@
 	<link rel="stylesheet" href="../src/assets/css/calendar.css" />
 	<link rel="stylesheet" href="../src/assets/css/logform.css">
 	<link rel="stylesheet" href="../src/assets/css/meta.css">
-	<link rel="dns-prefetch" href="https://api.arthem.co/">
 
-	<script src="../node_modules/chai/chai.js"></script>
 	<script src="../node_modules/mocha/mocha.js"></script>
 	<link rel="stylesheet" href="../node_modules/mocha/mocha.css">
 	<style>#mocha-stats {background:bisque;border-radius:2px;
@@ -22,7 +20,8 @@
 </head>
 <body>
 	<div id="mocha"></div>
-	<script>mocha.setup('bdd'); mocha.checkLeaks(); window.assert = chai.assert</script>
+	<!-- run with `npm test`; Node's assert is there because the page runs in Electron -->
+	<script>mocha.setup('bdd'); mocha.checkLeaks(); window.assert = require('assert')</script>
 
 	<!-- Default log items, should reflect non-test index -->
 	<div id="header-root"></div>
@@ -34,11 +33,13 @@
 
 	<script src="../src/Components/Util.js"></script>
 	<script src="../src/locales/locales.js"></script>
+	<script src="../src/Components/Config.js"></script>
+	<script src="../src/Components/Storage.js"></script>
 	<script src="../src/Components/Module.js"></script>
 	<script src="../src/Components/Meta.js"></script>
-	<script src="../src/Components/logform.js"></script>
-	<script src="../src/Components/calendar.js"></script>
-	<script src="../src/Components/header.js"></script>
+	<script src="../src/Components/Logform.js"></script>
+	<script src="../src/Components/Calendar.js"></script>
+	<script src="../src/Components/Header.js"></script>
 	<script src="../src/Components/Visualiser.js"></script>
 	<script src="../src/Components/Editor.js" defer></script>
 	<!-- End normal log -->
@@ -47,11 +48,13 @@
 	<script src="test.js"></script>
 
 	<script>
-		// TESTS!
-
-
+		// report to tests/main.js (npm test) when there is one
+		const ipc = window.require && require('electron').ipcRenderer
+		const runner = mocha.run(failures => ipc && ipc.send('tests-done', failures))
+		if (ipc) {
+			runner.on('pass', test => ipc.send('test-result', { title: test.fullTitle() }))
+			runner.on('fail', (test, err) => ipc.send('test-result', { title: test.fullTitle(), error: err.message }))
+		}
 	</script>
-
-	<script>mocha.run();</script>
 </body>
 </html>

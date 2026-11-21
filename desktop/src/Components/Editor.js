@@ -23,8 +23,9 @@ class Editor extends Module {
 
 	hide () {
 		if (this.state.modified.length > 0) {
+			const saves = []
 			if (window.store == 'CRUD') {
-				this.state.modified.forEach((log, id) => this.confirm(id, log))
+				this.state.modified.forEach((log, id) => saves.push(this.confirm(id, log)))
 			} else if (window.store == 'IPFS') {
 				// TODO
 			} else {
@@ -32,10 +33,12 @@ class Editor extends Module {
 					const key = entry.key
 					let log = entry
 					delete entry.key // local uses a hash, this is not part of the entry
-					this.confirm(key, log)
+					saves.push(this.confirm(key, log))
 				})
 			}
-			
+			// redraw the visualiser and day details once the edits are in
+			Promise.allSettled(saves).then(() => document.dispatchEvent(new CustomEvent('commit')))
+
 			this.state.closebtn.innerHTML = 'close'
 			this.state.modified = []
 		}
@@ -57,14 +60,17 @@ class Editor extends Module {
 		data.id.style.color = '#F29E74'
 		this.state.closebtn.innerHTML = 'update'
 
+		// textContent, not innerHTML: "R&D" must not be saved as "R&amp;D".
+		// contentEditable also types non-breaking spaces; store plain ones.
+		const text = el => el.textContent.replace(/\u00a0/g, ' ')
 		let log = {
-			category: data.cat.innerHTML,
-			comment: data.comment.innerHTML,
-			date: data.date.innerHTML,
-			hours: data.hours.innerHTML,
-			project: data.proj.innerHTML,
-			task: data.task.innerHTML,
-			tod: data.tod.innerHTML
+			category: text(data.cat),
+			comment: text(data.comment),
+			date: text(data.date),
+			hours: text(data.hours),
+			project: text(data.proj),
+			task: text(data.task),
+			tod: text(data.tod)
 		}
 		if (window.store == 'CRUD') {
 			this.state.modified[Number(data.id.data)] = log
@@ -77,7 +83,7 @@ class Editor extends Module {
 
 	confirm (id, log) {
 		console.log(`Updated log #${id} with fields:`, log)
-		window.storage.update(id, log)
+		return window.storage.update(id, log)
 	}
 
 	// This method adapts a similar one seen in Visualiser.js
@@ -98,6 +104,10 @@ class Editor extends Module {
 		// Query database for logs in date range
 		const query = `?$&filter=date,bt,${start},${end}`
 		const data = await window.storage.get(query, true)
+		if (!data) {
+			this.root.innerHTML = `<p class="loading">Couldn't reach the API</p>`
+			return
+		}
 
 		data.reverse() // display nearest logs first
 
@@ -110,14 +120,14 @@ class Editor extends Module {
 			const l = window.store == 'CRUD' ? log : log[1]
 
 			const parts = {
-				id: elem('span', { innerHTML: ("0000" + uid).substr(-4, 4), className: 'id', data: uid }),
-				date: elem('span', { contentEditable: true, innerHTML: l.date, className: 'date' }),
-				hours: elem('span', { contentEditable: true, innerHTML: l.hours, className: 'hours' }),
-				proj: elem('span', { contentEditable: true, innerHTML: l.project, className: 'project' }),
-				tod: elem('span', { contentEditable: true, innerHTML: l.tod, className: 'tod' }),
-				task: elem('span', { contentEditable: true, innerHTML: l.task, className: 'task' }),
-				cat: elem('span', { contentEditable: true, innerHTML: l.category, className: 'category' }),
-				comment: elem('span', { contentEditable: true, innerHTML: l.comment, className: 'comment' })
+				id: elem('span', { textContent: ("0000" + uid).substr(-4, 4), className: 'id', data: uid }),
+				date: elem('span', { contentEditable: true, textContent: l.date, className: 'date' }),
+				hours: elem('span', { contentEditable: true, textContent: l.hours, className: 'hours' }),
+				proj: elem('span', { contentEditable: true, textContent: l.project, className: 'project' }),
+				tod: elem('span', { contentEditable: true, textContent: l.tod, className: 'tod' }),
+				task: elem('span', { contentEditable: true, textContent: l.task, className: 'task' }),
+				cat: elem('span', { contentEditable: true, textContent: l.category, className: 'category' }),
+				comment: elem('span', { contentEditable: true, textContent: l.comment, className: 'comment' })
 			}
 
 			Object.values(parts).forEach(el => {

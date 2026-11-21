@@ -13,7 +13,8 @@ Upon first use you'll be asked to provide a .json file formatted with at least s
 ```js
 {
 	"APIurl": "string", // API URL, if you have one.
-	"mode": "local", // or CRUD. Optional
+	"store": "local", // "local" (no server) or "CRUD". Optional with an APIurl
+	"locale": "en", // or fr, de, es, jp, it, zh. Optional
 	"dateOfBirth": "MM/DD/YYYY", // to calculate the logo
 	"motto": " - a motto of yours, optional",
 	"colors": {
@@ -31,7 +32,7 @@ View the `/desktop` directory to view the codebase and install.
 
 This app contains no external dependencies beyond Electron, which is not strictly speaking necessary, but does rely on some modern Javascript. An ES6+ capable browser that understands async/await, fetch() et al. should do fine if you so desire to run it without electron.
 
-A prominent component of this version of Jars utilises a calendar representation written by [Alexey Botkov](https://github.com/nomand/). Jars' visual design, raison d'etre and current programming ethos were heavily inpired by [a close friend's log](https://v-os.ca/timekeeping) and associated projects.
+A prominent component of this version of Jars utilises a calendar representation written by [Alexey Botkov](https://github.com/nomand/). Jars' visual design, raison d'etre and current programming ethos were heavily inspired by [a close friend's log](https://v-os.ca/timekeeping) and associated projects.
 
 Jars contains code from the following repos:
 

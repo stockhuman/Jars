@@ -172,6 +172,10 @@ class LogForm extends Module {
 						if (said.startsWith('sudo')) {
 							return this.error('You are not in the sudoers file. This incident will be reported.')
 						}
+						if (filterFloat(ival) === 0) return this.error(`0 hours? That's not a bean, that's a nap.`)
+						if (filterFloat(ival) >= 24) {
+							return this.error(`${escapeHTML(ival)} hours? There are only 24 in a day. Even for you.`)
+						}
 						this.setState({
 							placeholder: strings.s0.placeholder,
 							commit: { ...this.state.commit, hours: ival}
@@ -186,7 +190,7 @@ class LogForm extends Module {
 									summary: `${ival} ${strings.s0.pluralHour} `
 								})
 							}
-						} else return this.error('Commit time not a valid number')
+						} else return this.error(`"${escapeHTML(ival)}" isn't a number of hours. That's OK. Numbers are hard.`)
 						break;
 					case 1: // time of day
 						const s1s = strings.s1 // alias stage 1 strings

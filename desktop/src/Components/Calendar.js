@@ -38,9 +38,8 @@ class Calendar extends Module {
 		this.monthNames = locales('monthNames')
 		this.dayNames = locales('dayNames')
 
-		// 'mount' component
+		// 'mount' component (render also hooks up the day events)
 		this.render()
-		this.events() // hook events
 	}
 
 	_labels() {
@@ -99,7 +98,7 @@ class Calendar extends Module {
 	}
 
 	events () {
-		const days = document.querySelectorAll(".graph rect:not(.null)")
+		const days = this.root.querySelectorAll(".graph rect:not(.null)")
 		days.forEach(day => {
 			day.date = day.attributes.details.value
 			this.listeners.push(day)
@@ -110,8 +109,6 @@ class Calendar extends Module {
 	setYear (year) {
 		this.state.year = year
 		this.render()
-		this.listeners = []
-		this.events()
 	}
 
 	today () {
@@ -167,5 +164,9 @@ class Calendar extends Module {
 		}
 
 		this.root.innerHTML = `<section id="calendar">${html}</section>`
+
+		// innerHTML just replaced every day, so hook the new ones up
+		this.listeners = []
+		this.events()
 	}
 }

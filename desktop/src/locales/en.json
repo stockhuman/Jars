@@ -7,7 +7,8 @@
 			"Good Afternoon",
 			"Good Evening",
 			"Good Night"
-		]
+		],
+		"friday": "It’s Friday. Put the beans down."
 	},
 	"logform": {
 		"misc": {

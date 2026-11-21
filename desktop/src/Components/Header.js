@@ -72,6 +72,12 @@ class Header {
 	}
 
 	subtitle () {
+		// outside the 80 years the logo counts
+		const dob = localStorage.getItem('dob')
+		const born = dob ? new Date(dob).getFullYear() : NaN
+		if (this.year < born) return 'BEFORE YOUR TIME'
+		if (this.year > born + 80) return 'THE JAR OUTLIVES YOU'
+
 		const diff = new Date() - new Date(this.year, 0, 1, 0)
 		const yearLength = new Date(this.year + 1, 0, 1) - new Date(this.year, 0, 1) // 366 days in leap years
 		const progress = ((diff / yearLength) * 100).toFixed(2)
@@ -106,6 +112,9 @@ class Header {
 	greeting () {
 		let hr = new Date().getHours()
 		let msg = ''
+
+		// Friday afternoon outranks the time of day (if the language has an opinion)
+		if (new Date().getDay() == 5 && hr >= 16 && hr < 23 && this.strings.friday) return this.strings.friday
 
 		switch (hr) {
 			case 3:

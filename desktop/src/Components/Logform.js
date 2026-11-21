@@ -106,6 +106,17 @@ class LogForm extends Module {
 		document.dispatchEvent(e)
 	}
 
+	// puts a bean in perspective: its share of the rest of your life,
+	// counted to the same 80 years as the logo in the header
+	_receipt (hours) {
+		const template = this.state.strings.receipt
+		const birth = new Date(localStorage.getItem('dob'))
+		const end = new Date(birth.getFullYear() + 80, birth.getMonth(), birth.getDate())
+		const hoursLeft = (end - new Date()) / 36e5
+		if (!template || !(hoursLeft > 0)) return '' // no birthday, or living on bonus time
+		return ' ' + template.replace('{share}', (filterFloat(hours) / hoursLeft * 100).toPrecision(2))
+	}
+
 	// it's raining beans
 	_beans () {
 		this.input.blur()
@@ -296,6 +307,8 @@ class LogForm extends Module {
 						return
 					}
 
+					const receipt = this._receipt(this.state.commit.hours)
+
 					// commit!
 					window.storage.set(this.state.commit).then(() => {
 						let e = new CustomEvent('commit', { detail: this.state.commit })
@@ -304,7 +317,7 @@ class LogForm extends Module {
 
 					// reset
 					this.setState({
-						placeholder: strings.success,
+						placeholder: strings.success + receipt,
 						summary: '',
 						commit: {}
 					})
@@ -312,7 +325,7 @@ class LogForm extends Module {
 					// blurs() the input, returning focus to the main window
 					setTimeout(() => {
 						this.input.blur()
-					}, 2000)
+					}, receipt ? 4000 : 2000) // time to read about your mortality
 				}
 			} else if (event.key === 'Escape') {
 				l.blur()

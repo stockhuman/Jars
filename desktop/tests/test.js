@@ -234,3 +234,35 @@ describe('pirate.json', () => {
     assert.deepEqual(pirate.logform.s1.values.map(v => v.abbr), en.logform.s1.values.map(v => v.abbr))
   })
 })
+
+describe('Header, philosophically', () => {
+  const root = document.getElementById('header-root')
+  before(() => { root.innerHTML = ''; localStorage.setItem('dob', '06/15/1990') })
+  after(() => localStorage.removeItem('dob'))
+
+  it('knows when you weren’t around yet', () => {
+    assert.equal(new Header({ root, year: 1989 }).subtitle(), 'BEFORE YOUR TIME')
+  })
+
+  it('knows the jar outlives you', () => {
+    assert.equal(new Header({ root, year: 2071 }).subtitle(), 'THE JAR OUTLIVES YOU')
+  })
+})
+
+describe('LogForm, emotionally', () => {
+  const form = new LogForm({ root: document.getElementById('log-root') })
+  after(() => localStorage.removeItem('dob'))
+
+  it('puts a bean in perspective', () => {
+    const born = new Date()
+    born.setFullYear(born.getFullYear() - 40)
+    localStorage.setItem('dob', born.toDateString())
+    // one hour out of the ~350,640 left
+    assert.equal(form._receipt('1'), ' that was 0.00029% of the rest of your life. no pressure.')
+  })
+
+  it('stops counting after 80', () => {
+    localStorage.setItem('dob', '01/01/1900')
+    assert.equal(form._receipt('1'), '')
+  })
+})

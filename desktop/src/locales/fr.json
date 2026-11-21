@@ -11,7 +11,7 @@
 	},
 	"logform": {
 		"misc": {
-			"begin": "Ecrivez le nombre d'heures (appuyez sur Enter pour enregistrer)",
+			"begin": "Écrivez le nombre d'heures (appuyez sur Enter pour enregistrer)",
 			"placeholder": "Journalez",
 			"recap": "Heures cette semaine :"
 		},
@@ -39,7 +39,7 @@
 				},
 				{
 					"abbr": "am",
-					"expa": "dans l'après midi"
+					"expa": "dans l'après-midi"
 				},
 				{
 					"abbr": "s",
@@ -72,5 +72,5 @@
 		},
 		"success": "haricot commis !"
 	},
-	"noTranslationWarning": "Pas de traduction disponible pur"
+	"noTranslationWarning": "Pas de traduction disponible pour"
 }

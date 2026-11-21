@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, ipcMain } = require('electron')
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -17,18 +17,23 @@ const createWindow = () => {
     // show: false,
 		skipTaskbar: false,
 		frame: false,
-		setAutoHideMenuBar: true,
+		autoHideMenuBar: true,
 		titleBarStyle: 'hiddenInset',
 		webPreferences: {
 			nodeIntegration: true,
 			contextIsolation: false,
-			enableRemoteModule: true,
       devTools: false,
 		},
   })
 
   // and load the index.html of the app.
   mainWindow.loadURL(`file://${__dirname}/index.html`)
+
+  // Let the page know when the window is maximised, so the custom titlebar
+  // can swap its maximise button for a restore button.
+  const win = mainWindow
+  win.on('maximize', () => win.webContents.send('window-maximized', true))
+  win.on('unmaximize', () => win.webContents.send('window-maximized', false))
 
   // mainWindow.once('ready-to-show', () => {
   //   mainWindow.show()
@@ -46,7 +51,18 @@ const createWindow = () => {
   })
 }
 
-app.allowRendererProcessReuse = true
+// The custom titlebar buttons (Windows/Linux) ask the main process to act on
+// their window. They used to call `remote` directly, but Electron removed
+// `remote` in v14, which left the buttons dead.
+ipcMain.on('window-control', (event, action) => {
+  const win = BrowserWindow.fromWebContents(event.sender)
+  if (win && ['minimize', 'maximize', 'unmaximize', 'close'].includes(action)) win[action]()
+})
+
+ipcMain.handle('window-is-maximized', event => {
+  const win = BrowserWindow.fromWebContents(event.sender)
+  return win ? win.isMaximized() : false
+})
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

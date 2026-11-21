@@ -70,48 +70,28 @@ class StorageHandler {
   }
 
   
+  /**
+   * Answers the same PHP-CRUD-API style filters the server does, from
+   * localStorage: `filter=<field>,eq,<value>` and `filter=<field>,bt,<from>,<to>`.
+   * Logs live under `YYYYMMDD-hash` keys, so a day can hold several of them.
+   */
   _localGet(query, withKey) {
-    const splitq = query.split(',')
-    const type = splitq[1]
-    const start = splitq[2]
+    const filter = /filter=([^&]*)/.exec(query)
+    if (!filter) return []
+    const [field, type, ...values] = filter[1].split(',').map(decodeURIComponent)
 
-    let array = []
-    let keys = Object.keys(localStorage)
-
-    if (type == 'eq') { // exact date match
-			keys = keys.filter(key => key.startsWith(YYYYMMDD(start)))
-			keys.forEach(key => {
-        if (withKey) {
-          array.push([key, JSON.parse(localStorage.getItem(key))])
-        } else {
-          array.push(JSON.parse(localStorage.getItem(key)))
-        }
-			})
-    } else if (type == 'bt') { // range
-      // Since local keys are indexed as `date-hash`, to avoid overwriting
-      // in case of multiple entries per day, we do this little dance.
-      // This could be avoided by making entries a date-indexed array
-      // that contains the day's commits, but this introduces a greater
-      // discrepancy between storage modes architecturally.
-      // A final goal of this system is to be able to transition between modes
-      // with a simple programmatic conversion.
-      let end = splitq[3]
-      end = end.split('&')[0] // remove extra qparams
-      
-			this.getDaysArray(start, end).forEach(day => {
-        let match = keys.filter(item => item.startsWith(day))
-        let lsm = localStorage.getItem(match)
-        if (lsm) {
-          if (withKey) {
-            array.push([match, JSON.parse(lsm)])
-          } else {
-            array.push(JSON.parse(lsm))
-          }
-        }
-			})
+    const matches = value => {
+      if (type == 'eq') return value == values.join(',')
+      if (type == 'bt') return value >= values[0] && value <= values[1]
+      return false
     }
 
-    return array
+    return Object.keys(localStorage)
+      .filter(key => /^\d{8}-/.test(key)) // skip the config and other settings
+      .map(key => [key, JSON.parse(localStorage.getItem(key))])
+      .filter(([, log]) => matches(String(log[field])))
+      .sort(([, a], [, b]) => String(a.date).localeCompare(String(b.date)))
+      .map(entry => withKey ? entry : entry[1])
   }
 
   /** `ID` = YYYYMMDD-(hash(commit)).subString(0, 5) */
@@ -134,32 +114,5 @@ class StorageHandler {
       hash |= 0 // Convert to 32bit integer
     }
     return hash
-  }
-
-  /**
-   * returns an array of YYYYMMDD formatted dates between `start` and `end`
-   * @param {string} start YYYYMMDD date string
-   * @param {string} end YYYYMMDD date string
-   */
-  getDaysArray (start, end) {
-    const toISO = (date) => {
-      const year = date.substring(0, 4)
-      const month = date.substring(4, 6)
-      const day = date.substring(6, 8)
-      return `${year}-${month}-${day}T12:00:00Z` // time to correct for DST
-    }
-
-    let arr = []
-    end = new Date(toISO(end))
-    start = toISO(start)
-
-    // off by one error correction
-    end = end.setDate(end.getDate() + 1)
-
-    for (let dt = new Date(start); dt <= end; dt.setDate(dt.getDate() + 1)) {
-      arr.push(new Date(dt))
-    }
-
-    return arr.map(el => YYYYMMDD(el))
   }
 }

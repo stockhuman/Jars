@@ -154,7 +154,12 @@ class Visualiser extends Module {
 			case 4: furthest = new Date(this.state.year, fmonth - 1); break
 		}
 
-		let ratio = thisYear ? 600 / dist(furthest, new Date()) : 1.58 // ~full year
+		// one slot per day, today's included. Measuring up to `new Date()` rounded
+		// off the time of day, so before noon today's bars landed at x=600, just
+		// past the right edge.
+		const now = new Date()
+		const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+		let ratio = thisYear ? 600 / (dist(furthest, today) + 1) : 1.58 // ~full year
 
 		// create 'time of day' labels
 		for (let i = 0; i < 7; i++) {

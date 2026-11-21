@@ -45,7 +45,7 @@ class StorageHandler {
     let data = await fetch(window.api + query)
       .then(r => r.json())
       .catch(e => { console.warn(e); return null })
-    return data.records
+    return data ? data.records : null // null when the API can't be reached
   }
 
   _CRUDSet(commit){

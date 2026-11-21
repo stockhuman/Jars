@@ -104,6 +104,10 @@ class Editor extends Module {
 		// Query database for logs in date range
 		const query = `?$&filter=date,bt,${start},${end}`
 		const data = await window.storage.get(query, true)
+		if (!data) {
+			this.root.innerHTML = `<p class="loading">Couldn't reach the API</p>`
+			return
+		}
 
 		data.reverse() // display nearest logs first
 

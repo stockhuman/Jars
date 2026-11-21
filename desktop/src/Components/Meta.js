@@ -15,6 +15,10 @@ class Meta extends Module {
 		// see https://github.com/mevdschee/php-crud-api
 		let query = `?filter=date,eq,${YYYYMMDD(selectedDay)}`
 		let db = await window.storage.get(query)
+		if (db === null) {
+			this.root.innerHTML = `Couldn't reach the API`
+			return
+		}
 
 		if (db && db.length > 0) {
 			records = db

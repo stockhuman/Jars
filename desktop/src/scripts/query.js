@@ -1,6 +1,7 @@
 
 // check for setup credentials, no redirect
 new Config().pollute()
+window.storage = new StorageHandler()
 if (!window.localeStrings) setLocaleStrings()
 
 let querymodule

@@ -47,7 +47,7 @@ class Query extends Module {
 	}
 
 	createQuery() {
-		return `?&filter=project,eq,${this.state.inputValue}`
+		return `?&filter=project,eq,${encodeURIComponent(this.state.inputValue)}`
 	}
 
 	events () {
@@ -66,10 +66,9 @@ class Query extends Module {
 
 	// This method adapts a similar one seen in Visualiser.js
 	render () {
-		const data = this.state.data
+		// display nearest logs first (copy, so re-renders don't flip the order back)
+		const data = [...this.state.data].reverse()
 		this.results.innerHTML = `<p class="loading">Loading...</p>`
-
-		data.reverse() // display nearest logs first
 
 		const container = elem('div', {className: 'editor-log-list'})
 
@@ -81,7 +80,7 @@ class Query extends Module {
 			const li = elem('div', { className: 'editor-log' })
 
 			const parts = {
-				id: elem('span', { innerHTML: ("0000" + l.ID).substr(-4, 4), className: 'id' }),
+				id: elem('span', { innerHTML: l.ID ? ("0000" + l.ID).substr(-4, 4) : '', className: 'id' }), // local logs have no ID
 				date: elem('span', { innerHTML: l.date, className: 'date' }),
 				hours: elem('span', { innerHTML: l.hours, className: 'hours' }),
 				proj: elem('span', { innerHTML: l.project, className: 'project' }),

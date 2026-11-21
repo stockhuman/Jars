@@ -16,6 +16,13 @@ function elemNS (ns, type, options = {}) {
 	return e
 }
 
+// makes text safe to drop into innerHTML. Logs can come from a server, and
+// with nodeIntegration on, markup that runs in the page can reach Node.
+function escapeHTML (text) {
+	const entities = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }
+	return String(text ?? '').replace(/[&<>"']/g, c => entities[c])
+}
+
 function filterFloat(value) {
 	if (!value) return NaN; else value = String(value)
 	if (value.startsWith('.')) value = '0' + value

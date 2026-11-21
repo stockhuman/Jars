@@ -80,14 +80,14 @@ class Query extends Module {
 			const li = elem('div', { className: 'editor-log' })
 
 			const parts = {
-				id: elem('span', { innerHTML: l.ID ? ("0000" + l.ID).substr(-4, 4) : '', className: 'id' }), // local logs have no ID
-				date: elem('span', { innerHTML: l.date, className: 'date' }),
-				hours: elem('span', { innerHTML: l.hours, className: 'hours' }),
-				proj: elem('span', { innerHTML: l.project, className: 'project' }),
-				tod: elem('span', { innerHTML: l.tod, className: 'tod' }),
-				task: elem('span', { innerHTML: l.task, className: 'task' }),
-				cat: elem('span', { innerHTML: l.category, className: 'category' }),
-				comment: elem('span', { innerHTML: l.comment, className: 'comment' })
+				id: elem('span', { textContent: l.ID ? ("0000" + l.ID).substr(-4, 4) : '', className: 'id' }), // local logs have no ID
+				date: elem('span', { textContent: l.date, className: 'date' }),
+				hours: elem('span', { textContent: l.hours, className: 'hours' }),
+				proj: elem('span', { textContent: l.project, className: 'project' }),
+				tod: elem('span', { textContent: l.tod, className: 'tod' }),
+				task: elem('span', { textContent: l.task, className: 'task' }),
+				cat: elem('span', { textContent: l.category, className: 'category' }),
+				comment: elem('span', { textContent: l.comment, className: 'comment' })
 			}
 
 			hours += parseFloat(l.hours)
@@ -99,8 +99,9 @@ class Query extends Module {
 			container.appendChild(li)
 		})
 
+		hours = Math.round(hours * 100) / 100 // 1.1 + 2.2 is 3.3000000000000003
 		this.results.innerHTML =
-			`<h3>${data.length} log${data.length==1?'':'s'} selected - ${hours} hours</h3>`
+			`<h3>${data.length} log${data.length==1?'':'s'} selected - ${hours} hour${hours==1?'':'s'}</h3>`
 		this.results.appendChild(container)
 		this.results.classList = 'loaded'
 	}

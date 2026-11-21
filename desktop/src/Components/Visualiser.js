@@ -184,7 +184,7 @@ class Visualiser extends Module {
 
 		// most commonly entered time of day for work
 		const modalTod =
-			`Scale: ${this.state.scales[this.state.scale]}. Mode: ${mode(data.map(item => item.tod))}.`
+			`Scale: ${this.state.scales[this.state.scale]}. Mode: ${escapeHTML(mode(data.map(item => item.tod)))}.`
 
 		this.state.container.className = 'ready'
 		this.state.svg.innerHTML = svg
@@ -196,7 +196,7 @@ class Visualiser extends Module {
 			el.addEventListener('mouseover', e => {
 				const { project, date, hours, tod } = e.target.dataset
 				const day = fromSQL(date).toDateString().slice(0, -5) // remove ' YYYY'
-				const meta = ` <span class="detail">${day}, <em class="hrs">${hours}</em>hrs@${tod} on ${project}</span>`
+				const meta = ` <span class="detail">${day}, <em class="hrs">${escapeHTML(hours)}</em>hrs@${escapeHTML(tod)} on ${escapeHTML(project)}</span>`
 				this.state.meta.innerHTML = modalTod + meta
 			})
 		})
